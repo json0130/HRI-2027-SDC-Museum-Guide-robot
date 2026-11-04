@@ -1,5 +1,21 @@
 # Progress log
 
+## step B: initiation policy table  *(branch `museum-visual-profile`)*
+
+**Goal:** map (age band, confidence, group size) to opening parameters, robot-agnostic.
+
+**Built:** `modules/museum/initiation.py` (`OpeningParams`, `choose_opening`), `config/museum_initiation.yaml`
+(rows `<neutral|child|adult>_<solo|group>`, missing fields inherit `default`). `unsure`, confidence < `min_conf` (0.7) or
+`use_prior=False` always select the neutral row. Band only picks the row; it is never in the wording.
+
+**Verified:** `modules/museum/tests_initiation.py` passed; full suite 58 passed. A test checks every row has a choice question and
+no age/appearance wording.
+**Didn't work -> fixed:** my age-word regex flagged "look around" in a child row; the regex was too broad (changed to "you look"),
+the wording was fine.
+**Not verified:** that the child/adult wording suits real visitors; Pepper mapping of the parameters.
+
+---
+
 ## step A: age-band estimator + worker  *(branch `museum-visual-profile`)*
 
 **Goal:** coarse visual first impression (`child | adult | unsure`) as a weak prior for the opening move only.

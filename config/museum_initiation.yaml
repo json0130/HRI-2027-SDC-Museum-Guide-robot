@@ -1,0 +1,37 @@
+# Opening moves by (age band, confidence, group size). Keys: <neutral|child|adult>_<solo|group>.
+# Fields missing from an entry are taken from `default`. `unsure` or low confidence ALWAYS uses
+# the neutral rows. Wording must be acceptable to anyone and must never mention age or looks.
+settings:
+  min_conf: 0.7            # below this the band is ignored -> neutral
+
+default:
+  greeting_template: "Hello, and welcome! I'm {robot_name}, and I can show you around."
+  first_question: "Would you like the short version of each exhibit, or the full story?"
+  vocabulary: standard      # simple | standard
+  speech_rate: 1.0          # 1.0 = robot default
+  approach_distance_m: 1.5
+  gaze_height: level        # level | low
+
+neutral_solo: {}
+neutral_group:
+  greeting_template: "Hello, everyone, and welcome! I'm {robot_name}, and I can show you around."
+
+child_solo:
+  greeting_template: "Hi there! I'm {robot_name}. Let's explore together!"
+  first_question: "Do you want a quick story about this one, or to look around first?"
+  vocabulary: simple
+  speech_rate: 0.9
+  approach_distance_m: 1.8
+  gaze_height: low
+child_group:
+  greeting_template: "Hi, everyone! I'm {robot_name}. Let's explore together!"
+  first_question: "Do you want a quick story about this one, or to look around first?"
+  vocabulary: simple
+  speech_rate: 0.9
+  approach_distance_m: 1.8
+  gaze_height: low
+
+adult_solo:
+  greeting_template: "Good to meet you. I'm {robot_name}, happy to show you around."
+adult_group:
+  greeting_template: "Good to meet you all. I'm {robot_name}, happy to show you around."
