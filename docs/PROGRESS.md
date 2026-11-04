@@ -1,5 +1,23 @@
 # Progress log
 
+## step D: profiling interaction policy  *(branch `museum-visual-profile`)*
+
+**Goal:** decide the next move toward learning a visitor, with low regret.
+
+**Built:** `modules/museum/profiling_policy.py` (`ProfilingPolicy`, `Move`) and `config/museum_policy.yaml`. Question budget (min 3 turns apart, max 4 per
+person), allow-listed wording only (choice questions first, then one open interest question), dimension = argmax (1-confidence) x usefulness, gates
+low <0.35 generic / 0.35-0.7 offer / >=0.7 adapt, adaptation levels -2..+2 one step at a time with a cooldown. Declined / ignored / contradicted ->
+revert that step, confidence x0.5, logged with `reversal=True`. `step_log` is an in-memory list of JSON-serialisable dicts (the evaluation/log
+persistence work is deferred).
+
+**Verified:** `modules/museum/tests_policy.py` (12 tests, all with the real `VisitProfile` and no LLM); full suite 87 passed.
+**Didn't work -> fixed (tests, not policy):** two of my own tests failed at first: one expected an offer on `depth` although the argmax correctly
+chose a more useful, more uncertain dimension (fixed by zeroing the other usefulness values in that test); one used contradicting evidence that left
+|value| at 0.297, under the 0.3 floor (fixed with more evidence).
+**Not verified:** the thresholds, budget and cooldown are untuned guesses; no evidence yet they are good. Nothing here ever ran against a human or real LLM.
+
+---
+
 ## step C: visit-scoped profile in the KG  *(branch `museum-visual-profile`)*
 
 **Goal:** per-person, per-visit likes, dislikes and style (`talk_level`, `depth`, `pace`) with value, confidence and evidence.

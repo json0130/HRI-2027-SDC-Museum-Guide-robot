@@ -1,0 +1,36 @@
+# Profiling interaction policy: when to ask, offer or adapt. All values are untuned guesses.
+thresholds:
+  low: 0.35              # confidence below this -> keep the generic default
+  high: 0.7              # at/above -> adapt (one level); between -> offer
+  min_abs_value: 0.3     # mixed/contradictory evidence (|value| below this) never triggers offer/adapt
+budget:
+  min_turns_between_questions: 3
+  max_questions_per_person: 4
+  ignore_after_turns: 2  # an unanswered question/offer counts as "ignored" after this many turns
+  step_cooldown_turns: 2 # min turns between adapt steps on the same dimension
+adaptation:
+  max_level: 2           # level in [-max, +max]; moves one step at a time
+  reversal_conf_factor: 0.5
+usefulness:              # how much knowing this dimension helps the tour
+  talk_level: 1.0
+  depth: 0.8
+  pace: 0.6
+  interest: 0.7
+# Allow-list of everything the robot may ask. Choice questions first, then one open interest
+# question. Nothing personal or sensitive; add new wording here only.
+questions:
+  choice:
+    talk_level: "Would you like me to chat along the way, or mostly stay quiet while you look?"
+    depth: "Would you like the short version, or the full story?"
+    pace: "Shall we take it slowly, or keep things moving?"
+  open: "What has caught your eye so far?"
+  offer:
+    talk_level:
+      high: "Shall I tell you a bit more as we go?"
+      low: "Would you prefer I stay quiet and let you look?"
+    depth:
+      high: "Want more detail on this one?"
+      low: "Should I keep it short here?"
+    pace:
+      high: "Shall we move along a little quicker?"
+      low: "Shall we take this one slowly?"
