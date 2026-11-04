@@ -1,5 +1,19 @@
 # Progress log
 
+## step E: interface for the group policy  *(branch `museum-visual-profile`)*
+
+**Goal:** expose per-person profiles and a visit snapshot to the teammate's group policy, without aggregating.
+
+**Built:** `modules/museum/profile_api.py` (`start_visit`, `end_visit`, `get_person_profile`, `get_visit_snapshot`; JSON-serialisable) and
+`modules/museum/README.md` (contract, rules, age model note). Top-level README updated: the old line "never infers from age" is now "age band shapes only the opening move";
+`proactivity` (listed in the old README) is not built; the brief's three dimensions are.
+
+**Verified:** `modules/museum/tests_profile_api.py` (contract keys, JSON round trip, prior kept out of `dimensions`, unknown ids raise, `end_visit` wipes);
+full suite 90 passed (graph_relationship + museum tests 83, `test_first_impression.py` 7 under pytest; the script itself prints all passed).
+**Not verified:** that the group policy's real needs fit this shape (no consumer exists yet); `prior` is exposed in the profile dict as a labelled hint, which a consumer could misuse.
+
+---
+
 ## step D: profiling interaction policy  *(branch `museum-visual-profile`)*
 
 **Goal:** decide the next move toward learning a visitor, with low regret.

@@ -23,7 +23,7 @@ Each preference carries a **confidence** value, and confidence decides what the 
 | Medium | Offer a choice ("Want more detail on this one?") |
 | High | Adapt, in a way that is easy to undo |
 
-It never infers from age, gender or group type, and it forgets everything when the visit ends.
+A coarse age band (`child` / `adult` / `unsure`) from the camera only shapes how the robot *opens*; it is never spoken, never stored as a preference and is overwritten by what visitors say or choose. It never estimates gender, ethnicity or personality, and it forgets everything when the visit ends.
 
 ## Research questions
 
@@ -52,6 +52,8 @@ reconciled with this one.
 | `modules/graph_relationship/` | Minimal graph closure the guards and rename depend on (`schema`, `store`, `interactions`, `topics`, `scales`, `rename`) and its `tests_*.py` |
 | `modules/session_store.py` | Transcript store |
 | `modules/face_webcam/face_id.py` | `FaceIdentifier` (enroll / identify_all / rename / save) |
+| `modules/museum/` | Museum mode (see its [README](modules/museum/README.md)): age-band prior, opening table, visit-scoped profile in the KG, profiling policy, interface for the group policy. Evaluation not built yet |
+| `config/museum_*.yaml` | Tunable thresholds, weights, wording |
 | `test_first_impression.py` | Headless check of the first-impression flow |
 | `docs/PROGRESS.md` | Provenance, what was verified, and open decisions |
 
@@ -61,10 +63,10 @@ No camera, LLM or network needed.
 
 ```bash
 python3 test_first_impression.py
-python3 -m pytest -q modules/graph_relationship/tests_*.py
+python3 -m pytest -q modules/graph_relationship/tests_*.py modules/museum/tests_*.py
 ```
 
-Python dependencies: `pydantic`, `numpy`, `pytest`. Importing `face_id.py` also needs `opencv-python`,
+Python dependencies: `pydantic`, `numpy`, `pytest`, `pyyaml` (museum mode); `onnxruntime` + `opencv-python` only for the real FairFace backend. Importing `face_id.py` also needs `opencv-python`,
 `torch` and `Pillow`, and real face recognition needs `facenet_pytorch`.
 
 ## Open decisions
