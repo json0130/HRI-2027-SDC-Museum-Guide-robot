@@ -1,0 +1,8 @@
+# Age-band estimator smoothing / abstention. Weak prior only: it shapes how the robot OPENS.
+window: 8            # frames averaged per tracked person
+min_frames: 5        # fewer frames than this -> "unsure"
+min_conf: 0.6        # max(P(child), P(adult)) below this -> "unsure"
+abstain_lo: 0.35     # P(child)/(P(child)+P(adult)) inside (lo, hi) -> "unsure"
+abstain_hi: 0.65
+track_iou: 0.3       # min IoU to continue a visitor track
+track_max_missed: 30 # frames without a match before a track (and its smoother) is dropped

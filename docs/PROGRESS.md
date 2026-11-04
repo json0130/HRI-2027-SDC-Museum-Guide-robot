@@ -1,5 +1,23 @@
 # Progress log
 
+## step A: age-band estimator + worker  *(branch `museum-visual-profile`)*
+
+**Goal:** coarse visual first impression (`child | adult | unsure`) as a weak prior for the opening move only.
+
+**Built:** `modules/museum/appearance.py` (`AgeBandEstimator` protocol; `fake` and `fairface` backends; `PersonAgeSmoother`;
+in-memory IoU `VisitTracker` giving `visitor_N`; `AgeBandPipeline`), `worker.py` (`AgeBandWorker`, `_DetectionWorker` pattern),
+`config.py` (YAML loader), `config/museum_appearance.yaml`. FairFace reads only the 9 age logits; race/gender logits are discarded
+inside the backend. No new pip dependency (onnxruntime already installed); model file is pinned by SHA-256 and not auto-downloaded.
+The 10-19 bin counts toward neither child nor adult, so teens come out `unsure`.
+
+**Verified:** `modules/museum/tests_appearance.py` 13 passed (smoothing, abstention, tracker, worker thread, no gender/race fields,
+checksum refusal, one real FairFace forward pass on a random image against the cached model). Full suite green.
+
+**Not verified:** FairFace age quality on real faces (the test only checks the output is a valid distribution); real camera; there is
+no `webcam_loop` in this repo, so the `--museum` flag has nothing to attach to yet. IoU-only tracking can swap ids when people cross.
+
+---
+
 ## import: first-impression logic from ChatBox-companion-robot  *(branch `feat/import-first-impression`)*
 
 **Goal:** seed the museum-guide repo with the first-impression work (the brief's "guards from your
