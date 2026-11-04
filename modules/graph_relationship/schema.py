@@ -297,11 +297,19 @@ class RoleTopicNode(BaseModel):
 
 
 # Union of all node types (discriminated on node_type for (de)serialisation)
+class StyleDimNode(BaseModel):
+    """One shared node per interaction-style dimension (museum mode): talk_level, depth, pace.
+    A visitor's ProfileEdge points here. Holds no person data."""
+    id: str
+    dim: str   # closed set enforced by modules/museum/profile.py (talk_level | depth | pace)
+    node_type: Literal["style_dim"] = "style_dim"
+
+
 AnyNode = Union[
     RobotNode, PersonNode, TopicNode,
     PersonaNode, RoleNode, CapabilityNode, InterestNode,
     InteractionNode, SessionNode, ConversationNode,
-    CultureNode, CultureTopicNode, RoleTopicNode,
+    CultureNode, CultureTopicNode, RoleTopicNode, StyleDimNode,
 ]
 
 
@@ -533,7 +541,36 @@ class RoleKnowsEdge(EdgeBase):
     timescale: Timescale = Timescale.SLOW
 
 
+# ---------------------------------------------------------------------------
+# Visit-scoped profile edge (museum mode) — FAST, signed, with evidence
+# ---------------------------------------------------------------------------
+
+class Evidence(BaseModel):
+    """One piece of evidence behind a ProfileEdge. Stores NO visitor text, only a turn index."""
+    source: str                          # choice_answer | llm_statement | behavior_cue
+    weight: float = Field(..., ge=0.0, le=1.0)
+    sign: int = Field(..., ge=-1, le=1)  # +1 / -1
+    timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    turn_ref: Optional[int] = None
+
+
+class ProfileEdge(EdgeBase):
+    """Person → TopicNode (like > 0 / dislike < 0) or Person → StyleDimNode, for ONE visit.
+
+    `value` is signed in [-1, 1] (style: -1 quiet/brief/slow … +1 chatty/detailed/fast).
+    `confidence` is how sure we are; consumers must read value * confidence ("pulled toward
+    neutral"), not the raw value. FAST and visit-scoped: deleted when the visit ends, never
+    saved. Old kg_state.json files simply contain none of these.
+    """
+    edge_type: Literal["visit_pref"] = "visit_pref"
+    value: float = Field(..., ge=-1.0, le=1.0)
+    confidence: float = Field(..., ge=0.0, le=1.0)
+    visit_id: str
+    evidence: List[Evidence] = Field(default_factory=list)
+    timescale: Timescale = Timescale.FAST
+
+
 AnyEdge = Union[
     RelationshipEdge, PersonAttributeEdge, IdentityEdge, TopicEdge,
-    InteractionEdge, CultureEdge, RoleKnowsEdge,
+    InteractionEdge, CultureEdge, RoleKnowsEdge, ProfileEdge,
 ]

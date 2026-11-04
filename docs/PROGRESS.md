@@ -1,5 +1,24 @@
 # Progress log
 
+## step C: visit-scoped profile in the KG  *(branch `museum-visual-profile`)*
+
+**Goal:** per-person, per-visit likes, dislikes and style (`talk_level`, `depth`, `pace`) with value, confidence and evidence.
+
+**Schema (additive, `schema.py`):** `Evidence`, `StyleDimNode`, `ProfileEdge` (`visit_pref`, FAST, signed `value` in [-1,1], `confidence`,
+`visit_id`, `evidence[]`). Existing types untouched; `PersonAttributeEdge` and `get_person_context` do not see the new edge, so existing
+consumers are unaffected. `PreferenceEdge` (SLOW, unsigned) and `AboutEdge` (SLOW, no visit scope) were not reused: they would be long-term memory.
+**Built:** `modules/museum/profile.py` (`VisitProfile`: private `InMemoryGraphStore`, never saved; noisy-OR confidence; `effective_value = value x confidence`;
+visual prior held outside the KG and decaying x0.5 per real evidence; `end()` deletes persons, edges, created topics and style nodes),
+`profile_extraction.py` (per-turn, injected `llm_fn`, closed vocab, `CONFIDENCE_MIN`, quote must occur in the utterance, parse/shape failure applies nothing),
+`config/museum_profile.yaml`.
+
+**Verified:** `modules/museum/tests_profile.py` (old-format `kg_state` loads, new types round-trip, weights, contradiction, prior never in the KG,
+guards with a fake LLM, wipe at end, no files created); full suite 75 passed.
+**Not verified:** real LLM extraction quality; `SessionStore`/RAG are simply not used by museum code (nothing enforces it beyond the museum modules not importing them).
+**Deviation:** extraction drops invalid items individually (as `kg_extraction` does) and applies the survivors together; a parse/shape failure applies nothing.
+
+---
+
 ## step B: initiation policy table  *(branch `museum-visual-profile`)*
 
 **Goal:** map (age band, confidence, group size) to opening parameters, robot-agnostic.
