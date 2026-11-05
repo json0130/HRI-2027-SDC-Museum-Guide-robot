@@ -1,5 +1,30 @@
 # Progress log
 
+## follow-up 2: FairFace boundary tests  *(branch `museum-visual-profile`)*
+
+**Goal:** prove race/gender never leave the FairFace backend and that the 10-19 bin reads `unsure`.
+**Built (tests only, no code change):** in `tests_appearance.py` a fake onnx session returns 7 race + 2 gender + 9 age logits.
+Verified: wildly different race/gender logits give an identical `AgeProbs`; the result has only `p_child`/`p_adult`/`p_teen`; each of the 9 bins maps
+to child (0-2, 3-9) / teen (10-19) / adult (20+); a 10-19 face stays `unsure` through the smoother at a full window; a source check that
+`estimate` reads only `logits[9:18]`. 25 tests in that file pass.
+**Not verified:** that the real model's age output is sensible (still only a valid-distribution check on random pixels).
+
+---
+
+## follow-up 1: ephemerality enforced  *(branch `museum-visual-profile`)*
+
+**Problem:** step C only avoided the disk paths by convention (README said "nothing enforces that").
+**Fix:** `modules/ephemeral.py`, a ref-counted switch turned on by `VisitProfile()` and off by `end()`. While on, `forbid()` raises `EphemeralViolation` from:
+`SessionStore(path)` (unless `":memory:"`), `FaceIdentifier.save` and `.load`, `FirstImpression.auto_enroll` / `learn_name` (and so `meet`), and `GraphStore.save`.
+With no visit active every call is a no-op, so existing modes behave as before (existing tests unchanged).
+**Deviation:** this edits four files imported from ChatBox (a one-line guard each, plus the import), so they now differ from the originals.
+**Verified:** `tests_ephemeral.py`: with no visit a disk SessionStore, auto-enrol and graph save still work; during a visit each refuses, no file (incl. `faces.npz`) is created,
+`:memory:` SessionStore still works, normal behaviour returns after `end()`; the real `FaceIdentifier` (no models loaded) refuses `save`/`load`; overlapping visits and a double `end()` keep the counter balanced.
+My own step-C round-trip test saved a graph during a visit and broke, which is the guard working; that test now serialises by hand. 94 passed.
+**Not verified / limits:** this guards the persistence entry points in this repo. Any other file write (e.g. someone using `np.savez` directly) is not caught. The switch is process-wide.
+
+---
+
 ## step E: interface for the group policy  *(branch `museum-visual-profile`)*
 
 **Goal:** expose per-person profiles and a visit snapshot to the teammate's group policy, without aggregating.
