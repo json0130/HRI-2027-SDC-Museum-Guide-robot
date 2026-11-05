@@ -1,6 +1,6 @@
 # modules/museum: low-regret personalisation for one-off visits
 
-Steps A-E of the museum-visual-profile work. Evaluation (decision log, baseline modes, simulator) is **not built yet**.
+Steps A-F of the museum-visual-profile work.
 
 | File | What |
 |---|---|
@@ -9,6 +9,8 @@ Steps A-E of the museum-visual-profile work. Evaluation (decision log, baseline 
 | `profile.py`, `profile_extraction.py` | Visit-scoped likes / dislikes / style (`talk_level`, `depth`, `pace`) as `ProfileEdge`s in a private in-memory KG; guarded per-turn LLM extraction |
 | `profiling_policy.py` | Question budget, confidence gates (generic / offer / adapt), one-step adaptation with reversal |
 | `profile_api.py` | Read-only interface for the group policy |
+| `decision_log.py` | Anonymised JSONL decision log, the only thing kept after a visit (random `visit_id`, `t` = seconds since visit start, no text/labels/names/images/embeddings) |
+| `simulate.py` | No-hardware simulator: `fixed` / `prior-only` / `profile` modes, scripted visitors with ground truth, paired seeds, bootstrap intervals, sweeps, break-even sensitivity analysis. `python -m modules.museum.simulate --seeds 200 --out docs/results --prefix museum_first_run` |
 
 ## Rules (enforced by tests where noted)
 - **Age band only.** No gender, race/ethnicity or personality is estimated, stored or returned. FairFace outputs them; the backend reads only the 9 age logits (test: output fields).

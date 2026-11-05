@@ -1,5 +1,30 @@
 # Progress log
 
+## step F (build): decision log, three modes, simulator  *(branch `museum-visual-profile`)*
+
+**Built:** `decision_log.py` (JSONL per visit; `visit_id` = random 12 hex chars; `t` = seconds since visit start; whitelisted fields only, topics as closed category counts, never labels or speech; `suspended_writes` cumulative),
+`simulate.py` + `config/museum_sim.yaml`. Modes: `fixed` (neutral opening, nothing else), `prior-only` (opening from the age-band prior, nothing else), `profile` (prior + guarded extraction + profiling policy with small steps/reversals).
+Scenarios: child, adult, adult confidently misread as child, quiet, chatty, topic-dislike (truth neutral on every style dimension), and three swap variants (quiet+chatty pair): detected (ids swap for 4 turns, `track_conf` drops, writes suspended),
+silent (same swap, `track_conf` does not drop), silent-persistent (swap from turn 8 to the end). Fake LLM with a noise knob {0, .1, .2, .3}: per item flip direction (guards cannot catch), invent a quote / low confidence / off-vocabulary
+(the real guards drop these), plus a spurious topic quoting a real word. Age misread rate is a swept parameter {0, .1, .2, .3} (plus one forced misread scenario). Paired design: each random draw is keyed by (seed, scenario, person, turn, purpose),
+so a visitor says and does the same thing in every mode. Metrics: wrong openings; wrong adaptations as two numbers (opposed to truth / made when truth was neutral); reversals; questions per visitor; declined offers; turns to confident (confidence >= the adapt gate)
+and confident-but-wrong; profile accuracy (style sign correct / wrong / no call, false positives on truth-0 dimensions, MAE of effective value) and like/dislike precision/recall; suspended writes. Intervals: percentile bootstrap (1000) over seeds.
+Break-even: W/R at which `profile` (or `prior-only`) stops beating `fixed`, labelled a sensitivity analysis; `fixed` has net benefit 0, so the ratio is right/wrong (optionally minus a per-question cost).
+**Verified:** `tests_simulate.py` (determinism, fixed/prior-only never adapt or ask, misread parameter, silent swap worse than detected, noise events caught/not by the real guards, bootstrap + break-even arithmetic, config-hash tracks effective config, log content anonymous and whitelisted, `t` and random `visit_id`);
+end-to-end ephemerality: a full simulated visit (all three modes, two scenarios) in an EMPTY temp dir creates only the `.jsonl` decision logs, nothing else (no `faces.npz`, `sessions.db`, `kg_state.json`). 136 passed.
+**Didn't work -> fixed (before freezing):** `DecisionLog` was built before the simulator clock state existed (NameError, only when logging); fixed. My style phrase "i love chatting as we go" also matched the fake LLM's *topic* rule and produced spurious likes (dev like-precision 0.58); the phrase was changed.
+**Development used only seeds >= 10000** (unit tests, plus one 6-seed smoke run on 10000..10005 to check rendering and speed). The official run uses seeds 0..199. No threshold was changed after any run.
+
+---
+
+## FROZEN: thresholds and simulator parameters before the first official run  *(branch `museum-visual-profile`)*
+
+Config hash (sha256 of the canonical JSON of all effective museum configs: appearance, initiation, profile, policy, sim): `1929eb86ac450e809b77a50bbd2fc96169f52c32d67dbb239be0fa393a3d01d5`.
+Gates low 0.35 / high 0.7, min_abs_value 0.3, budget 3 turns / 4 questions, ignore-after 2, cooldown 2, max level 2, reversal x0.5; weights 0.8 / 0.5 / 0.25; min_track_conf 0.5; opening min_conf 0.7; headline noise 0.1, misread 0.1, 24 turns, 200 paired seeds (0..199).
+If any value changes after this point the results are a NEW run with a new hash, labelled as such; the first run is reported as it is.
+
+---
+
 ## follow-up 5 (step 4): tracker re-association, margin rule, track confidence, suspended writes  *(branch `museum-visual-profile`)*
 
 **Goal:** fewer id swaps; when identity is in doubt, stop writing evidence.

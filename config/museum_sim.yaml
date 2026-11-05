@@ -1,0 +1,27 @@
+# Simulator parameters: scripted visitors with ground truth. These encode MY assumptions about
+# how visitors behave; the results measure the policy against these simulated people, not real ones.
+turns: 24
+seeds: 200
+boot: 1000
+noise: 0.1               # headline extraction-noise rate in the fake LLM
+misread: 0.1             # headline age-misread rate (probability a visitor's band is read confidently wrong)
+noise_grid: [0.0, 0.1, 0.2, 0.3]
+misread_grid: [0.0, 0.1, 0.2, 0.3]
+prior_frames: 8
+seconds_per_turn: 20
+swap: {start: 8, window: 4}
+topic_call: 0.2          # |effective_value| needed to count a topic as predicted like/dislike
+style_call: 0.05         # |effective_value| below this = "no call" on a style dimension
+neutral_fp: 0.2          # |effective_value| at/above this on a truth-0 dimension = false positive
+costs: {question: [0.0, 0.05, 0.1]}   # break-even sensitivity: cost per question, in units of one right adaptation
+visitor:
+  p_speak: {"-1": 0.25, "0": 0.5, "1": 0.8}     # chance of volunteering a statement, by true talk_level
+  p_answer: 0.9           # answers a choice / open question at all
+  p_lapse: 0.1            # answers a choice question with the wrong side
+  p_accept_agree: 0.9     # accepts an offer that matches the truth
+  p_decline_oppose: 0.9   # declines an offer that opposes the truth
+  p_accept_neutral: 0.5   # accepts an offer on a dimension they have no preference on
+  p_react_agree: 0.9      # visibly accepts an adaptation that matches the truth (silence = "ignored")
+  p_react_oppose: 0.7     # visibly declines an adaptation that opposes the truth
+  p_decline_neutral: 0.2  # declines an adaptation on a dimension they have no preference on
+  p_followup: 0.3         # asks a follow-up (behaviour cue) per turn when the truth is depth +1
