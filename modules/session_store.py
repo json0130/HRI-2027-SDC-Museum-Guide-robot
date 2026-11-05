@@ -21,6 +21,8 @@ import threading
 from datetime import datetime, timezone
 from typing import List, Optional
 
+from modules import ephemeral
+
 DEFAULT_DB = "sessions.db"
 
 
@@ -32,6 +34,8 @@ class SessionStore:
     """SQLite-backed transcript store. One row per conversation turn."""
 
     def __init__(self, path: str = DEFAULT_DB) -> None:
+        if path != ":memory:":
+            ephemeral.forbid("a disk-backed SessionStore")
         self.path = path
         # check_same_thread=False + a lock: the viz server is a ThreadingHTTPServer,
         # so requests touch this connection from different threads. The lock

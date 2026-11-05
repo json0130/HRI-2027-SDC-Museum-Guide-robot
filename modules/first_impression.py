@@ -18,6 +18,8 @@ from typing import Callable, Iterable, Optional
 
 import numpy as np
 
+from modules import ephemeral
+
 # ─────────────────────────────────────────────────────────────────────────────
 # Name extraction (guard: feelings / filler / culture words are not names)
 # ─────────────────────────────────────────────────────────────────────────────
@@ -96,6 +98,7 @@ class FirstImpression:
     def auto_enroll(self, frame: np.ndarray) -> Optional[str]:
         """Enrol the face in `frame` under a fresh provisional id and persist the face
         DB. Returns the new id, or None if no face was captured."""
+        ephemeral.forbid("first-impression auto-enrol (it saves faces.npz)")
         if frame is None:
             print("[FirstImpression] auto-enrol skipped — no face seen recently")
             return None
@@ -112,6 +115,7 @@ class FirstImpression:
     def learn_name(self, old_id: str, new_id: str, display: str) -> bool:
         """Re-key a provisional guest to their real name across the face DB, the graph,
         the transcript store and the in-memory maps."""
+        ephemeral.forbid("first-impression name learning (it saves faces.npz)")
         if not self.face_id.rename(old_id, new_id):
             return False
         self.face_id.save(self.faces_path)

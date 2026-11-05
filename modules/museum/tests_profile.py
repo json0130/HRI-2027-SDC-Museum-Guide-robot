@@ -29,7 +29,9 @@ def test_old_kg_state_loads_and_new_types_round_trip(tmp_path):
     p.record_style("visitor_1", "pace", -1, "choice_answer", turn_ref=2)
     p.record_topic("visitor_1", "dinosaurs", "animals", +1, "llm_statement")
     out = tmp_path / "new.json"
-    p.store.save(str(out))          # test-only save; production museum code never saves
+    # store.save() now refuses during a visit (see tests_ephemeral), so serialise by hand, same format
+    out.write_text(json.dumps({"nodes": [n.model_dump(mode="json") for n in p.store._nodes.values()],
+                               "edges": [e.model_dump(mode="json") for e in p.store._edges.values()]}))
     s2 = InMemoryGraphStore()
     assert s2.load(str(out), quiet=True)
     e = s2.get_edge("visitor_1", "style:pace", "visit_pref")

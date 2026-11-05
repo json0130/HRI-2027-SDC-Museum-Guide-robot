@@ -22,6 +22,8 @@ from typing import Dict, List, Optional, Set, Tuple
 from pydantic import Field, TypeAdapter
 from typing import Annotated
 
+from modules import ephemeral
+
 from .schema import (
     AnyEdge,
     AnyNode,
@@ -308,6 +310,7 @@ class InMemoryGraphStore(GraphStore):
 
     def save(self, path: str) -> None:
         """Serialise the full graph to a JSON file using Pydantic model_dump."""
+        ephemeral.forbid("saving the knowledge graph")
         import json
         data = {
             "nodes": [n.model_dump(mode="json") for n in self._nodes.values()],

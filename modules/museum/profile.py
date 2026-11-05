@@ -24,6 +24,8 @@ from modules.graph_relationship.schema import (
 from modules.graph_relationship.store import InMemoryGraphStore
 from modules.graph_relationship.topics import resolve_topic
 
+from modules import ephemeral
+
 from .config import load_config
 
 # dim -> (value -1 meaning, value +1 meaning)
@@ -52,6 +54,7 @@ class VisitProfile:
         self._n_real: Dict[str, int] = {}
         self._topics: Set[str] = set()
         self.ended = False
+        ephemeral.enter()     # from here until end(), disk persistence of visitor data refuses to run
 
     # -- persons / prior ------------------------------------------------------
 
@@ -165,6 +168,8 @@ class VisitProfile:
 
     def end(self) -> dict:
         """Delete every person node (with its edges) and the topics this visit created."""
+        if self.ended:
+            return {"visit_id": self.visit_id, "persons_deleted": 0, "topics_deleted": 0}
         n_p, n_t = len(self._persons), len(self._topics)
         for pid in self._persons:
             self.store.delete_node(pid)
@@ -174,4 +179,5 @@ class VisitProfile:
             self.store.delete_node(_style_id(dim))
         self._persons, self._prior, self._n_real, self._topics = [], {}, {}, set()
         self.ended = True
+        ephemeral.leave()
         return {"visit_id": self.visit_id, "persons_deleted": n_p, "topics_deleted": n_t}

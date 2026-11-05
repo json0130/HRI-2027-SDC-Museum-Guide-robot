@@ -38,6 +38,8 @@ import numpy as np
 import torch
 from PIL import Image
 
+from modules import ephemeral
+
 # ── Load facenet-pytorch models (CPU only — RTX 5060 needs sm_120, see notes) ─
 
 try:
@@ -890,6 +892,7 @@ class FaceIdentifier:
         older checkout, or any external reader, keeps working. Schema-2 readers
         ignore it.
         """
+        ephemeral.forbid("saving the face database")
         names = list(self._protos)
         if not names:
             np.savez(path, schema=np.array([self.SCHEMA], np.int32),
@@ -920,6 +923,7 @@ class FaceIdentifier:
     def load(self, path: str) -> bool:
         """Load galleries from a .npz file. Reads schema 2, and MIGRATES the old
         single-averaged-embedding format (schema 1) in place. Returns True on success."""
+        ephemeral.forbid("loading a stored face database")
         if not os.path.exists(path):
             return False
         try:
