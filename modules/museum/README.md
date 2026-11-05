@@ -35,6 +35,15 @@ get_visit_snapshot(visit_id, include_prior=False) -> {"visit_id", "group_size", 
 ```
 Act on `effective_value`, not `value`: low-confidence items are already pulled toward neutral there. `value` -1 means the *low* end (quiet / brief / slow), +1 the *high* end (chatty / detailed / fast). Unknown visit or person raises `KeyError`. No group aggregation is implemented.
 
+## Live demo (webcam + conversation + live KG view)
+```bash
+# real webcam + lab AI server (needs torch/facenet-pytorch/opencv/flask + the cached FairFace model)
+python3 -m modules.museum.live --camera 0 --ai-server 172.24.30.251 --log-dir logs/museum
+# no hardware, no network: virtual visitor, rule-based fake LLM
+python3 -m modules.museum.live --no-camera --virtual-band adult --llm fake
+```
+Open http://127.0.0.1:8080. Face appears -> opening (greeting + one choice question) from the age-band prior -> each message: pending question/step outcome, guarded LLM extraction into the in-memory KG, policy decides the next move, reply uses the current style levels. The page redraws the profile, the graph and the policy steps every 0.7 s. "End visit (wipe)" deletes all person data. `--llm fake` only understands the simulator's exact phrases ("just give me the short version", "tell me the full story please", "let's keep things moving", "can we take this slowly", "I love X", "I can't stand X"); the opening depth question is also answered by keywords. Real webcam and real AI-server use are **not verified** (see PROGRESS.md).
+
 ## Identity (tracker) and suspended writes
 `VisitTracker` keeps `visitor_N` ids by IoU plus, when the detector supplies `Detection(box, emb)`, face-embedding cosine (face outweighs position). A returning face takes back a lost id only if its best cosine is >= `reid_min_cos` (0.6) **and** beats the runner-up track by >= `reid_gap` (0.1); otherwise it is a new person (a wrongly new id loses a profile, a wrong merge corrupts one). Each track has a `track_conf`; an ambiguous match (small margin, or overlapping faces with no embeddings) drops it. `VisitProfile.apply_tracks(results)` passes it in; below `min_track_conf` (0.5) evidence writes are **dropped, not buffered**, and counted (`suspended_writes`, `suspended_by_person`); the policy asks nothing of that person.
 - Face embeddings are biometric data held **in memory only**, per track, discarded with the track and by `AgeBandPipeline.clear()`; never written to disk.

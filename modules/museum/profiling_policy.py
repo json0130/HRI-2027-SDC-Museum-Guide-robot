@@ -198,6 +198,13 @@ class ProfilingPolicy:
                 return self._ask(st, pid, turn, Move("ask_choice", d, 0, c["questions"]["choice"][d]), d)
         return NONE
 
+    def note_external_question(self, pid: str, turn: int) -> None:
+        """A question asked outside the policy (the opening's first question) still uses budget."""
+        st = self._st(pid)
+        st.questions += 1
+        st.last_q_turn = turn
+        self._log(turn, pid, "opening_question", "opening", "none", confidence=0.0)
+
     def _ask(self, st: _P, pid: str, turn: int, mv: Move, target: str) -> Move:
         if mv.kind == "ask_open":
             st.asked_open = True

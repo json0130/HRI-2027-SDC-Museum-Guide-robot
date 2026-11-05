@@ -1,5 +1,18 @@
 # Progress log
 
+## live demo: webcam + conversation + live KG view  *(branch `museum-visual-profile`)*
+
+**Goal:** something runnable to meet a person, watch the profile and KG build live, and talk to the lab LLM.
+**Built:** `modules/museum/live.py` (`Live` session + Flask app + camera thread + CLI), `live_ui.html` (video with debug overlay, chat, profile bars, SVG graph, policy-step table; polls `/state`), `modules/ai_server_llm.py` (vendored stdlib TCP client from ChatBox),
+`ProfilingPolicy.note_external_question` (the opening's question uses question budget). The webcam path uses `FaceIdentifier` only for detection + embeddings (`identify_all(..., with_emb=True)`); it never enrols, saves or loads, and the ephemeral guard would raise if it did.
+The age-band prior only picks the opening row and, while no real evidence exists, adds "use simple words" to the prompt; the LLM never sees the band, mood, or anything about appearance.
+**Verified (headless):** `tests_live.py` (opening from the prior without age wording, unsure -> neutral row, answer -> evidence -> prior dropped, extraction -> likes + graph edges, one-level steps, negative reaction reverts + logs, low `track_conf` drops writes and the UI count shows it, end wipes and only the `.jsonl` log remains, disk `SessionStore` refused mid-visit, Flask endpoints, no-face case);
+the server process also started and served `/chat`, `/state`, `/video` with the virtual visitor. 145 passed.
+**Didn't work -> fixed:** graph label code evaluated `id.split(":")[1]` for person ids (IndexError, found by tests); two of my live tests mis-modelled the policy (one explicit answer already reaches the adapt gate, so the first step happens on that same turn, and the visitor's reaction is judged on the very next message).
+**NOT verified:** a real webcam (this machine has no `/dev/video*`), real MTCNN/Haar detection + embeddings through `Detection`, real FairFace inference on live frames, the real AI server (unreachable from here), real LLM extraction quality and latency (extraction runs synchronously inside the chat request), multi-person visits in the UI (the chat addresses the largest face), the UI in a browser (only fetched, never rendered by me).
+
+---
+
 ## RESULT: first official simulator run  *(branch `museum-visual-profile`)*
 
 **Run:** 200 paired seeds (0..199), 24 turns, headline extraction noise 0.1 and age-misread 0.1, config hash `1929eb86...3d01d5` (matches the FROZEN entry), code at commit `e972257` (tree clean). Full tables: `docs/results/museum_first_run.md` / `.json`.
