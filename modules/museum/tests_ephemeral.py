@@ -52,7 +52,7 @@ def test_museum_visit_refuses_every_disk_path(tmp_path, monkeypatch):
 
 
 def test_real_face_identifier_save_and_load_refuse(tmp_path, monkeypatch):
-    face_id = pytest.importorskip("modules.face_webcam.face_id")
+    from modules.face_webcam import face_id            # hard import: a missing dependency must fail, not skip
     monkeypatch.chdir(tmp_path)
     fid = face_id.FaceIdentifier.__new__(face_id.FaceIdentifier)    # no models loaded
     vp = VisitProfile("v1")

@@ -1,5 +1,13 @@
 # Progress log
 
+## follow-up 4: confirm the FaceIdentifier guard landed  *(branch `museum-visual-profile`)*
+
+**Why:** my follow-up-1 edit script aborted halfway on a failed string match, leaving the guards half-applied; I fixed it and the suite passed, but nothing proved the `face_id.py` guards specifically.
+**Done:** the `FaceIdentifier.save` / `.load` test used `importorskip`, so a missing dependency would have skipped it silently; it is now a hard import.
+**Verified (mutation check):** commenting out both `ephemeral.forbid` lines in `face_id.py` makes `test_real_face_identifier_save_and_load_refuse` fail (AttributeError, because the object has no models loaded, so the guard really is the first statement); restoring them passes. `git status` clean after commit.
+
+---
+
 ## follow-up 3: prior hidden by default, opening-only, dropped on evidence  *(branch `museum-visual-profile`)*
 
 **Problem:** step E exposed `prior` in every profile, where a group policy could mistake it for a preference.
