@@ -35,6 +35,7 @@ SOURCES = ("choice_answer", "llm_statement", "behavior_cue")
 DEFAULTS = {
     "weights": {"choice_answer": 0.8, "llm_statement": 0.5, "behavior_cue": 0.25},
     "extraction": {"max_items_per_turn": 3},
+    "min_track_conf": 0.5,
 }
 _EDGE = "visit_pref"
 
@@ -52,6 +53,9 @@ class VisitProfile:
         self._prior: Dict[str, dict] = {}
         self._n_real: Dict[str, int] = {}
         self._topics: Set[str] = set()
+        self._track_conf: Dict[str, float] = {}
+        self.suspended_writes = 0
+        self.suspended_by_person: Dict[str, int] = {}
         self.ended = False
         ephemeral.enter()     # from here until end(), disk persistence of visitor data refuses to run
 
@@ -71,6 +75,20 @@ class VisitProfile:
     def group_size(self) -> int:
         return len(self._persons)
 
+    def set_track_conf(self, person_id: str, conf: float) -> None:
+        """Identity confidence of this person's face track (from the tracker). Below
+        cfg['min_track_conf'] new evidence is DROPPED, not buffered (see ``is_suspended``)."""
+        self._track_conf[person_id] = float(conf)
+
+    def apply_tracks(self, results) -> None:
+        """Feed AgeBandPipeline.process() results in: updates track confidence per person."""
+        for r in results:
+            if r["person_id"] in self._persons:
+                self.set_track_conf(r["person_id"], r["track_conf"])
+
+    def is_suspended(self, person_id: str) -> bool:
+        return self._track_conf.get(person_id, 1.0) < self.cfg["min_track_conf"]
+
     def set_prior(self, person_id: str, band: str, confidence: float) -> None:
         self._prior[person_id] = {"band": band, "confidence": float(confidence)}
 
@@ -85,7 +103,7 @@ class VisitProfile:
     # -- writing evidence -----------------------------------------------------
 
     def _add(self, person_id: str, target_id: str, sign: int, source: str, turn_ref: Optional[int],
-             strength: float) -> ProfileEdge:
+             strength: float) -> Optional[ProfileEdge]:
         if self.ended:
             raise RuntimeError("visit has ended")
         if person_id not in self._persons:
@@ -94,6 +112,10 @@ class VisitProfile:
             raise ValueError(f"unknown evidence source {source!r}")
         if sign not in (-1, 1):
             raise ValueError("sign must be +1 or -1")
+        if self.is_suspended(person_id):      # who this is, is in doubt: write nothing (and count it)
+            self.suspended_writes += 1
+            self.suspended_by_person[person_id] = self.suspended_by_person.get(person_id, 0) + 1
+            return None
         w = max(0.0, min(1.0, self.cfg["weights"][source] * strength))
         ev = Evidence(source=source, weight=w, sign=sign, turn_ref=turn_ref)
         old = self.store.get_edge(person_id, target_id, _EDGE)
@@ -111,8 +133,8 @@ class VisitProfile:
         return self.store.upsert_edge(edge)
 
     def record_style(self, person_id: str, dim: str, sign: int, source: str, turn_ref: Optional[int] = None,
-                     strength: float = 1.0) -> ProfileEdge:
-        """sign +1 = the high end (chatty/detailed/fast), -1 = the low end (quiet/brief/slow)."""
+                     strength: float = 1.0) -> Optional[ProfileEdge]:
+        """Returns None when the write was suspended (low track confidence). sign +1 = the high end (chatty/detailed/fast), -1 = the low end (quiet/brief/slow)."""
         if dim not in DIMS:
             raise ValueError(f"unknown style dimension {dim!r}")
         sid = _style_id(dim)
@@ -121,12 +143,14 @@ class VisitProfile:
         return self._add(person_id, sid, sign, source, turn_ref, strength)
 
     def record_topic(self, person_id: str, label: str, category: str, sign: int, source: str,
-                     turn_ref: Optional[int] = None, strength: float = 1.0) -> ProfileEdge:
-        """sign +1 = likes, -1 = dislikes."""
+                     turn_ref: Optional[int] = None, strength: float = 1.0) -> Optional[ProfileEdge]:
+        """sign +1 = likes, -1 = dislikes. None when the write was suspended."""
         if category not in TOPIC_CATEGORIES:
             category = "other"
         if person_id not in self._persons:
             raise KeyError(f"unknown person {person_id!r}")
+        if self.is_suspended(person_id):
+            return self._add(person_id, "", sign, source, turn_ref, strength)   # counted + dropped, no topic node
         t = resolve_topic(self.store, label, category)
         self._topics.add(t.id)
         return self._add(person_id, t.id, sign, source, turn_ref, strength)
@@ -178,6 +202,7 @@ class VisitProfile:
         for dim in DIMS:
             self.store.delete_node(_style_id(dim))
         self._persons, self._prior, self._n_real, self._topics = [], {}, {}, set()
+        self._track_conf = {}
         self.ended = True
         ephemeral.leave()
         return {"visit_id": self.visit_id, "persons_deleted": n_p, "topics_deleted": n_t}

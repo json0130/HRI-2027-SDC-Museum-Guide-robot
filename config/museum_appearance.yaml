@@ -6,3 +6,16 @@ abstain_lo: 0.35     # P(child)/(P(child)+P(adult)) inside (lo, hi) -> "unsure"
 abstain_hi: 0.65
 track_iou: 0.3       # min IoU to continue a visitor track
 track_max_missed: 30 # frames without a match before a track (and its smoother) is dropped
+# Re-association (in-memory face embeddings; see VisitTracker). Cosine scale: facenet-pytorch
+# InceptionResnetV1(vggface2). Checked on 8 stored views of one person: same-person cosine
+# min 0.42 / mean 0.67 / max 0.87, so 0.6 misses some true returns (safe direction: a new id).
+# Different-person range NOT measured (no multi-person face data available locally).
+reid_min_cos: 0.6    # best cosine needed to give a returning face its old id
+reid_gap: 0.1        # ...and it must beat the runner-up track by this much, else a new id
+reid_ttl: 300        # frames a lost track (with an embedding) is remembered for re-association
+iou_weight: 0.3      # continuity score = iou_weight*IoU + (1-iou_weight)*cosine (face outweighs position)
+overlap_ambiguous: 0.2  # two overlapping detections lacking embeddings = ambiguous (crossing / occlusion)
+match_margin: 0.15   # best-vs-runner-up score gap below this = ambiguous match
+conf_ambiguous: 0.2  # track_conf after an ambiguous match
+conf_recover: 0.2    # track_conf gained per clean frame
+new_track_conf: 0.6  # track_conf of a new / re-associated track

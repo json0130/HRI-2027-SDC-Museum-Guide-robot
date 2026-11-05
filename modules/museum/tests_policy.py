@@ -133,3 +133,19 @@ def test_step_log_is_json_serialisable_and_has_no_prior():
         pol.next_move("visitor_1", t)
     blob = json.dumps(pol.step_log)
     assert "child" not in blob and pol.step_log
+
+
+def test_suspended_person_gets_no_moves_and_observe_writes_are_dropped():
+    prof, pol = make()
+    prof.record_style("visitor_1", "pace", +1, "choice_answer")
+    prof.record_style("visitor_1", "pace", +1, "llm_statement")
+    prof.set_track_conf("visitor_1", 0.1)
+    assert pol.next_move("visitor_1", 0).kind == "none"
+    assert pol.level("visitor_1", "pace") == 0
+    prof.set_track_conf("visitor_1", 0.9)
+    assert pol.next_move("visitor_1", 1).kind == "adapt"
+    prof.set_track_conf("visitor_1", 0.1)
+    n = prof.style("visitor_1", "pace")["evidence_count"]
+    pol.observe("visitor_1", "declined", 2)                 # the revert still happens; the evidence write is dropped
+    assert prof.style("visitor_1", "pace")["evidence_count"] == n and prof.suspended_writes >= 1
+    assert pol.level("visitor_1", "pace") == 0

@@ -5,5 +5,6 @@ weights:
   behavior_cue: 0.25     # declining an offer, asking a follow-up, ...
 # The visual age-band prior is not evidence: it is never written to the KG and is dropped
 # as soon as any real evidence exists (see VisitProfile.prior).
+min_track_conf: 0.5   # below this a person's evidence writes are dropped (counted, not buffered)
 extraction:
   max_items_per_turn: 3

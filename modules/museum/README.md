@@ -33,6 +33,12 @@ get_visit_snapshot(visit_id, include_prior=False) -> {"visit_id", "group_size", 
 ```
 Act on `effective_value`, not `value`: low-confidence items are already pulled toward neutral there. `value` -1 means the *low* end (quiet / brief / slow), +1 the *high* end (chatty / detailed / fast). Unknown visit or person raises `KeyError`. No group aggregation is implemented.
 
+## Identity (tracker) and suspended writes
+`VisitTracker` keeps `visitor_N` ids by IoU plus, when the detector supplies `Detection(box, emb)`, face-embedding cosine (face outweighs position). A returning face takes back a lost id only if its best cosine is >= `reid_min_cos` (0.6) **and** beats the runner-up track by >= `reid_gap` (0.1); otherwise it is a new person (a wrongly new id loses a profile, a wrong merge corrupts one). Each track has a `track_conf`; an ambiguous match (small margin, or overlapping faces with no embeddings) drops it. `VisitProfile.apply_tracks(results)` passes it in; below `min_track_conf` (0.5) evidence writes are **dropped, not buffered**, and counted (`suspended_writes`, `suspended_by_person`); the policy asks nothing of that person.
+- Face embeddings are biometric data held **in memory only**, per track, discarded with the track and by `AgeBandPipeline.clear()`; never written to disk.
+- **Silent swaps remain possible**: if people exchange places while occluded and there are no embeddings, ids follow the spots and `track_conf` does not drop (a test shows this).
+- The 0.6 / 0.1 values are not validated on real different-person faces; see PROGRESS.md (follow-up 5).
+
 ## Age model
 FairFace ResNet-34 ONNX via onnxruntime (CPU), cached at `~/.fairface/fairface.onnx`, not downloaded automatically, SHA-256 pinned in `appearance.py`. Age bins are coarse, accuracy varies across groups, and this is a third-party ONNX conversion: weak prior only. The 10-19 bin counts toward neither child nor adult, so teenagers read `unsure`.
 

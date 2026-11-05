@@ -83,9 +83,10 @@ def extract_and_apply_profile(profile: VisitProfile, person_id: str, text: str, 
     upd, dropped = parse_update(raw, text, profile.cfg["extraction"]["max_items_per_turn"])
     if upd is None:
         return {"applied": False, "topics": 0, "style": 0, "dropped": dropped}
-    for label, cat, sign in upd["topics"]:
-        profile.record_topic(person_id, label, cat, sign, "llm_statement", turn_ref)
-    for dim, sign in upd["style"]:
-        profile.record_style(person_id, dim, sign, "llm_statement", turn_ref)
-    return {"applied": bool(upd["topics"] or upd["style"]), "topics": len(upd["topics"]),
-            "style": len(upd["style"]), "dropped": dropped}
+    before = profile.suspended_writes
+    n_t = sum(profile.record_topic(person_id, label, cat, sign, "llm_statement", turn_ref) is not None
+              for label, cat, sign in upd["topics"])
+    n_s = sum(profile.record_style(person_id, dim, sign, "llm_statement", turn_ref) is not None
+              for dim, sign in upd["style"])
+    return {"applied": bool(n_t or n_s), "topics": n_t, "style": n_s, "dropped": dropped,
+            "suspended": profile.suspended_writes - before}

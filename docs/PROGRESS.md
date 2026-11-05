@@ -1,5 +1,22 @@
 # Progress log
 
+## follow-up 5 (step 4): tracker re-association, margin rule, track confidence, suspended writes  *(branch `museum-visual-profile`)*
+
+**Goal:** fewer id swaps; when identity is in doubt, stop writing evidence.
+**Built:** `Detection(box, emb)`; `VisitTracker` combines IoU (weight 0.3) and embedding cosine, re-associates lost tracks (`reid_ttl` 300 frames) only if best cosine >= 0.6 and beats the
+runner-up (lost or live) by >= 0.1, else new id; per-track `track_conf` (ambiguous match or overlapping faces without embeddings -> 0.2, +0.2 per clean frame, new/re-associated 0.6);
+ambiguous frames are not fed to the age smoother; `VisitProfile.set_track_conf/apply_tracks/is_suspended`: below 0.5 evidence writes are **dropped (not buffered), counted** (`suspended_writes`, per person; extraction results report `suspended`);
+`next_move` returns none for a suspended person; `AgeBandPipeline.clear()`.
+**Threshold check (what I actually found):** the embedding model is facenet-pytorch InceptionResnetV1 (vggface2), already cached. The only real embeddings available are the 8 stored views of ONE enrolled person:
+same-person pairwise cosine min 0.417, mean 0.674, max 0.873, and 21% of those pairs fall below 0.6. So 0.6 will reject some true returns (it fails toward a new id, which is the cheap error). I have **no different-person faces locally**,
+so the impostor side (false-merge rate) is **not measured**; I did not use published figures as if measured. Those 8 views include deliberately varied poses, so live frame-to-frame cosine should sit higher.
+**Limits:** synthetic embeddings in the tests (random orthogonal vectors, mixtures for look-alikes) show the logic of the margin rule only; they cannot show how well real faces separate, relatives and siblings especially. Needs a real multi-person (and related-pair) set before trusting 0.6 / 0.1.
+**Verified:** exchange-places test: IoU-only swaps ids silently (track_conf stays >= 0.6), embeddings keep them; crossing: with embeddings ids stable and conf >= 0.5, without embeddings conf drops < 0.5; re-association returns the old id, look-alike at equal cosine gets a new id, a clear winner reuses, below-threshold is new, a face resembling a LIVE track is not merged into a lost one; suspension drops/ counts/ recovers; prior not consumed by a dropped write. 121 passed.
+**Didn't work -> fixed:** with equal IoU and cosine weights a "same place, different face" case tied (0.5 vs 0.5); face now outweighs position (0.3/0.7). IoU-only crossing swapped ids with margin 0.18 > 0.15, i.e. unflagged; added the overlapping-faces-without-embeddings ambiguity rule. Four of my own new tests were wrong (cosine of mixtures miscomputed) and were corrected, not the code.
+**Not verified:** real cameras; real `identify_all(..., with_emb=True)` output through `Detection` (not wired anywhere in this repo).
+
+---
+
 ## follow-up 4: confirm the FaceIdentifier guard landed  *(branch `museum-visual-profile`)*
 
 **Why:** my follow-up-1 edit script aborted halfway on a failed string match, leaving the guards half-applied; I fixed it and the suite passed, but nothing proved the `face_id.py` guards specifically.

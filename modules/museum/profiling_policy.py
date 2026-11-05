@@ -152,6 +152,8 @@ class ProfilingPolicy:
         """Decide (and record) the next move for ``pid`` at ``turn``. Call once per turn."""
         st, c = self._st(pid), self.cfg
         self._expire_and_contradict(pid, turn)
+        if self.profile.is_suspended(pid):   # identity in doubt: ask nothing, adapt nothing
+            return NONE
         if st.pending:                       # one outstanding thing at a time
             return NONE
         t, b, mx = c["thresholds"], c["budget"], c["adaptation"]["max_level"]

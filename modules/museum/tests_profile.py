@@ -158,3 +158,44 @@ def test_end_wipes_everything_and_writes_nothing(tmp_path, monkeypatch):
     assert set(os.listdir(tmp_path)) == before
     with pytest.raises(RuntimeError):
         p.record_style("visitor_1", "pace", 1, "choice_answer")
+
+
+# ── suspension when the track (identity) is in doubt ─────────────────────────────────────
+
+def test_low_track_conf_drops_writes_counts_them_and_recovers():
+    p = make()
+    p.record_style("visitor_1", "pace", +1, "choice_answer")
+    before = p.style("visitor_1", "pace")
+    p.set_track_conf("visitor_1", 0.2)
+    assert p.is_suspended("visitor_1")
+    assert p.record_style("visitor_1", "pace", -1, "choice_answer") is None
+    assert p.record_topic("visitor_1", "war", "other", -1, "llm_statement") is None
+    assert p.style("visitor_1", "pace") == before                     # nothing changed
+    assert p.topics("visitor_1") == {"likes": [], "dislikes": []} and "topic:war" not in " ".join(p.store._nodes)
+    assert (p.suspended_writes, p.suspended_by_person) == (2, {"visitor_1": 2})
+    p.set_track_conf("visitor_1", 0.6)                                # confidence back: writes resume, dropped ones are gone
+    p.record_style("visitor_1", "pace", +1, "behavior_cue")
+    assert p.style("visitor_1", "pace")["evidence_count"] == 2 and p.suspended_writes == 2
+
+
+def test_suspended_write_does_not_consume_the_prior():
+    p = make()
+    p.set_prior("visitor_1", "child", 0.9)
+    p.set_track_conf("visitor_1", 0.1)
+    p.record_style("visitor_1", "pace", 1, "choice_answer")
+    assert p.prior("visitor_1") is not None                           # no real evidence was written
+
+
+def test_apply_tracks_and_default_is_not_suspended():
+    p = make()
+    assert not p.is_suspended("visitor_1")
+    p.apply_tracks([{"person_id": "visitor_1", "track_conf": 0.3}, {"person_id": "ghost", "track_conf": 0.0}])
+    assert p.is_suspended("visitor_1")
+
+
+def test_extraction_reports_dropped_count_when_suspended():
+    p = make()
+    p.set_track_conf("visitor_1", 0.1)
+    r = extract_and_apply_profile(p, "visitor_1", TEXT, lambda s, u: GOOD)
+    assert (r["applied"], r["topics"], r["style"], r["suspended"]) == (False, 0, 0, 2)
+    assert p.suspended_writes == 2 and p.store._edges == {}
