@@ -82,14 +82,14 @@ def test_bad_inputs_rejected():
 
 # ── visual prior is not a profile fact ───────────────────────────────────────
 
-def test_prior_decays_and_never_enters_kg():
+def test_prior_is_opening_only_dropped_after_any_evidence_and_never_in_kg():
     p = make()
     p.set_prior("visitor_1", "child", 0.9)
-    w0 = p.prior("visitor_1")["weight"]
-    assert w0 == pytest.approx(0.1) and p.topics("visitor_1") == {"likes": [], "dislikes": []}
+    assert p.prior("visitor_1") == {"band": "child", "confidence": 0.9, "use": "opening_only"}
+    assert p.topics("visitor_1") == {"likes": [], "dislikes": []}
     assert all(p.style("visitor_1", d)["evidence_count"] == 0 for d in ("talk_level", "depth", "pace"))
-    p.record_style("visitor_1", "pace", 1, "behavior_cue")
-    assert p.prior("visitor_1")["weight"] == pytest.approx(0.05)
+    p.record_style("visitor_1", "pace", 1, "behavior_cue")           # weakest real evidence is enough
+    assert p.prior("visitor_1") is None
     assert not any("child" in json.dumps(e.model_dump(mode="json")) for e in p.store._edges.values())
 
 

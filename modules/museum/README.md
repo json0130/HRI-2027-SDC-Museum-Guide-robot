@@ -12,23 +12,24 @@ Steps A-E of the museum-visual-profile work. Evaluation (decision log, baseline 
 
 ## Rules (enforced by tests where noted)
 - **Age band only.** No gender, race/ethnicity or personality is estimated, stored or returned. FairFace outputs them; the backend reads only the 9 age logits (test: output fields).
-- **The prior is weak.** It only picks an opening row; never spoken, never evidence, never in `dimensions`; its weight halves with each real evidence item (tests).
-- **Ephemeral.** Visit-scoped `visitor_N` ids; private `InMemoryGraphStore` that is never saved; `end_visit` deletes persons, edges, topics and style nodes; no files are created (test). Museum code must not call `FirstImpression.auto_enroll` (writes `faces.npz`) or open a disk `SessionStore`; **nothing enforces that beyond this code not importing them.**
+- **The prior is weak.** It only picks an opening row; never spoken, never evidence, never in `dimensions`, and dropped entirely once any real evidence exists (tests). `get_visit_snapshot` / `get_person_profile` omit it unless `include_prior=True`.
+- **Ephemeral.** Visit-scoped `visitor_N` ids; private `InMemoryGraphStore` that is never saved; `end_visit` deletes persons, edges, topics and style nodes; no files are created (test). While a `VisitProfile` is alive, `modules/ephemeral.py` makes a disk `SessionStore`, `FaceIdentifier.save/load`, `FirstImpression.auto_enroll/learn_name` and `GraphStore.save` raise `EphemeralViolation` (tests). It guards those entry points only; other file writes are not caught.
 - **No inferred mood** is extracted or put in any prompt.
 - LLM proposes (JSON, closed vocab, confidence >= `CONFIDENCE_MIN`, verbatim quote); deterministic code decides what is written.
 
 ## Contract for the group policy
 ```python
 from modules.museum.profile_api import start_visit, get_person_profile, get_visit_snapshot, end_visit
-get_person_profile(visit_id, person_id) -> {
+get_person_profile(visit_id, person_id, include_prior=False) -> {
   "visit_id", "person_id",
   "dimensions": {"talk_level"|"depth"|"pace": {"value": -1..1, "confidence": 0..1,
                  "effective_value": value*confidence, "evidence_count": int, "low": str, "high": str}},
   "likes": [{"label","category","value","confidence","effective_value","evidence_count"}],
   "dislikes": [same],
-  "prior": {"band","confidence","weight"} | None      # opening hint only; do NOT aggregate or treat as preference
+  # only with include_prior=True:
+  "prior": {"band","confidence","use": "opening_only"} | None   # None once any real evidence exists; never a preference
 }
-get_visit_snapshot(visit_id) -> {"visit_id", "group_size", "persons": {person_id: <profile above>}}
+get_visit_snapshot(visit_id, include_prior=False) -> {"visit_id", "group_size", "persons": {person_id: <profile above>}}
 ```
 Act on `effective_value`, not `value`: low-confidence items are already pulled toward neutral there. `value` -1 means the *low* end (quiet / brief / slow), +1 the *high* end (chatty / detailed / fast). Unknown visit or person raises `KeyError`. No group aggregation is implemented.
 

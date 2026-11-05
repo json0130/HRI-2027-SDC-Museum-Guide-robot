@@ -3,8 +3,7 @@ weights:
   choice_answer: 0.8     # explicit answer to a choice question
   llm_statement: 0.5     # LLM-extracted statement (only if extraction confidence >= CONFIDENCE_MIN)
   behavior_cue: 0.25     # declining an offer, asking a follow-up, ...
-prior:
-  weight: 0.1            # visual prior: lowest of all, and NEVER written to the KG
-  decay: 0.5             # multiplied in once per real evidence item
+# The visual age-band prior is not evidence: it is never written to the KG and is dropped
+# as soon as any real evidence exists (see VisitProfile.prior).
 extraction:
   max_items_per_turn: 3

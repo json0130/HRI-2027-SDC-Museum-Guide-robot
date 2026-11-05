@@ -25,24 +25,26 @@ def end_visit(visit_id: str) -> dict:
     return _VISITS.pop(visit_id).end()
 
 
-def get_person_profile(visit_id: str, person_id: str) -> dict:
+def get_person_profile(visit_id: str, person_id: str, include_prior: bool = False) -> dict:
     vp = _VISITS[visit_id]
     if person_id not in vp.persons:
         raise KeyError(person_id)
     t = vp.topics(person_id)
-    return {
+    out = {
         "visit_id": visit_id,
         "person_id": person_id,
         "dimensions": {d: {**vp.style(person_id, d), "low": lo, "high": hi} for d, (lo, hi) in DIMS.items()},
         "likes": t["likes"],
         "dislikes": t["dislikes"],
-        # Opening-move hint from the camera, NOT a preference and not evidence: do not aggregate
-        # or act on it for anything but how the robot opens. None when museum mode had no estimate.
-        "prior": vp.prior(person_id),
     }
+    if include_prior:
+        # Opening-move hint from the camera, NOT a preference and not evidence. Present only when
+        # asked for, marked "use": "opening_only", and None once any real evidence exists.
+        out["prior"] = vp.prior(person_id)
+    return out
 
 
-def get_visit_snapshot(visit_id: str) -> dict:
+def get_visit_snapshot(visit_id: str, include_prior: bool = False) -> dict:
     vp = _VISITS[visit_id]
     return {"visit_id": visit_id, "group_size": vp.group_size,
-            "persons": {p: get_person_profile(visit_id, p) for p in vp.persons}}
+            "persons": {p: get_person_profile(visit_id, p, include_prior) for p in vp.persons}}

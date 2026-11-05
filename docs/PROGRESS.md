@@ -1,5 +1,16 @@
 # Progress log
 
+## follow-up 3: prior hidden by default, opening-only, dropped on evidence  *(branch `museum-visual-profile`)*
+
+**Problem:** step E exposed `prior` in every profile, where a group policy could mistake it for a preference.
+**Fix:** `get_person_profile` / `get_visit_snapshot` take `include_prior=False`; when included the prior is `{band, confidence, use: "opening_only"}`, and
+`VisitProfile.prior()` returns `None` once the person has any real evidence (even the weakest behaviour cue).
+**Deviation from the plan:** step C said the prior "decays x0.5 per evidence item"; it is now dropped outright, so the `prior:` weight/decay config was removed (it was never used anywhere).
+**Verified:** profile + API tests (default snapshot contains no prior and no band string; included prior marked opening-only; None after evidence; `dimensions` unaffected); 106 passed.
+**Not verified:** nothing yet reads the prior to choose an opening (that wiring is for the museum loop, which does not exist in this repo).
+
+---
+
 ## follow-up 2: FairFace boundary tests  *(branch `museum-visual-profile`)*
 
 **Goal:** prove race/gender never leave the FairFace backend and that the 10-19 bin reads `unsure`.

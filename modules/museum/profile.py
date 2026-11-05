@@ -10,8 +10,8 @@ dimension) is a ProfileEdge holding a signed value, a confidence and an evidence
   ``effective_value = value * confidence`` pulls low-confidence items toward neutral; that is the
   only number downstream code should act on.
 
-The visual age-band prior is deliberately NOT evidence: it is held in a separate object, decays
-once any real evidence arrives, and is never written to the KG or exposed as a dimension.
+The visual age-band prior is deliberately NOT evidence: it is held outside the KG, is dropped
+entirely once any real evidence arrives, and is never exposed as a dimension.
 """
 
 from __future__ import annotations
@@ -34,7 +34,6 @@ SOURCES = ("choice_answer", "llm_statement", "behavior_cue")
 
 DEFAULTS = {
     "weights": {"choice_answer": 0.8, "llm_statement": 0.5, "behavior_cue": 0.25},
-    "prior": {"weight": 0.1, "decay": 0.5},
     "extraction": {"max_items_per_turn": 3},
 }
 _EDGE = "visit_pref"
@@ -76,11 +75,12 @@ class VisitProfile:
         self._prior[person_id] = {"band": band, "confidence": float(confidence)}
 
     def prior(self, person_id: str) -> Optional[dict]:
+        """The camera's age-band hint, or None. Opening-only, and gone as soon as any real
+        evidence (an answer, a statement, a behaviour cue) exists for this person."""
         p = self._prior.get(person_id)
-        if p is None:
+        if p is None or self._n_real.get(person_id, 0) > 0:
             return None
-        w = self.cfg["prior"]["weight"] * self.cfg["prior"]["decay"] ** self._n_real.get(person_id, 0)
-        return {**p, "weight": w}
+        return {**p, "use": "opening_only"}
 
     # -- writing evidence -----------------------------------------------------
 
