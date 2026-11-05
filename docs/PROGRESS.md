@@ -1,5 +1,40 @@
 # Progress log
 
+## RESULT: first official simulator run  *(branch `museum-visual-profile`)*
+
+**Run:** 200 paired seeds (0..199), 24 turns, headline extraction noise 0.1 and age-misread 0.1, config hash `1929eb86...3d01d5` (matches the FROZEN entry), code at commit `e972257` (tree clean). Full tables: `docs/results/museum_first_run.md` / `.json`.
+No threshold was changed before or after. Numbers are per visitor, mean [95% bootstrap CI over seeds]. The intervals reflect simulation randomness only, not uncertainty about real visitors or about my visitor model.
+**What the simulator is:** my model of visitors (truthful 90% of the time, accept/decline rules, templated speech) and a fake LLM whose corruptions are mostly the kinds the guards drop. It is easy by construction; it says nothing about real people.
+
+**Headline (six single-visitor scenarios):**
+| | fixed | prior-only | profile |
+|---|---|---|---|
+| wrong openings | 0 | 0.25 [0.23, 0.27] | 0.25 [0.23, 0.27] |
+| right adaptation steps | 0 | 0 | 3.17 [3.12, 3.21] |
+| wrong adaptations, opposed to truth | 0 | 0 | 0.07 [0.05, 0.08] |
+| wrong adaptations, made when truth was neutral | 0 | 0 | 0.00 [0.00, 0.00] |
+| reversals | 0 | 0 | 0.37 [0.33, 0.40] |
+| questions per visitor | 0 | 0 | 3.24 [3.20, 3.28] |
+| declined offers | 0 | 0 | 0.07 [0.06, 0.09] |
+| turns to confident | n/a | n/a | 4.78 [4.69, 4.88] |
+| confident but wrong (of dims that got confident) | n/a | n/a | 0.08 [0.06, 0.09] |
+| style sign correct / wrong / no call | n/a | n/a | 0.98 / 0.01 / 0.01 |
+
+**Break-even (sensitivity analysis, not a measured cost):** `profile` stops beating `fixed` at wrong/right cost ratio W/R = 12.3 [11.4, 13.3] (q=0); 11.3 [10.5, 12.2] with a question cost of 0.1; 7.3 [7.0, 7.6] when the three swap scenarios are included.
+`prior-only` stops beating `fixed` at W/R = 3.0 [2.7, 3.3]; at W/R = 5 its paired net benefit vs fixed is negative (-0.51 [-0.60, -0.41]). Misread sweep: prior-only break-even falls 5.0 -> 3.0 -> 2.0 -> 1.4 and profile 17.1 -> 12.3 -> 9.6 -> 7.7 for misread 0 / 0.1 / 0.2 / 0.3.
+
+**Findings, with what supports them:**
+1. *Silent swaps are the real risk, suspension helps.* Swap pair (quiet + chatty): detected (writes suspended, 2.8 dropped per visit) wrong-opposed 0.12, style-wrong 1%, MAE 0.15; silent (same swap, no `track_conf` drop) wrong-opposed 0.86, wrong-neutral 0.51, style-wrong 7%, MAE 0.47; silent-persistent style-correct 0.47 / wrong 0.44 (coin flip), confident-but-wrong 0.18. From the table means, persistent-silent profile has about 5.0 right vs 1.2 wrong adaptations per pair, i.e. `fixed` wins above W/R about 4 there (rough, from means, not bootstrapped).
+2. *A wrong opening is never undone.* `profile` has exactly prior-only's wrong openings. The policy only changes later adaptation levels; nothing corrects the opening (vocabulary/gaze/rate) once real evidence arrives, and the simulator does not even model a lingering opening effect. This is a gap, not a result in favour of the design.
+3. *One explicit answer is enough to adapt* (choice answer weight 0.8 >= the 0.7 adapt gate). So a visitor's single lapse (10% in the model) makes a wrong adaptation, which is then reverted: this plausibly explains the 8% confident-but-wrong and the 0.07 wrong steps. Not isolated by an experiment.
+4. *Reversals mostly undo right steps (inference).* Reversals 0.37 vs wrong steps 0.07 per visitor; the model has visitors stay silent after 10% of right adaptations, and silence counts as "ignored" = negative. I did not count reversed-right steps directly; a "right steps wrongly reverted" metric should be added (that would be a new run).
+5. *Neutral visitors cost questions without benefit:* topic_dislike (truth neutral on every style dimension) used the whole budget (4.00 questions) and made no adaptations (right or wrong). The wrong-neutral number is 0.00 everywhere except the swap scenarios.
+6. *Extraction noise has a modest effect* (style-correct 0.99 -> 0.97, confident-but-wrong 0.07 -> 0.11 for noise 0 -> 0.3), partly by construction: 3 of my 4 corruption types are dropped by the real guards.
+7. *like_precision is 0.63 and I first thought it was a bug.* Diagnostic (not an official run, no config change, seeds 0..59): precision is 1.00 at noise 0 and 0.63 at noise 0.1, so it is the injected spurious-topic noise (a real word of the utterance reported as a like, which the quote guard cannot catch), working as designed. The guards pass hallucinated topics that quote real words.
+**Not verified:** anything about real visitors, real LLM extraction, real face re-association, or the hypotheses in findings 3-4.
+
+---
+
 ## step F (build): decision log, three modes, simulator  *(branch `museum-visual-profile`)*
 
 **Built:** `decision_log.py` (JSONL per visit; `visit_id` = random 12 hex chars; `t` = seconds since visit start; whitelisted fields only, topics as closed category counts, never labels or speech; `suspended_writes` cumulative),

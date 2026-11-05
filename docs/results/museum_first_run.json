@@ -1,0 +1,7423 @@
+{
+ "meta": {
+  "config_hash": "1929eb86ac450e809b77a50bbd2fc96169f52c32d67dbb239be0fa393a3d01d5",
+  "git": {
+   "commit": "e972257cd2969e947e928e2d1447a01bc126da2d",
+   "dirty": false
+  },
+  "seeds": [
+   0,
+   199,
+   200
+  ],
+  "headline_noise": 0.1,
+  "headline_misread": 0.1,
+  "turns": 24,
+  "modes": [
+   "fixed",
+   "prior-only",
+   "profile"
+  ]
+ },
+ "headline": {
+  "fixed": {
+   "wrong_openings": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "right_openings": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "adaptations": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "right_adaptations": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "wrong_adapt_opposed": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "wrong_adapt_neutral": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "reversals": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "questions": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "offers_declined": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "suspended_writes": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "turns_to_confident": [
+    NaN,
+    [
+     NaN,
+     NaN
+    ]
+   ],
+   "confident_dims_frac": [
+    NaN,
+    [
+     NaN,
+     NaN
+    ]
+   ],
+   "confident_but_wrong": [
+    NaN,
+    [
+     NaN,
+     NaN
+    ]
+   ],
+   "acc_correct": [
+    NaN,
+    [
+     NaN,
+     NaN
+    ]
+   ],
+   "acc_wrong": [
+    NaN,
+    [
+     NaN,
+     NaN
+    ]
+   ],
+   "acc_no_call": [
+    NaN,
+    [
+     NaN,
+     NaN
+    ]
+   ],
+   "neutral_false_pos": [
+    NaN,
+    [
+     NaN,
+     NaN
+    ]
+   ],
+   "mae_eff_value": [
+    NaN,
+    [
+     NaN,
+     NaN
+    ]
+   ],
+   "like_precision": [
+    NaN,
+    [
+     NaN,
+     NaN
+    ]
+   ],
+   "like_recall": [
+    NaN,
+    [
+     NaN,
+     NaN
+    ]
+   ],
+   "dislike_precision": [
+    NaN,
+    [
+     NaN,
+     NaN
+    ]
+   ],
+   "dislike_recall": [
+    NaN,
+    [
+     NaN,
+     NaN
+    ]
+   ]
+  },
+  "prior-only": {
+   "wrong_openings": [
+    0.25083333333333335,
+    [
+     0.23416666666666666,
+     0.2675
+    ]
+   ],
+   "right_openings": [
+    0.7491666666666666,
+    [
+     0.7324791666666667,
+     0.7641666666666667
+    ]
+   ],
+   "adaptations": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "right_adaptations": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "wrong_adapt_opposed": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "wrong_adapt_neutral": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "reversals": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "questions": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "offers_declined": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "suspended_writes": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "turns_to_confident": [
+    NaN,
+    [
+     NaN,
+     NaN
+    ]
+   ],
+   "confident_dims_frac": [
+    NaN,
+    [
+     NaN,
+     NaN
+    ]
+   ],
+   "confident_but_wrong": [
+    NaN,
+    [
+     NaN,
+     NaN
+    ]
+   ],
+   "acc_correct": [
+    NaN,
+    [
+     NaN,
+     NaN
+    ]
+   ],
+   "acc_wrong": [
+    NaN,
+    [
+     NaN,
+     NaN
+    ]
+   ],
+   "acc_no_call": [
+    NaN,
+    [
+     NaN,
+     NaN
+    ]
+   ],
+   "neutral_false_pos": [
+    NaN,
+    [
+     NaN,
+     NaN
+    ]
+   ],
+   "mae_eff_value": [
+    NaN,
+    [
+     NaN,
+     NaN
+    ]
+   ],
+   "like_precision": [
+    NaN,
+    [
+     NaN,
+     NaN
+    ]
+   ],
+   "like_recall": [
+    NaN,
+    [
+     NaN,
+     NaN
+    ]
+   ],
+   "dislike_precision": [
+    NaN,
+    [
+     NaN,
+     NaN
+    ]
+   ],
+   "dislike_recall": [
+    NaN,
+    [
+     NaN,
+     NaN
+    ]
+   ]
+  },
+  "profile": {
+   "wrong_openings": [
+    0.25083333333333335,
+    [
+     0.23416666666666666,
+     0.2675
+    ]
+   ],
+   "right_openings": [
+    0.7491666666666666,
+    [
+     0.7324791666666667,
+     0.7641666666666667
+    ]
+   ],
+   "adaptations": [
+    3.2358333333333333,
+    [
+     3.200833333333333,
+     3.2758333333333334
+    ]
+   ],
+   "right_adaptations": [
+    3.1683333333333334,
+    [
+     3.1241458333333334,
+     3.2091666666666665
+    ]
+   ],
+   "wrong_adapt_opposed": [
+    0.0675,
+    [
+     0.05333333333333334,
+     0.0825
+    ]
+   ],
+   "wrong_adapt_neutral": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "reversals": [
+    0.36916666666666664,
+    [
+     0.3325,
+     0.40166666666666667
+    ]
+   ],
+   "questions": [
+    3.2425,
+    [
+     3.203333333333333,
+     3.2791875
+    ]
+   ],
+   "offers_declined": [
+    0.0725,
+    [
+     0.0583125,
+     0.08833333333333333
+    ]
+   ],
+   "suspended_writes": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "turns_to_confident": [
+    4.778647288988261,
+    [
+     4.685676353230497,
+     4.883956473214285
+    ]
+   ],
+   "confident_dims_frac": [
+    0.9938888888888889,
+    [
+     0.99,
+     0.9972222222222222
+    ]
+   ],
+   "confident_but_wrong": [
+    0.0771380659586361,
+    [
+     0.06491144821787563,
+     0.08938672395864236
+    ]
+   ],
+   "acc_correct": [
+    0.9833333333333333,
+    [
+     0.9772222222222222,
+     0.9894444444444445
+    ]
+   ],
+   "acc_wrong": [
+    0.005555555555555556,
+    [
+     0.0022222222222222222,
+     0.008888888888888889
+    ]
+   ],
+   "acc_no_call": [
+    0.011111111111111112,
+    [
+     0.006666666666666667,
+     0.016666666666666666
+    ]
+   ],
+   "neutral_false_pos": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "mae_eff_value": [
+    0.07294597222222222,
+    [
+     0.06780184444444444,
+     0.07752786111111111
+    ]
+   ],
+   "like_precision": [
+    0.6336418072945019,
+    [
+     0.6196757909367816,
+     0.6495022414571142
+    ]
+   ],
+   "like_recall": [
+    0.97,
+    [
+     0.9591666666666666,
+     0.9791666666666666
+    ]
+   ],
+   "dislike_precision": [
+    0.9660194174757282,
+    [
+     0.9389599388785543,
+     0.9900497512437811
+    ]
+   ],
+   "dislike_recall": [
+    0.995,
+    [
+     0.985,
+     1.0
+    ]
+   ]
+  }
+ },
+ "per_scenario": {
+  "child_correct": {
+   "fixed": {
+    "wrong_openings": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "right_openings": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "adaptations": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "right_adaptations": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "wrong_adapt_opposed": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "wrong_adapt_neutral": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "reversals": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "questions": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "offers_declined": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "suspended_writes": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "turns_to_confident": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "confident_dims_frac": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "confident_but_wrong": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "acc_correct": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "acc_wrong": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "acc_no_call": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "neutral_false_pos": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "mae_eff_value": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "like_precision": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "like_recall": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "dislike_precision": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "dislike_recall": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ]
+   },
+   "prior-only": {
+    "wrong_openings": [
+     0.11,
+     [
+      0.07,
+      0.15512499999999987
+     ]
+    ],
+    "right_openings": [
+     0.89,
+     [
+      0.845,
+      0.93
+     ]
+    ],
+    "adaptations": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "right_adaptations": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "wrong_adapt_opposed": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "wrong_adapt_neutral": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "reversals": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "questions": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "offers_declined": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "suspended_writes": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "turns_to_confident": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "confident_dims_frac": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "confident_but_wrong": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "acc_correct": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "acc_wrong": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "acc_no_call": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "neutral_false_pos": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "mae_eff_value": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "like_precision": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "like_recall": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "dislike_precision": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "dislike_recall": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ]
+   },
+   "profile": {
+    "wrong_openings": [
+     0.11,
+     [
+      0.07,
+      0.15512499999999987
+     ]
+    ],
+    "right_openings": [
+     0.89,
+     [
+      0.845,
+      0.93
+     ]
+    ],
+    "adaptations": [
+     4.24,
+     [
+      4.14,
+      4.34
+     ]
+    ],
+    "right_adaptations": [
+     4.16,
+     [
+      4.045,
+      4.265
+     ]
+    ],
+    "wrong_adapt_opposed": [
+     0.08,
+     [
+      0.045,
+      0.12
+     ]
+    ],
+    "wrong_adapt_neutral": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "reversals": [
+     0.42,
+     [
+      0.33,
+      0.51
+     ]
+    ],
+    "questions": [
+     2.94,
+     [
+      2.84,
+      3.045
+     ]
+    ],
+    "offers_declined": [
+     0.08,
+     [
+      0.04,
+      0.125
+     ]
+    ],
+    "suspended_writes": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "turns_to_confident": [
+     5.471177944862156,
+     [
+      5.292455670426065,
+      5.656663063909774
+     ]
+    ],
+    "confident_dims_frac": [
+     0.9975,
+     [
+      0.9925,
+      1.0
+     ]
+    ],
+    "confident_but_wrong": [
+     0.08020050125313283,
+     [
+      0.0575,
+      0.105
+     ]
+    ],
+    "acc_correct": [
+     0.9925,
+     [
+      0.9825,
+      1.0
+     ]
+    ],
+    "acc_wrong": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "acc_no_call": [
+     0.0075,
+     [
+      0.0,
+      0.0175
+     ]
+    ],
+    "neutral_false_pos": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "mae_eff_value": [
+     0.10072883333333332,
+     [
+      0.08604541666666667,
+      0.11606883750000001
+     ]
+    ],
+    "like_precision": [
+     0.6372549019607843,
+     [
+      0.6024464831804281,
+      0.6757726748403514
+     ]
+    ],
+    "like_recall": [
+     0.975,
+     [
+      0.95,
+      0.995
+     ]
+    ],
+    "dislike_precision": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "dislike_recall": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ]
+   }
+  },
+  "adult_correct": {
+   "fixed": {
+    "wrong_openings": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "right_openings": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "adaptations": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "right_adaptations": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "wrong_adapt_opposed": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "wrong_adapt_neutral": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "reversals": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "questions": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "offers_declined": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "suspended_writes": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "turns_to_confident": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "confident_dims_frac": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "confident_but_wrong": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "acc_correct": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "acc_wrong": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "acc_no_call": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "neutral_false_pos": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "mae_eff_value": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "like_precision": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "like_recall": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "dislike_precision": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "dislike_recall": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ]
+   },
+   "prior-only": {
+    "wrong_openings": [
+     0.125,
+     [
+      0.08,
+      0.175
+     ]
+    ],
+    "right_openings": [
+     0.875,
+     [
+      0.825,
+      0.92
+     ]
+    ],
+    "adaptations": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "right_adaptations": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "wrong_adapt_opposed": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "wrong_adapt_neutral": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "reversals": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "questions": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "offers_declined": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "suspended_writes": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "turns_to_confident": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "confident_dims_frac": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "confident_but_wrong": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "acc_correct": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "acc_wrong": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "acc_no_call": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "neutral_false_pos": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "mae_eff_value": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "like_precision": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "like_recall": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "dislike_precision": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "dislike_recall": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ]
+   },
+   "profile": {
+    "wrong_openings": [
+     0.125,
+     [
+      0.08,
+      0.175
+     ]
+    ],
+    "right_openings": [
+     0.875,
+     [
+      0.825,
+      0.92
+     ]
+    ],
+    "adaptations": [
+     2.25,
+     [
+      2.18,
+      2.3201249999999995
+     ]
+    ],
+    "right_adaptations": [
+     2.225,
+     [
+      2.155,
+      2.295
+     ]
+    ],
+    "wrong_adapt_opposed": [
+     0.025,
+     [
+      0.005,
+      0.05
+     ]
+    ],
+    "wrong_adapt_neutral": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "reversals": [
+     0.26,
+     [
+      0.185,
+      0.3351249999999999
+     ]
+    ],
+    "questions": [
+     3.065,
+     [
+      2.939875,
+      3.185
+     ]
+    ],
+    "offers_declined": [
+     0.04,
+     [
+      0.015,
+      0.07
+     ]
+    ],
+    "suspended_writes": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "turns_to_confident": [
+     4.425,
+     [
+      4.219875,
+      4.65
+     ]
+    ],
+    "confident_dims_frac": [
+     1.0,
+     [
+      1.0,
+      1.0
+     ]
+    ],
+    "confident_but_wrong": [
+     0.075,
+     [
+      0.04,
+      0.11
+     ]
+    ],
+    "acc_correct": [
+     1.0,
+     [
+      1.0,
+      1.0
+     ]
+    ],
+    "acc_wrong": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "acc_no_call": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "neutral_false_pos": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "mae_eff_value": [
+     0.023810333333333336,
+     [
+      0.018750954166666663,
+      0.029700429166666664
+     ]
+    ],
+    "like_precision": [
+     0.635483870967742,
+     [
+      0.6042944785276073,
+      0.6724384651108789
+     ]
+    ],
+    "like_recall": [
+     0.985,
+     [
+      0.965,
+      1.0
+     ]
+    ],
+    "dislike_precision": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "dislike_recall": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ]
+   }
+  },
+  "adult_misread_child": {
+   "fixed": {
+    "wrong_openings": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "right_openings": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "adaptations": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "right_adaptations": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "wrong_adapt_opposed": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "wrong_adapt_neutral": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "reversals": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "questions": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "offers_declined": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "suspended_writes": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "turns_to_confident": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "confident_dims_frac": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "confident_but_wrong": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "acc_correct": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "acc_wrong": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "acc_no_call": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "neutral_false_pos": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "mae_eff_value": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "like_precision": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "like_recall": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "dislike_precision": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "dislike_recall": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ]
+   },
+   "prior-only": {
+    "wrong_openings": [
+     1.0,
+     [
+      1.0,
+      1.0
+     ]
+    ],
+    "right_openings": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "adaptations": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "right_adaptations": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "wrong_adapt_opposed": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "wrong_adapt_neutral": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "reversals": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "questions": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "offers_declined": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "suspended_writes": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "turns_to_confident": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "confident_dims_frac": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "confident_but_wrong": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "acc_correct": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "acc_wrong": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "acc_no_call": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "neutral_false_pos": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "mae_eff_value": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "like_precision": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "like_recall": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "dislike_precision": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "dislike_recall": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ]
+   },
+   "profile": {
+    "wrong_openings": [
+     1.0,
+     [
+      1.0,
+      1.0
+     ]
+    ],
+    "right_openings": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "adaptations": [
+     2.27,
+     [
+      2.2,
+      2.345
+     ]
+    ],
+    "right_adaptations": [
+     2.245,
+     [
+      2.179875,
+      2.3151249999999997
+     ]
+    ],
+    "wrong_adapt_opposed": [
+     0.025,
+     [
+      0.005,
+      0.045
+     ]
+    ],
+    "wrong_adapt_neutral": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "reversals": [
+     0.28,
+     [
+      0.205,
+      0.355
+     ]
+    ],
+    "questions": [
+     3.035,
+     [
+      2.9,
+      3.16
+     ]
+    ],
+    "offers_declined": [
+     0.025,
+     [
+      0.005,
+      0.05
+     ]
+    ],
+    "suspended_writes": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "turns_to_confident": [
+     4.55,
+     [
+      4.315,
+      4.795125
+     ]
+    ],
+    "confident_dims_frac": [
+     1.0,
+     [
+      1.0,
+      1.0
+     ]
+    ],
+    "confident_but_wrong": [
+     0.045,
+     [
+      0.02,
+      0.075
+     ]
+    ],
+    "acc_correct": [
+     1.0,
+     [
+      1.0,
+      1.0
+     ]
+    ],
+    "acc_wrong": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "acc_no_call": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "neutral_false_pos": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "mae_eff_value": [
+     0.024811833333333335,
+     [
+      0.019285558333333327,
+      0.03085710833333333
+     ]
+    ],
+    "like_precision": [
+     0.6633333333333333,
+     [
+      0.625,
+      0.704225352112676
+     ]
+    ],
+    "like_recall": [
+     0.995,
+     [
+      0.985,
+      1.0
+     ]
+    ],
+    "dislike_precision": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "dislike_recall": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ]
+   }
+  },
+  "quiet": {
+   "fixed": {
+    "wrong_openings": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "right_openings": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "adaptations": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "right_adaptations": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "wrong_adapt_opposed": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "wrong_adapt_neutral": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "reversals": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "questions": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "offers_declined": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "suspended_writes": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "turns_to_confident": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "confident_dims_frac": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "confident_but_wrong": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "acc_correct": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "acc_wrong": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "acc_no_call": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "neutral_false_pos": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "mae_eff_value": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "like_precision": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "like_recall": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "dislike_precision": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "dislike_recall": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ]
+   },
+   "prior-only": {
+    "wrong_openings": [
+     0.11,
+     [
+      0.065,
+      0.155
+     ]
+    ],
+    "right_openings": [
+     0.89,
+     [
+      0.845,
+      0.93
+     ]
+    ],
+    "adaptations": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "right_adaptations": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "wrong_adapt_opposed": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "wrong_adapt_neutral": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "reversals": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "questions": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "offers_declined": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "suspended_writes": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "turns_to_confident": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "confident_dims_frac": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "confident_but_wrong": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "acc_correct": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "acc_wrong": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "acc_no_call": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "neutral_false_pos": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "mae_eff_value": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "like_precision": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "like_recall": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "dislike_precision": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "dislike_recall": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ]
+   },
+   "profile": {
+    "wrong_openings": [
+     0.11,
+     [
+      0.065,
+      0.155
+     ]
+    ],
+    "right_openings": [
+     0.89,
+     [
+      0.845,
+      0.93
+     ]
+    ],
+    "adaptations": [
+     4.0,
+     [
+      3.87,
+      4.135
+     ]
+    ],
+    "right_adaptations": [
+     3.845,
+     [
+      3.7,
+      3.99
+     ]
+    ],
+    "wrong_adapt_opposed": [
+     0.155,
+     [
+      0.105,
+      0.21
+     ]
+    ],
+    "wrong_adapt_neutral": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "reversals": [
+     0.5,
+     [
+      0.41,
+      0.59
+     ]
+    ],
+    "questions": [
+     3.68,
+     [
+      3.61,
+      3.75
+     ]
+    ],
+    "offers_declined": [
+     0.105,
+     [
+      0.065,
+      0.15
+     ]
+    ],
+    "suspended_writes": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "turns_to_confident": [
+     4.97948717948718,
+     [
+      4.719776289984894,
+      5.269969678992815
+     ]
+    ],
+    "confident_dims_frac": [
+     0.975,
+     [
+      0.9575,
+      0.99
+     ]
+    ],
+    "confident_but_wrong": [
+     0.09743589743589744,
+     [
+      0.07160668615272195,
+      0.12308483290488431
+     ]
+    ],
+    "acc_correct": [
+     0.9375,
+     [
+      0.9125,
+      0.96
+     ]
+    ],
+    "acc_wrong": [
+     0.02,
+     [
+      0.0075,
+      0.035
+     ]
+    ],
+    "acc_no_call": [
+     0.0425,
+     [
+      0.0225,
+      0.0625
+     ]
+    ],
+    "neutral_false_pos": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "mae_eff_value": [
+     0.16162349999999998,
+     [
+      0.14396444583333332,
+      0.18107189583333333
+     ]
+    ],
+    "like_precision": [
+     0.7927927927927928,
+     [
+      0.7441711389385808,
+      0.8421052631578947
+     ]
+    ],
+    "like_recall": [
+     0.88,
+     [
+      0.835,
+      0.920125
+     ]
+    ],
+    "dislike_precision": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "dislike_recall": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ]
+   }
+  },
+  "chatty": {
+   "fixed": {
+    "wrong_openings": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "right_openings": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "adaptations": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "right_adaptations": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "wrong_adapt_opposed": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "wrong_adapt_neutral": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "reversals": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "questions": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "offers_declined": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "suspended_writes": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "turns_to_confident": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "confident_dims_frac": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "confident_but_wrong": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "acc_correct": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "acc_wrong": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "acc_no_call": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "neutral_false_pos": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "mae_eff_value": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "like_precision": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "like_recall": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "dislike_precision": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "dislike_recall": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ]
+   },
+   "prior-only": {
+    "wrong_openings": [
+     0.075,
+     [
+      0.04,
+      0.115
+     ]
+    ],
+    "right_openings": [
+     0.925,
+     [
+      0.885,
+      0.96
+     ]
+    ],
+    "adaptations": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "right_adaptations": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "wrong_adapt_opposed": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "wrong_adapt_neutral": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "reversals": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "questions": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "offers_declined": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "suspended_writes": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "turns_to_confident": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "confident_dims_frac": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "confident_but_wrong": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "acc_correct": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "acc_wrong": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "acc_no_call": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "neutral_false_pos": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "mae_eff_value": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "like_precision": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "like_recall": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "dislike_precision": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "dislike_recall": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ]
+   },
+   "profile": {
+    "wrong_openings": [
+     0.075,
+     [
+      0.04,
+      0.115
+     ]
+    ],
+    "right_openings": [
+     0.925,
+     [
+      0.885,
+      0.96
+     ]
+    ],
+    "adaptations": [
+     6.655,
+     [
+      6.544875,
+      6.77
+     ]
+    ],
+    "right_adaptations": [
+     6.535,
+     [
+      6.43,
+      6.645
+     ]
+    ],
+    "wrong_adapt_opposed": [
+     0.12,
+     [
+      0.075,
+      0.17
+     ]
+    ],
+    "wrong_adapt_neutral": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "reversals": [
+     0.755,
+     [
+      0.64,
+      0.8651249999999999
+     ]
+    ],
+    "questions": [
+     2.735,
+     [
+      2.625,
+      2.85
+     ]
+    ],
+    "offers_declined": [
+     0.185,
+     [
+      0.13,
+      0.25
+     ]
+    ],
+    "suspended_writes": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "turns_to_confident": [
+     4.381666666666667,
+     [
+      4.226666666666667,
+      4.566666666666666
+     ]
+    ],
+    "confident_dims_frac": [
+     1.0,
+     [
+      1.0,
+      1.0
+     ]
+    ],
+    "confident_but_wrong": [
+     0.07333333333333333,
+     [
+      0.05333333333333334,
+      0.095
+     ]
+    ],
+    "acc_correct": [
+     0.9966666666666667,
+     [
+      0.9916666666666667,
+      1.0
+     ]
+    ],
+    "acc_wrong": [
+     0.0033333333333333335,
+     [
+      0.0,
+      0.008333333333333333
+     ]
+    ],
+    "acc_no_call": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "neutral_false_pos": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "mae_eff_value": [
+     0.12670133333333336,
+     [
+      0.11275792916666666,
+      0.1417261708333333
+     ]
+    ],
+    "like_precision": [
+     0.5038363171355499,
+     [
+      0.4745731782753928,
+      0.5367897801500504
+     ]
+    ],
+    "like_recall": [
+     0.985,
+     [
+      0.965,
+      1.0
+     ]
+    ],
+    "dislike_precision": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "dislike_recall": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ]
+   }
+  },
+  "topic_dislike": {
+   "fixed": {
+    "wrong_openings": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "right_openings": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "adaptations": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "right_adaptations": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "wrong_adapt_opposed": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "wrong_adapt_neutral": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "reversals": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "questions": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "offers_declined": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "suspended_writes": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "turns_to_confident": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "confident_dims_frac": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "confident_but_wrong": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "acc_correct": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "acc_wrong": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "acc_no_call": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "neutral_false_pos": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "mae_eff_value": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "like_precision": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "like_recall": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "dislike_precision": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "dislike_recall": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ]
+   },
+   "prior-only": {
+    "wrong_openings": [
+     0.085,
+     [
+      0.045,
+      0.125
+     ]
+    ],
+    "right_openings": [
+     0.915,
+     [
+      0.875,
+      0.95
+     ]
+    ],
+    "adaptations": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "right_adaptations": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "wrong_adapt_opposed": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "wrong_adapt_neutral": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "reversals": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "questions": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "offers_declined": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "suspended_writes": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "turns_to_confident": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "confident_dims_frac": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "confident_but_wrong": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "acc_correct": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "acc_wrong": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "acc_no_call": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "neutral_false_pos": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "mae_eff_value": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "like_precision": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "like_recall": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "dislike_precision": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "dislike_recall": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ]
+   },
+   "profile": {
+    "wrong_openings": [
+     0.085,
+     [
+      0.045,
+      0.125
+     ]
+    ],
+    "right_openings": [
+     0.915,
+     [
+      0.875,
+      0.95
+     ]
+    ],
+    "adaptations": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "right_adaptations": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "wrong_adapt_opposed": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "wrong_adapt_neutral": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "reversals": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "questions": [
+     4.0,
+     [
+      4.0,
+      4.0
+     ]
+    ],
+    "offers_declined": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "suspended_writes": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "turns_to_confident": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "confident_dims_frac": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "confident_but_wrong": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "acc_correct": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "acc_wrong": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "acc_no_call": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "neutral_false_pos": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "mae_eff_value": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "like_precision": [
+     0.6493506493506493,
+     [
+      0.6134969325153374,
+      0.6872852233676976
+     ]
+    ],
+    "like_recall": [
+     1.0,
+     [
+      1.0,
+      1.0
+     ]
+    ],
+    "dislike_precision": [
+     1.0,
+     [
+      1.0,
+      1.0
+     ]
+    ],
+    "dislike_recall": [
+     0.995,
+     [
+      0.985,
+      1.0
+     ]
+    ]
+   }
+  }
+ },
+ "swap": {
+  "swap_detected": {
+   "fixed": {
+    "wrong_openings": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "right_openings": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "adaptations": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "right_adaptations": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "wrong_adapt_opposed": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "wrong_adapt_neutral": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "reversals": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "questions": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "offers_declined": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "suspended_writes": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "turns_to_confident": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "confident_dims_frac": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "confident_but_wrong": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "acc_correct": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "acc_wrong": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "acc_no_call": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "neutral_false_pos": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "mae_eff_value": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "like_precision": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "like_recall": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "dislike_precision": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "dislike_recall": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ]
+   },
+   "prior-only": {
+    "wrong_openings": [
+     0.09,
+     [
+      0.0625,
+      0.1175
+     ]
+    ],
+    "right_openings": [
+     0.91,
+     [
+      0.8825,
+      0.9375
+     ]
+    ],
+    "adaptations": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "right_adaptations": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "wrong_adapt_opposed": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "wrong_adapt_neutral": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "reversals": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "questions": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "offers_declined": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "suspended_writes": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "turns_to_confident": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "confident_dims_frac": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "confident_but_wrong": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "acc_correct": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "acc_wrong": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "acc_no_call": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "neutral_false_pos": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "mae_eff_value": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "like_precision": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "like_recall": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "dislike_precision": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "dislike_recall": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ]
+   },
+   "profile": {
+    "wrong_openings": [
+     0.09,
+     [
+      0.0625,
+      0.1175
+     ]
+    ],
+    "right_openings": [
+     0.91,
+     [
+      0.8825,
+      0.9375
+     ]
+    ],
+    "adaptations": [
+     5.2325,
+     [
+      5.13,
+      5.3325
+     ]
+    ],
+    "right_adaptations": [
+     5.115,
+     [
+      5.0124375,
+      5.2200625
+     ]
+    ],
+    "wrong_adapt_opposed": [
+     0.1175,
+     [
+      0.0875,
+      0.15
+     ]
+    ],
+    "wrong_adapt_neutral": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "reversals": [
+     0.595,
+     [
+      0.52,
+      0.6700625
+     ]
+    ],
+    "questions": [
+     3.195,
+     [
+      3.13,
+      3.2625
+     ]
+    ],
+    "offers_declined": [
+     0.1075,
+     [
+      0.08,
+      0.14
+     ]
+    ],
+    "suspended_writes": [
+     2.7975,
+     [
+      2.6849375,
+      2.9150625
+     ]
+    ],
+    "turns_to_confident": [
+     4.856415478615071,
+     [
+      4.6706629088151805,
+      5.052084973583342
+     ]
+    ],
+    "confident_dims_frac": [
+     0.982,
+     [
+      0.974,
+      0.989
+     ]
+    ],
+    "confident_but_wrong": [
+     0.07841140529531568,
+     [
+      0.06345471351283605,
+      0.0948036416401423
+     ]
+    ],
+    "acc_correct": [
+     0.973,
+     [
+      0.962,
+      0.983
+     ]
+    ],
+    "acc_wrong": [
+     0.008,
+     [
+      0.003,
+      0.014
+     ]
+    ],
+    "acc_no_call": [
+     0.019,
+     [
+      0.011,
+      0.029
+     ]
+    ],
+    "neutral_false_pos": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "mae_eff_value": [
+     0.15004433333333334,
+     [
+      0.13829925833333334,
+      0.16191217916666667
+     ]
+    ],
+    "like_precision": [
+     0.6514886164623468,
+     [
+      0.6243820013036554,
+      0.6765002154708037
+     ]
+    ],
+    "like_recall": [
+     0.93,
+     [
+      0.905,
+      0.9525
+     ]
+    ],
+    "dislike_precision": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "dislike_recall": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ]
+   }
+  },
+  "swap_silent": {
+   "fixed": {
+    "wrong_openings": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "right_openings": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "adaptations": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "right_adaptations": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "wrong_adapt_opposed": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "wrong_adapt_neutral": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "reversals": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "questions": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "offers_declined": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "suspended_writes": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "turns_to_confident": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "confident_dims_frac": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "confident_but_wrong": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "acc_correct": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "acc_wrong": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "acc_no_call": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "neutral_false_pos": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "mae_eff_value": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "like_precision": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "like_recall": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "dislike_precision": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "dislike_recall": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ]
+   },
+   "prior-only": {
+    "wrong_openings": [
+     0.125,
+     [
+      0.095,
+      0.15506249999999994
+     ]
+    ],
+    "right_openings": [
+     0.875,
+     [
+      0.84,
+      0.905
+     ]
+    ],
+    "adaptations": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "right_adaptations": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "wrong_adapt_opposed": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "wrong_adapt_neutral": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "reversals": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "questions": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "offers_declined": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "suspended_writes": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "turns_to_confident": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "confident_dims_frac": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "confident_but_wrong": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "acc_correct": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "acc_wrong": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "acc_no_call": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "neutral_false_pos": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "mae_eff_value": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "like_precision": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "like_recall": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "dislike_precision": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "dislike_recall": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ]
+   },
+   "profile": {
+    "wrong_openings": [
+     0.125,
+     [
+      0.095,
+      0.15506249999999994
+     ]
+    ],
+    "right_openings": [
+     0.875,
+     [
+      0.84,
+      0.905
+     ]
+    ],
+    "adaptations": [
+     5.4725,
+     [
+      5.345,
+      5.6000625
+     ]
+    ],
+    "right_adaptations": [
+     4.1075,
+     [
+      4.005,
+      4.2175
+     ]
+    ],
+    "wrong_adapt_opposed": [
+     0.86,
+     [
+      0.8024375,
+      0.92
+     ]
+    ],
+    "wrong_adapt_neutral": [
+     0.505,
+     [
+      0.435,
+      0.5775
+     ]
+    ],
+    "reversals": [
+     1.3675,
+     [
+      1.2925,
+      1.4475
+     ]
+    ],
+    "questions": [
+     3.515,
+     [
+      3.4574375,
+      3.575
+     ]
+    ],
+    "offers_declined": [
+     0.5275,
+     [
+      0.475,
+      0.58
+     ]
+    ],
+    "suspended_writes": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "turns_to_confident": [
+     4.503036437246964,
+     [
+      4.376121726644915,
+      4.63669028340081
+     ]
+    ],
+    "confident_dims_frac": [
+     0.988,
+     [
+      0.981,
+      0.994
+     ]
+    ],
+    "confident_but_wrong": [
+     0.13866396761133604,
+     [
+      0.11905967780375135,
+      0.15843263327218618
+     ]
+    ],
+    "acc_correct": [
+     0.876,
+     [
+      0.8569749999999999,
+      0.896
+     ]
+    ],
+    "acc_wrong": [
+     0.07,
+     [
+      0.055,
+      0.085
+     ]
+    ],
+    "acc_no_call": [
+     0.054,
+     [
+      0.041,
+      0.06702499999999999
+     ]
+    ],
+    "neutral_false_pos": [
+     0.88,
+     [
+      0.835,
+      0.92
+     ]
+    ],
+    "mae_eff_value": [
+     0.4686458333333333,
+     [
+      0.4530184729166667,
+      0.4848043625
+     ]
+    ],
+    "like_precision": [
+     0.4608355091383812,
+     [
+      0.4389870051794303,
+      0.4834019272974154
+     ]
+    ],
+    "like_recall": [
+     0.8825,
+     [
+      0.85,
+      0.9125624999999999
+     ]
+    ],
+    "dislike_precision": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "dislike_recall": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ]
+   }
+  },
+  "swap_silent_persistent": {
+   "fixed": {
+    "wrong_openings": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "right_openings": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "adaptations": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "right_adaptations": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "wrong_adapt_opposed": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "wrong_adapt_neutral": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "reversals": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "questions": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "offers_declined": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "suspended_writes": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "turns_to_confident": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "confident_dims_frac": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "confident_but_wrong": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "acc_correct": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "acc_wrong": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "acc_no_call": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "neutral_false_pos": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "mae_eff_value": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "like_precision": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "like_recall": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "dislike_precision": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "dislike_recall": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ]
+   },
+   "prior-only": {
+    "wrong_openings": [
+     0.1025,
+     [
+      0.0725,
+      0.135
+     ]
+    ],
+    "right_openings": [
+     0.8975,
+     [
+      0.865,
+      0.925
+     ]
+    ],
+    "adaptations": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "right_adaptations": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "wrong_adapt_opposed": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "wrong_adapt_neutral": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "reversals": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "questions": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "offers_declined": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "suspended_writes": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "turns_to_confident": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "confident_dims_frac": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "confident_but_wrong": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "acc_correct": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "acc_wrong": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "acc_no_call": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "neutral_false_pos": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "mae_eff_value": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "like_precision": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "like_recall": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "dislike_precision": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ],
+    "dislike_recall": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ]
+   },
+   "profile": {
+    "wrong_openings": [
+     0.1025,
+     [
+      0.0725,
+      0.135
+     ]
+    ],
+    "right_openings": [
+     0.8975,
+     [
+      0.865,
+      0.925
+     ]
+    ],
+    "adaptations": [
+     6.2125,
+     [
+      6.077437499999999,
+      6.3475625
+     ]
+    ],
+    "right_adaptations": [
+     5.0325,
+     [
+      4.9,
+      5.1625
+     ]
+    ],
+    "wrong_adapt_opposed": [
+     0.8225,
+     [
+      0.7575,
+      0.8925
+     ]
+    ],
+    "wrong_adapt_neutral": [
+     0.3575,
+     [
+      0.2925,
+      0.4175
+     ]
+    ],
+    "reversals": [
+     1.4725,
+     [
+      1.37,
+      1.565
+     ]
+    ],
+    "questions": [
+     3.565,
+     [
+      3.5125,
+      3.615
+     ]
+    ],
+    "offers_declined": [
+     0.59,
+     [
+      0.5325,
+      0.6475624999999999
+     ]
+    ],
+    "suspended_writes": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "turns_to_confident": [
+     4.775757575757575,
+     [
+      4.608630545133525,
+      4.926849491359235
+     ]
+    ],
+    "confident_dims_frac": [
+     0.99,
+     [
+      0.9829749999999999,
+      0.996
+     ]
+    ],
+    "confident_but_wrong": [
+     0.18383838383838383,
+     [
+      0.16177548998580343,
+      0.206832505903009
+     ]
+    ],
+    "acc_correct": [
+     0.475,
+     [
+      0.454,
+      0.496
+     ]
+    ],
+    "acc_wrong": [
+     0.44,
+     [
+      0.417,
+      0.462
+     ]
+    ],
+    "acc_no_call": [
+     0.085,
+     [
+      0.068,
+      0.103
+     ]
+    ],
+    "neutral_false_pos": [
+     1.0,
+     [
+      1.0,
+      1.0
+     ]
+    ],
+    "mae_eff_value": [
+     0.8878656666666666,
+     [
+      0.8706658687500001,
+      0.9055482145833335
+     ]
+    ],
+    "like_precision": [
+     0.3103030303030303,
+     [
+      0.2912811633568514,
+      0.3272123550124275
+     ]
+    ],
+    "like_recall": [
+     0.64,
+     [
+      0.595,
+      0.6825
+     ]
+    ],
+    "dislike_precision": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "dislike_recall": [
+     NaN,
+     [
+      NaN,
+      NaN
+     ]
+    ]
+   }
+  }
+ },
+ "sweeps": {
+  "noise": {
+   "0.0": {
+    "wrong_openings": [
+     0.25083333333333335,
+     [
+      0.23416666666666666,
+      0.2675
+     ]
+    ],
+    "right_openings": [
+     0.7491666666666666,
+     [
+      0.7324791666666667,
+      0.7641666666666667
+     ]
+    ],
+    "adaptations": [
+     3.2483333333333335,
+     [
+      3.21,
+      3.2866666666666666
+     ]
+    ],
+    "right_adaptations": [
+     3.1858333333333335,
+     [
+      3.144979166666667,
+      3.225
+     ]
+    ],
+    "wrong_adapt_opposed": [
+     0.0625,
+     [
+      0.049166666666666664,
+      0.07666666666666666
+     ]
+    ],
+    "wrong_adapt_neutral": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "reversals": [
+     0.3616666666666667,
+     [
+      0.32666666666666666,
+      0.3958333333333333
+     ]
+    ],
+    "questions": [
+     3.1883333333333335,
+     [
+      3.1491666666666664,
+      3.225
+     ]
+    ],
+    "offers_declined": [
+     0.065,
+     [
+      0.050833333333333335,
+      0.07916666666666666
+     ]
+    ],
+    "suspended_writes": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "turns_to_confident": [
+     4.680446927374302,
+     [
+      4.584213542061586,
+      4.778780203585016
+     ]
+    ],
+    "confident_dims_frac": [
+     0.9944444444444445,
+     [
+      0.9905555555555555,
+      0.9977777777777778
+     ]
+    ],
+    "confident_but_wrong": [
+     0.06536312849162011,
+     [
+      0.05418994413407821,
+      0.07597977828602852
+     ]
+    ],
+    "acc_correct": [
+     0.9877777777777778,
+     [
+      0.9822222222222222,
+      0.9927777777777778
+     ]
+    ],
+    "acc_wrong": [
+     0.0033333333333333335,
+     [
+      0.0011111111111111111,
+      0.006111111111111111
+     ]
+    ],
+    "acc_no_call": [
+     0.008888888888888889,
+     [
+      0.005,
+      0.01334722222222221
+     ]
+    ],
+    "neutral_false_pos": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "mae_eff_value": [
+     0.053859444444444446,
+     [
+      0.049751990972222215,
+      0.058003261805555546
+     ]
+    ],
+    "like_precision": [
+     1.0,
+     [
+      1.0,
+      1.0
+     ]
+    ],
+    "like_recall": [
+     0.99,
+     [
+      0.9841666666666666,
+      0.995
+     ]
+    ],
+    "dislike_precision": [
+     1.0,
+     [
+      1.0,
+      1.0
+     ]
+    ],
+    "dislike_recall": [
+     1.0,
+     [
+      1.0,
+      1.0
+     ]
+    ]
+   },
+   "0.1": {
+    "wrong_openings": [
+     0.25083333333333335,
+     [
+      0.23416666666666666,
+      0.2675
+     ]
+    ],
+    "right_openings": [
+     0.7491666666666666,
+     [
+      0.7324791666666667,
+      0.7641666666666667
+     ]
+    ],
+    "adaptations": [
+     3.2358333333333333,
+     [
+      3.200833333333333,
+      3.2758333333333334
+     ]
+    ],
+    "right_adaptations": [
+     3.1683333333333334,
+     [
+      3.1241458333333334,
+      3.2091666666666665
+     ]
+    ],
+    "wrong_adapt_opposed": [
+     0.0675,
+     [
+      0.05333333333333334,
+      0.0825
+     ]
+    ],
+    "wrong_adapt_neutral": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "reversals": [
+     0.36916666666666664,
+     [
+      0.3325,
+      0.40166666666666667
+     ]
+    ],
+    "questions": [
+     3.2425,
+     [
+      3.203333333333333,
+      3.2791875
+     ]
+    ],
+    "offers_declined": [
+     0.0725,
+     [
+      0.0583125,
+      0.08833333333333333
+     ]
+    ],
+    "suspended_writes": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "turns_to_confident": [
+     4.778647288988261,
+     [
+      4.685676353230497,
+      4.883956473214285
+     ]
+    ],
+    "confident_dims_frac": [
+     0.9938888888888889,
+     [
+      0.99,
+      0.9972222222222222
+     ]
+    ],
+    "confident_but_wrong": [
+     0.0771380659586361,
+     [
+      0.06491144821787563,
+      0.08938672395864236
+     ]
+    ],
+    "acc_correct": [
+     0.9833333333333333,
+     [
+      0.9772222222222222,
+      0.9894444444444445
+     ]
+    ],
+    "acc_wrong": [
+     0.005555555555555556,
+     [
+      0.0022222222222222222,
+      0.008888888888888889
+     ]
+    ],
+    "acc_no_call": [
+     0.011111111111111112,
+     [
+      0.006666666666666667,
+      0.016666666666666666
+     ]
+    ],
+    "neutral_false_pos": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "mae_eff_value": [
+     0.07294597222222222,
+     [
+      0.06780184444444444,
+      0.07752786111111111
+     ]
+    ],
+    "like_precision": [
+     0.6336418072945019,
+     [
+      0.6196757909367816,
+      0.6495022414571142
+     ]
+    ],
+    "like_recall": [
+     0.97,
+     [
+      0.9591666666666666,
+      0.9791666666666666
+     ]
+    ],
+    "dislike_precision": [
+     0.9660194174757282,
+     [
+      0.9389599388785543,
+      0.9900497512437811
+     ]
+    ],
+    "dislike_recall": [
+     0.995,
+     [
+      0.985,
+      1.0
+     ]
+    ]
+   },
+   "0.2": {
+    "wrong_openings": [
+     0.25083333333333335,
+     [
+      0.23416666666666666,
+      0.2675
+     ]
+    ],
+    "right_openings": [
+     0.7491666666666666,
+     [
+      0.7324791666666667,
+      0.7641666666666667
+     ]
+    ],
+    "adaptations": [
+     3.2175,
+     [
+      3.1766458333333336,
+      3.2583541666666664
+     ]
+    ],
+    "right_adaptations": [
+     3.1433333333333335,
+     [
+      3.0975,
+      3.1825208333333332
+     ]
+    ],
+    "wrong_adapt_opposed": [
+     0.07416666666666667,
+     [
+      0.059166666666666666,
+      0.08916666666666667
+     ]
+    ],
+    "wrong_adapt_neutral": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "reversals": [
+     0.38666666666666666,
+     [
+      0.3491666666666667,
+      0.42083333333333334
+     ]
+    ],
+    "questions": [
+     3.3025,
+     [
+      3.2608125,
+      3.3408333333333333
+     ]
+    ],
+    "offers_declined": [
+     0.07916666666666666,
+     [
+      0.06583333333333333,
+      0.09416666666666666
+     ]
+    ],
+    "suspended_writes": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "turns_to_confident": [
+     4.840896358543417,
+     [
+      4.745251027955525,
+      4.940674223886243
+     ]
+    ],
+    "confident_dims_frac": [
+     0.9916666666666667,
+     [
+      0.9866666666666667,
+      0.9955555555555555
+     ]
+    ],
+    "confident_but_wrong": [
+     0.09411764705882353,
+     [
+      0.0812640134529148,
+      0.1071228266965788
+     ]
+    ],
+    "acc_correct": [
+     0.9794444444444445,
+     [
+      0.9727777777777777,
+      0.9855555555555555
+     ]
+    ],
+    "acc_wrong": [
+     0.006666666666666667,
+     [
+      0.0033333333333333335,
+      0.010555555555555556
+     ]
+    ],
+    "acc_no_call": [
+     0.013888888888888888,
+     [
+      0.008888888888888889,
+      0.02
+     ]
+    ],
+    "neutral_false_pos": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "mae_eff_value": [
+     0.09437655555555556,
+     [
+      0.08881160972222223,
+      0.0997049201388889
+     ]
+    ],
+    "like_precision": [
+     0.48989247311827955,
+     [
+      0.47917499280384385,
+      0.5015439246857932
+     ]
+    ],
+    "like_recall": [
+     0.9491666666666667,
+     [
+      0.9366666666666666,
+      0.9625
+     ]
+    ],
+    "dislike_precision": [
+     0.9428571428571428,
+     [
+      0.9120370370370371,
+      0.9705882352941176
+     ]
+    ],
+    "dislike_recall": [
+     0.99,
+     [
+      0.975,
+      1.0
+     ]
+    ]
+   },
+   "0.3": {
+    "wrong_openings": [
+     0.25083333333333335,
+     [
+      0.23416666666666666,
+      0.2675
+     ]
+    ],
+    "right_openings": [
+     0.7491666666666666,
+     [
+      0.7324791666666667,
+      0.7641666666666667
+     ]
+    ],
+    "adaptations": [
+     3.175,
+     [
+      3.1341458333333336,
+      3.216666666666667
+     ]
+    ],
+    "right_adaptations": [
+     3.0875,
+     [
+      3.0441458333333333,
+      3.13
+     ]
+    ],
+    "wrong_adapt_opposed": [
+     0.0875,
+     [
+      0.07166666666666667,
+      0.10418749999999999
+     ]
+    ],
+    "wrong_adapt_neutral": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "reversals": [
+     0.3825,
+     [
+      0.3449791666666666,
+      0.4175208333333333
+     ]
+    ],
+    "questions": [
+     3.3425,
+     [
+      3.3016666666666667,
+      3.379166666666667
+     ]
+    ],
+    "offers_declined": [
+     0.09083333333333334,
+     [
+      0.07666666666666666,
+      0.10666666666666667
+     ]
+    ],
+    "suspended_writes": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "turns_to_confident": [
+     4.910824453168817,
+     [
+      4.8144550660525995,
+      5.0100868863779775
+     ]
+    ],
+    "confident_dims_frac": [
+     0.9905555555555555,
+     [
+      0.9855416666666666,
+      0.995
+     ]
+    ],
+    "confident_but_wrong": [
+     0.10880538418395962,
+     [
+      0.09454080319116123,
+      0.12281714628770944
+     ]
+    ],
+    "acc_correct": [
+     0.9694444444444444,
+     [
+      0.9622222222222222,
+      0.9772222222222222
+     ]
+    ],
+    "acc_wrong": [
+     0.012222222222222223,
+     [
+      0.0077777777777777776,
+      0.017222222222222222
+     ]
+    ],
+    "acc_no_call": [
+     0.018333333333333333,
+     [
+      0.012777777777777779,
+      0.024444444444444446
+     ]
+    ],
+    "neutral_false_pos": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ],
+    "mae_eff_value": [
+     0.11594980555555556,
+     [
+      0.11002039999999998,
+      0.12202427083333332
+     ]
+    ],
+    "like_precision": [
+     0.4107008289374529,
+     [
+      0.40146852038843295,
+      0.41980316063441
+     ]
+    ],
+    "like_recall": [
+     0.9083333333333333,
+     [
+      0.8925,
+      0.9241666666666667
+     ]
+    ],
+    "dislike_precision": [
+     0.8947368421052632,
+     [
+      0.8538812785388128,
+      0.9330067851883022
+     ]
+    ],
+    "dislike_recall": [
+     0.935,
+     [
+      0.9,
+      0.9651249999999999
+     ]
+    ]
+   }
+  },
+  "misread": {
+   "0.0": {
+    "fixed": {
+     "wrong_openings": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "right_openings": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "adaptations": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "right_adaptations": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "wrong_adapt_opposed": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "wrong_adapt_neutral": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "reversals": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "questions": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "offers_declined": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "suspended_writes": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "turns_to_confident": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "confident_dims_frac": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "confident_but_wrong": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "acc_correct": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "acc_wrong": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "acc_no_call": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "neutral_false_pos": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "mae_eff_value": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "like_precision": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "like_recall": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "dislike_precision": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "dislike_recall": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ]
+    },
+    "prior-only": {
+     "wrong_openings": [
+      0.16666666666666666,
+      [
+       0.16666666666666666,
+       0.16666666666666666
+      ]
+     ],
+     "right_openings": [
+      0.8333333333333334,
+      [
+       0.8333333333333334,
+       0.8333333333333334
+      ]
+     ],
+     "adaptations": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "right_adaptations": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "wrong_adapt_opposed": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "wrong_adapt_neutral": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "reversals": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "questions": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "offers_declined": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "suspended_writes": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "turns_to_confident": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "confident_dims_frac": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "confident_but_wrong": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "acc_correct": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "acc_wrong": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "acc_no_call": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "neutral_false_pos": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "mae_eff_value": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "like_precision": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "like_recall": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "dislike_precision": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "dislike_recall": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ]
+    },
+    "profile": {
+     "wrong_openings": [
+      0.16666666666666666,
+      [
+       0.16666666666666666,
+       0.16666666666666666
+      ]
+     ],
+     "right_openings": [
+      0.8333333333333334,
+      [
+       0.8333333333333334,
+       0.8333333333333334
+      ]
+     ],
+     "adaptations": [
+      3.2358333333333333,
+      [
+       3.200833333333333,
+       3.2758333333333334
+      ]
+     ],
+     "right_adaptations": [
+      3.1683333333333334,
+      [
+       3.1241458333333334,
+       3.2091666666666665
+      ]
+     ],
+     "wrong_adapt_opposed": [
+      0.0675,
+      [
+       0.05333333333333334,
+       0.0825
+      ]
+     ],
+     "wrong_adapt_neutral": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "reversals": [
+      0.36916666666666664,
+      [
+       0.3325,
+       0.40166666666666667
+      ]
+     ],
+     "questions": [
+      3.2425,
+      [
+       3.203333333333333,
+       3.2791875
+      ]
+     ],
+     "offers_declined": [
+      0.0725,
+      [
+       0.0583125,
+       0.08833333333333333
+      ]
+     ],
+     "suspended_writes": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "turns_to_confident": [
+      4.778647288988261,
+      [
+       4.685676353230497,
+       4.883956473214285
+      ]
+     ],
+     "confident_dims_frac": [
+      0.9938888888888889,
+      [
+       0.99,
+       0.9972222222222222
+      ]
+     ],
+     "confident_but_wrong": [
+      0.0771380659586361,
+      [
+       0.06491144821787563,
+       0.08938672395864236
+      ]
+     ],
+     "acc_correct": [
+      0.9833333333333333,
+      [
+       0.9772222222222222,
+       0.9894444444444445
+      ]
+     ],
+     "acc_wrong": [
+      0.005555555555555556,
+      [
+       0.0022222222222222222,
+       0.008888888888888889
+      ]
+     ],
+     "acc_no_call": [
+      0.011111111111111112,
+      [
+       0.006666666666666667,
+       0.016666666666666666
+      ]
+     ],
+     "neutral_false_pos": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "mae_eff_value": [
+      0.07294597222222222,
+      [
+       0.06780184444444444,
+       0.07752786111111111
+      ]
+     ],
+     "like_precision": [
+      0.6336418072945019,
+      [
+       0.6196757909367816,
+       0.6495022414571142
+      ]
+     ],
+     "like_recall": [
+      0.97,
+      [
+       0.9591666666666666,
+       0.9791666666666666
+      ]
+     ],
+     "dislike_precision": [
+      0.9660194174757282,
+      [
+       0.9389599388785543,
+       0.9900497512437811
+      ]
+     ],
+     "dislike_recall": [
+      0.995,
+      [
+       0.985,
+       1.0
+      ]
+     ]
+    }
+   },
+   "0.1": {
+    "fixed": {
+     "wrong_openings": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "right_openings": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "adaptations": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "right_adaptations": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "wrong_adapt_opposed": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "wrong_adapt_neutral": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "reversals": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "questions": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "offers_declined": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "suspended_writes": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "turns_to_confident": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "confident_dims_frac": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "confident_but_wrong": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "acc_correct": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "acc_wrong": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "acc_no_call": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "neutral_false_pos": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "mae_eff_value": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "like_precision": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "like_recall": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "dislike_precision": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "dislike_recall": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ]
+    },
+    "prior-only": {
+     "wrong_openings": [
+      0.25083333333333335,
+      [
+       0.23416666666666666,
+       0.2675
+      ]
+     ],
+     "right_openings": [
+      0.7491666666666666,
+      [
+       0.7324791666666667,
+       0.7641666666666667
+      ]
+     ],
+     "adaptations": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "right_adaptations": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "wrong_adapt_opposed": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "wrong_adapt_neutral": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "reversals": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "questions": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "offers_declined": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "suspended_writes": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "turns_to_confident": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "confident_dims_frac": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "confident_but_wrong": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "acc_correct": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "acc_wrong": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "acc_no_call": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "neutral_false_pos": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "mae_eff_value": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "like_precision": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "like_recall": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "dislike_precision": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "dislike_recall": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ]
+    },
+    "profile": {
+     "wrong_openings": [
+      0.25083333333333335,
+      [
+       0.23416666666666666,
+       0.2675
+      ]
+     ],
+     "right_openings": [
+      0.7491666666666666,
+      [
+       0.7324791666666667,
+       0.7641666666666667
+      ]
+     ],
+     "adaptations": [
+      3.2358333333333333,
+      [
+       3.200833333333333,
+       3.2758333333333334
+      ]
+     ],
+     "right_adaptations": [
+      3.1683333333333334,
+      [
+       3.1241458333333334,
+       3.2091666666666665
+      ]
+     ],
+     "wrong_adapt_opposed": [
+      0.0675,
+      [
+       0.05333333333333334,
+       0.0825
+      ]
+     ],
+     "wrong_adapt_neutral": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "reversals": [
+      0.36916666666666664,
+      [
+       0.3325,
+       0.40166666666666667
+      ]
+     ],
+     "questions": [
+      3.2425,
+      [
+       3.203333333333333,
+       3.2791875
+      ]
+     ],
+     "offers_declined": [
+      0.0725,
+      [
+       0.0583125,
+       0.08833333333333333
+      ]
+     ],
+     "suspended_writes": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "turns_to_confident": [
+      4.778647288988261,
+      [
+       4.685676353230497,
+       4.883956473214285
+      ]
+     ],
+     "confident_dims_frac": [
+      0.9938888888888889,
+      [
+       0.99,
+       0.9972222222222222
+      ]
+     ],
+     "confident_but_wrong": [
+      0.0771380659586361,
+      [
+       0.06491144821787563,
+       0.08938672395864236
+      ]
+     ],
+     "acc_correct": [
+      0.9833333333333333,
+      [
+       0.9772222222222222,
+       0.9894444444444445
+      ]
+     ],
+     "acc_wrong": [
+      0.005555555555555556,
+      [
+       0.0022222222222222222,
+       0.008888888888888889
+      ]
+     ],
+     "acc_no_call": [
+      0.011111111111111112,
+      [
+       0.006666666666666667,
+       0.016666666666666666
+      ]
+     ],
+     "neutral_false_pos": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "mae_eff_value": [
+      0.07294597222222222,
+      [
+       0.06780184444444444,
+       0.07752786111111111
+      ]
+     ],
+     "like_precision": [
+      0.6336418072945019,
+      [
+       0.6196757909367816,
+       0.6495022414571142
+      ]
+     ],
+     "like_recall": [
+      0.97,
+      [
+       0.9591666666666666,
+       0.9791666666666666
+      ]
+     ],
+     "dislike_precision": [
+      0.9660194174757282,
+      [
+       0.9389599388785543,
+       0.9900497512437811
+      ]
+     ],
+     "dislike_recall": [
+      0.995,
+      [
+       0.985,
+       1.0
+      ]
+     ]
+    }
+   },
+   "0.2": {
+    "fixed": {
+     "wrong_openings": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "right_openings": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "adaptations": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "right_adaptations": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "wrong_adapt_opposed": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "wrong_adapt_neutral": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "reversals": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "questions": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "offers_declined": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "suspended_writes": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "turns_to_confident": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "confident_dims_frac": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "confident_but_wrong": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "acc_correct": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "acc_wrong": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "acc_no_call": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "neutral_false_pos": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "mae_eff_value": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "like_precision": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "like_recall": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "dislike_precision": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "dislike_recall": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ]
+    },
+    "prior-only": {
+     "wrong_openings": [
+      0.3308333333333333,
+      [
+       0.30666666666666664,
+       0.35333333333333333
+      ]
+     ],
+     "right_openings": [
+      0.6691666666666667,
+      [
+       0.6458125,
+       0.6908333333333333
+      ]
+     ],
+     "adaptations": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "right_adaptations": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "wrong_adapt_opposed": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "wrong_adapt_neutral": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "reversals": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "questions": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "offers_declined": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "suspended_writes": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "turns_to_confident": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "confident_dims_frac": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "confident_but_wrong": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "acc_correct": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "acc_wrong": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "acc_no_call": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "neutral_false_pos": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "mae_eff_value": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "like_precision": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "like_recall": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "dislike_precision": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "dislike_recall": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ]
+    },
+    "profile": {
+     "wrong_openings": [
+      0.3308333333333333,
+      [
+       0.30666666666666664,
+       0.35333333333333333
+      ]
+     ],
+     "right_openings": [
+      0.6691666666666667,
+      [
+       0.6458125,
+       0.6908333333333333
+      ]
+     ],
+     "adaptations": [
+      3.2358333333333333,
+      [
+       3.200833333333333,
+       3.2758333333333334
+      ]
+     ],
+     "right_adaptations": [
+      3.1683333333333334,
+      [
+       3.1241458333333334,
+       3.2091666666666665
+      ]
+     ],
+     "wrong_adapt_opposed": [
+      0.0675,
+      [
+       0.05333333333333334,
+       0.0825
+      ]
+     ],
+     "wrong_adapt_neutral": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "reversals": [
+      0.36916666666666664,
+      [
+       0.3325,
+       0.40166666666666667
+      ]
+     ],
+     "questions": [
+      3.2425,
+      [
+       3.203333333333333,
+       3.2791875
+      ]
+     ],
+     "offers_declined": [
+      0.0725,
+      [
+       0.0583125,
+       0.08833333333333333
+      ]
+     ],
+     "suspended_writes": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "turns_to_confident": [
+      4.778647288988261,
+      [
+       4.685676353230497,
+       4.883956473214285
+      ]
+     ],
+     "confident_dims_frac": [
+      0.9938888888888889,
+      [
+       0.99,
+       0.9972222222222222
+      ]
+     ],
+     "confident_but_wrong": [
+      0.0771380659586361,
+      [
+       0.06491144821787563,
+       0.08938672395864236
+      ]
+     ],
+     "acc_correct": [
+      0.9833333333333333,
+      [
+       0.9772222222222222,
+       0.9894444444444445
+      ]
+     ],
+     "acc_wrong": [
+      0.005555555555555556,
+      [
+       0.0022222222222222222,
+       0.008888888888888889
+      ]
+     ],
+     "acc_no_call": [
+      0.011111111111111112,
+      [
+       0.006666666666666667,
+       0.016666666666666666
+      ]
+     ],
+     "neutral_false_pos": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "mae_eff_value": [
+      0.07294597222222222,
+      [
+       0.06780184444444444,
+       0.07752786111111111
+      ]
+     ],
+     "like_precision": [
+      0.6336418072945019,
+      [
+       0.6196757909367816,
+       0.6495022414571142
+      ]
+     ],
+     "like_recall": [
+      0.97,
+      [
+       0.9591666666666666,
+       0.9791666666666666
+      ]
+     ],
+     "dislike_precision": [
+      0.9660194174757282,
+      [
+       0.9389599388785543,
+       0.9900497512437811
+      ]
+     ],
+     "dislike_recall": [
+      0.995,
+      [
+       0.985,
+       1.0
+      ]
+     ]
+    }
+   },
+   "0.3": {
+    "fixed": {
+     "wrong_openings": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "right_openings": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "adaptations": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "right_adaptations": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "wrong_adapt_opposed": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "wrong_adapt_neutral": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "reversals": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "questions": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "offers_declined": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "suspended_writes": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "turns_to_confident": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "confident_dims_frac": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "confident_but_wrong": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "acc_correct": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "acc_wrong": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "acc_no_call": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "neutral_false_pos": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "mae_eff_value": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "like_precision": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "like_recall": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "dislike_precision": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "dislike_recall": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ]
+    },
+    "prior-only": {
+     "wrong_openings": [
+      0.4216666666666667,
+      [
+       0.395,
+       0.4475
+      ]
+     ],
+     "right_openings": [
+      0.5783333333333334,
+      [
+       0.55,
+       0.605
+      ]
+     ],
+     "adaptations": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "right_adaptations": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "wrong_adapt_opposed": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "wrong_adapt_neutral": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "reversals": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "questions": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "offers_declined": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "suspended_writes": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "turns_to_confident": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "confident_dims_frac": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "confident_but_wrong": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "acc_correct": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "acc_wrong": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "acc_no_call": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "neutral_false_pos": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "mae_eff_value": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "like_precision": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "like_recall": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "dislike_precision": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ],
+     "dislike_recall": [
+      NaN,
+      [
+       NaN,
+       NaN
+      ]
+     ]
+    },
+    "profile": {
+     "wrong_openings": [
+      0.4216666666666667,
+      [
+       0.395,
+       0.4475
+      ]
+     ],
+     "right_openings": [
+      0.5783333333333334,
+      [
+       0.55,
+       0.605
+      ]
+     ],
+     "adaptations": [
+      3.2358333333333333,
+      [
+       3.200833333333333,
+       3.2758333333333334
+      ]
+     ],
+     "right_adaptations": [
+      3.1683333333333334,
+      [
+       3.1241458333333334,
+       3.2091666666666665
+      ]
+     ],
+     "wrong_adapt_opposed": [
+      0.0675,
+      [
+       0.05333333333333334,
+       0.0825
+      ]
+     ],
+     "wrong_adapt_neutral": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "reversals": [
+      0.36916666666666664,
+      [
+       0.3325,
+       0.40166666666666667
+      ]
+     ],
+     "questions": [
+      3.2425,
+      [
+       3.203333333333333,
+       3.2791875
+      ]
+     ],
+     "offers_declined": [
+      0.0725,
+      [
+       0.0583125,
+       0.08833333333333333
+      ]
+     ],
+     "suspended_writes": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "turns_to_confident": [
+      4.778647288988261,
+      [
+       4.685676353230497,
+       4.883956473214285
+      ]
+     ],
+     "confident_dims_frac": [
+      0.9938888888888889,
+      [
+       0.99,
+       0.9972222222222222
+      ]
+     ],
+     "confident_but_wrong": [
+      0.0771380659586361,
+      [
+       0.06491144821787563,
+       0.08938672395864236
+      ]
+     ],
+     "acc_correct": [
+      0.9833333333333333,
+      [
+       0.9772222222222222,
+       0.9894444444444445
+      ]
+     ],
+     "acc_wrong": [
+      0.005555555555555556,
+      [
+       0.0022222222222222222,
+       0.008888888888888889
+      ]
+     ],
+     "acc_no_call": [
+      0.011111111111111112,
+      [
+       0.006666666666666667,
+       0.016666666666666666
+      ]
+     ],
+     "neutral_false_pos": [
+      0.0,
+      [
+       0.0,
+       0.0
+      ]
+     ],
+     "mae_eff_value": [
+      0.07294597222222222,
+      [
+       0.06780184444444444,
+       0.07752786111111111
+      ]
+     ],
+     "like_precision": [
+      0.6336418072945019,
+      [
+       0.6196757909367816,
+       0.6495022414571142
+      ]
+     ],
+     "like_recall": [
+      0.97,
+      [
+       0.9591666666666666,
+       0.9791666666666666
+      ]
+     ],
+     "dislike_precision": [
+      0.9660194174757282,
+      [
+       0.9389599388785543,
+       0.9900497512437811
+      ]
+     ],
+     "dislike_recall": [
+      0.995,
+      [
+       0.985,
+       1.0
+      ]
+     ]
+    }
+   }
+  }
+ },
+ "break_even": {
+  "0.0": {
+   "prior-only": [
+    2.9867109634551494,
+    [
+     2.7383177570093458,
+     3.25531914893617
+    ]
+   ],
+   "profile": [
+    12.306282722513089,
+    [
+     11.440805852313103,
+     13.28680498871657
+    ]
+   ],
+   "profile_with_swap_scenarios": [
+    7.290978398983482,
+    [
+     6.97748543931259,
+     7.613316329107531
+    ]
+   ]
+  },
+  "0.05": {
+   "prior-only": [
+    2.9867109634551494,
+    [
+     2.7383177570093458,
+     3.25531914893617
+    ]
+   ],
+   "profile": [
+    11.796989528795814,
+    [
+     10.961400862068967,
+     12.742346723403916
+    ]
+   ],
+   "profile_with_swap_scenarios": [
+    7.036817026683609,
+    [
+     6.733473193422057,
+     7.352105783272753
+    ]
+   ]
+  },
+  "0.1": {
+   "prior-only": [
+    2.9867109634551494,
+    [
+     2.7383177570093458,
+     3.25531914893617
+    ]
+   ],
+   "profile": [
+    11.287696335078532,
+    [
+     10.481853448275862,
+     12.19788845809126
+    ]
+   ],
+   "profile_with_swap_scenarios": [
+    6.782655654383737,
+    [
+     6.488064693646488,
+     7.089234680304299
+    ]
+   ]
+  }
+ },
+ "net_vs_fixed": {
+  "1": {
+   "prior-only": [
+    0.49833333333333335,
+    [
+     0.4666666666666666,
+     0.5283333333333333
+    ]
+   ],
+   "profile": [
+    3.599166666666666,
+    [
+     3.5475,
+     3.6566666666666667
+    ]
+   ]
+  },
+  "2": {
+   "prior-only": [
+    0.2475,
+    [
+     0.2,
+     0.2925
+    ]
+   ],
+   "profile": [
+    3.2808333333333333,
+    [
+     3.209166666666667,
+     3.355
+    ]
+   ]
+  },
+  "5": {
+   "prior-only": [
+    -0.505,
+    [
+     -0.6,
+     -0.415
+    ]
+   ],
+   "profile": [
+    2.3258333333333336,
+    [
+     2.1933125,
+     2.455020833333333
+    ]
+   ]
+  }
+ },
+ "break_even_by_misread": {
+  "0.0": {
+   "prior-only": [
+    5.0,
+    [
+     5.0,
+     5.0
+    ]
+   ],
+   "profile": [
+    17.08896797153025,
+    [
+     15.926333333333332,
+     18.262377426455874
+    ]
+   ]
+  },
+  "0.1": {
+   "prior-only": [
+    2.9867109634551494,
+    [
+     2.7383177570093458,
+     3.25531914893617
+    ]
+   ],
+   "profile": [
+    12.306282722513089,
+    [
+     11.440805852313103,
+     13.28680498871657
+    ]
+   ]
+  },
+  "0.2": {
+   "prior-only": [
+    2.022670025188917,
+    [
+     1.830188679245283,
+     2.234501347708895
+    ]
+   ],
+   "profile": [
+    9.633891213389122,
+    [
+     8.943565910880418,
+     10.348324972905253
+    ]
+   ]
+  },
+  "0.3": {
+   "prior-only": [
+    1.3715415019762847,
+    [
+     1.23463687150838,
+     1.531779377525624
+    ]
+   ],
+   "profile": [
+    7.6592844974446335,
+    [
+     7.172849678456592,
+     8.219069179258017
+    ]
+   ]
+  }
+ }
+}
