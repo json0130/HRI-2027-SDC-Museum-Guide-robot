@@ -19,6 +19,8 @@ The visit flow has six steps. Only 1-4 are in scope and settled enough to build 
 conversation half of `live.py` (keyword answer matching, style prompt). They are untested guesses: **nothing here shows that the greeting, the first question or the
 profiling policy works.** Open questions are in `docs/RESEARCH_QUESTIONS_museum.md`.
 
+`simulate_tracking.py` (steps 1-4 only; `python -m modules.museum.simulate_tracking --seeds 100 --out docs/results`) evaluates the tracker, re-association, write suspension, group context and the engagement trigger on scripted people with synthetic face embeddings; first-run results are in `docs/results/museum_tracking_first_run.md` and PROGRESS.md. Headline: a passer-by walking through the near field DOES trigger it (the dwell test is time in the zone, not standing still); child-sized faces are missed at distances where adults trigger; embeddings prevent IoU-only id swaps; write suspension cannot catch a silent swap.
+
 `simulate.py` and `decision_log.py` were built before this rescope. The simulator's profile modes (`fixed` / `prior-only` / `profile`), its first run and the break-even
 numbers evaluate the step-5/6 placeholders against my own model of visitors; they are not evidence about real visitors or about whether personalisation helps. They are
 frozen and will not be extended. The decision log is kept (it is the one file allowed to outlive a visit) and will be reused for steps 1-4.

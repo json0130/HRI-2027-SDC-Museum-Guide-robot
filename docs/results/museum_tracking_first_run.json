@@ -1,0 +1,1416 @@
+{
+ "meta": {
+  "config_hash": "01ae9489eb79997d96e03b78dd29aef9374ab6f436e3a062760b152ff8b905fc",
+  "git": {
+   "commit": "f0bfbf14537c8711efb99b05c219589a71ea6950",
+   "dirty": false
+  },
+  "seeds": [
+   0,
+   99,
+   100
+  ]
+ },
+ "table": {
+  "crossing": {
+   "false_triggers": [
+    1.0,
+    [
+     1.0,
+     1.0
+    ]
+   ],
+   "missed_triggers": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "id_swaps": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "wrong_merges": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "fragmented_returns": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "writes_total": [
+    18.99,
+    [
+     18.85,
+     19.12
+    ]
+   ],
+   "writes_dropped": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "writes_misattributed": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "events": [
+    1.0,
+    [
+     1.0,
+     1.0
+    ]
+   ],
+   "regreets": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "disengaged": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "returned_logged": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "group_one_event": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "time_to_engage_s": [
+    NaN,
+    [
+     NaN,
+     NaN
+    ]
+   ]
+  },
+  "crossing_iou_only": {
+   "false_triggers": [
+    1.0,
+    [
+     1.0,
+     1.0
+    ]
+   ],
+   "missed_triggers": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "id_swaps": [
+    3.26,
+    [
+     2.9,
+     3.64
+    ]
+   ],
+   "wrong_merges": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "fragmented_returns": [
+    1.88,
+    [
+     1.78,
+     1.96
+    ]
+   ],
+   "writes_total": [
+    18.99,
+    [
+     18.86,
+     19.13
+    ]
+   ],
+   "writes_dropped": [
+    5.04,
+    [
+     4.84,
+     5.26
+    ]
+   ],
+   "writes_misattributed": [
+    4.6,
+    [
+     3.93,
+     5.260249999999999
+    ]
+   ],
+   "events": [
+    1.0,
+    [
+     1.0,
+     1.0
+    ]
+   ],
+   "regreets": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "disengaged": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "returned_logged": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "group_one_event": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "time_to_engage_s": [
+    NaN,
+    [
+     NaN,
+     NaN
+    ]
+   ]
+  },
+  "exchange_places": {
+   "false_triggers": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "missed_triggers": [
+    0.7,
+    [
+     0.61,
+     0.79
+    ]
+   ],
+   "id_swaps": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "wrong_merges": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "fragmented_returns": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "writes_total": [
+    20.0,
+    [
+     20.0,
+     20.0
+    ]
+   ],
+   "writes_dropped": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "writes_misattributed": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "events": [
+    1.0,
+    [
+     1.0,
+     1.0
+    ]
+   ],
+   "regreets": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "disengaged": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "returned_logged": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "group_one_event": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "time_to_engage_s": [
+    5.068717948717948,
+    [
+     4.928424722602218,
+     5.230353146853146
+    ]
+   ]
+  },
+  "exchange_places_iou_only": {
+   "false_triggers": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "missed_triggers": [
+    0.69,
+    [
+     0.6,
+     0.78
+    ]
+   ],
+   "id_swaps": [
+    2.0,
+    [
+     2.0,
+     2.0
+    ]
+   ],
+   "wrong_merges": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "fragmented_returns": [
+    2.0,
+    [
+     2.0,
+     2.0
+    ]
+   ],
+   "writes_total": [
+    20.0,
+    [
+     20.0,
+     20.0
+    ]
+   ],
+   "writes_dropped": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "writes_misattributed": [
+    11.01,
+    [
+     10.88,
+     11.14
+    ]
+   ],
+   "events": [
+    1.0,
+    [
+     1.0,
+     1.0
+    ]
+   ],
+   "regreets": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "disengaged": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "returned_logged": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "group_one_event": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "time_to_engage_s": [
+    5.066157760814249,
+    [
+     4.910160870516185,
+     5.237231450719822
+    ]
+   ]
+  },
+  "passer_by_near": {
+   "false_triggers": [
+    1.0,
+    [
+     1.0,
+     1.0
+    ]
+   ],
+   "missed_triggers": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "id_swaps": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "wrong_merges": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "fragmented_returns": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "writes_total": [
+    3.21,
+    [
+     3.13,
+     3.3
+    ]
+   ],
+   "writes_dropped": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "writes_misattributed": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "events": [
+    1.0,
+    [
+     1.0,
+     1.0
+    ]
+   ],
+   "regreets": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "disengaged": [
+    1.0,
+    [
+     1.0,
+     1.0
+    ]
+   ],
+   "returned_logged": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "group_one_event": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "time_to_engage_s": [
+    NaN,
+    [
+     NaN,
+     NaN
+    ]
+   ]
+  },
+  "passer_by_far": {
+   "false_triggers": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "missed_triggers": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "id_swaps": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "wrong_merges": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "fragmented_returns": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "writes_total": [
+    3.21,
+    [
+     3.14,
+     3.29
+    ]
+   ],
+   "writes_dropped": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "writes_misattributed": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "events": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "regreets": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "disengaged": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "returned_logged": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "group_one_event": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "time_to_engage_s": [
+    NaN,
+    [
+     NaN,
+     NaN
+    ]
+   ]
+  },
+  "lingering_far": {
+   "false_triggers": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "missed_triggers": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "id_swaps": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "wrong_merges": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "fragmented_returns": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "writes_total": [
+    39.0,
+    [
+     39.0,
+     39.0
+    ]
+   ],
+   "writes_dropped": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "writes_misattributed": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "events": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "regreets": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "disengaged": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "returned_logged": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "group_one_event": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "time_to_engage_s": [
+    NaN,
+    [
+     NaN,
+     NaN
+    ]
+   ]
+  },
+  "lingering_near": {
+   "false_triggers": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "missed_triggers": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "id_swaps": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "wrong_merges": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "fragmented_returns": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "writes_total": [
+    19.0,
+    [
+     19.0,
+     19.0
+    ]
+   ],
+   "writes_dropped": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "writes_misattributed": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "events": [
+    1.0,
+    [
+     1.0,
+     1.0
+    ]
+   ],
+   "regreets": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "disengaged": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "returned_logged": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "group_one_event": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "time_to_engage_s": [
+    1.3166666666666669,
+    [
+     1.3066666666666669,
+     1.3280000000000003
+    ]
+   ]
+  },
+  "group_arrives_together": {
+   "false_triggers": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "missed_triggers": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "id_swaps": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "wrong_merges": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "fragmented_returns": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "writes_total": [
+    56.35,
+    [
+     56.24975,
+     56.46
+    ]
+   ],
+   "writes_dropped": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "writes_misattributed": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "events": [
+    1.0,
+    [
+     1.0,
+     1.0
+    ]
+   ],
+   "regreets": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "disengaged": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "returned_logged": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "group_one_event": [
+    1.0,
+    [
+     1.0,
+     1.0
+    ]
+   ],
+   "time_to_engage_s": [
+    2.2917777777777775,
+    [
+     2.244877777777778,
+     2.3357888888888896
+    ]
+   ]
+  },
+  "adult_at_distance": {
+   "false_triggers": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "missed_triggers": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "id_swaps": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "wrong_merges": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "fragmented_returns": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "writes_total": [
+    19.0,
+    [
+     19.0,
+     19.0
+    ]
+   ],
+   "writes_dropped": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "writes_misattributed": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "events": [
+    1.0,
+    [
+     1.0,
+     1.0
+    ]
+   ],
+   "regreets": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "disengaged": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "returned_logged": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "group_one_event": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "time_to_engage_s": [
+    1.3213333333333335,
+    [
+     1.3100000000000003,
+     1.3320000000000005
+    ]
+   ]
+  },
+  "child_same_distance": {
+   "false_triggers": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "missed_triggers": [
+    1.0,
+    [
+     1.0,
+     1.0
+    ]
+   ],
+   "id_swaps": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "wrong_merges": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "fragmented_returns": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "writes_total": [
+    19.0,
+    [
+     19.0,
+     19.0
+    ]
+   ],
+   "writes_dropped": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "writes_misattributed": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "events": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "regreets": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "disengaged": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "returned_logged": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "group_one_event": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "time_to_engage_s": [
+    NaN,
+    [
+     NaN,
+     NaN
+    ]
+   ]
+  },
+  "leaves_after_trigger": {
+   "false_triggers": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "missed_triggers": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "id_swaps": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "wrong_merges": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "fragmented_returns": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "writes_total": [
+    32.0,
+    [
+     32.0,
+     32.0
+    ]
+   ],
+   "writes_dropped": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "writes_misattributed": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "events": [
+    1.0,
+    [
+     1.0,
+     1.0
+    ]
+   ],
+   "regreets": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "disengaged": [
+    1.0,
+    [
+     1.0,
+     1.0
+    ]
+   ],
+   "returned_logged": [
+    1.0,
+    [
+     1.0,
+     1.0
+    ]
+   ],
+   "group_one_event": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "time_to_engage_s": [
+    1.3166666666666669,
+    [
+     1.306,
+     1.328
+    ]
+   ]
+  },
+  "relatives_return_swapped": {
+   "false_triggers": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "missed_triggers": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "id_swaps": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "wrong_merges": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "fragmented_returns": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "writes_total": [
+    28.0,
+    [
+     28.0,
+     28.0
+    ]
+   ],
+   "writes_dropped": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "writes_misattributed": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "events": [
+    1.0,
+    [
+     1.0,
+     1.0
+    ]
+   ],
+   "regreets": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "disengaged": [
+    2.0,
+    [
+     2.0,
+     2.0
+    ]
+   ],
+   "returned_logged": [
+    2.0,
+    [
+     2.0,
+     2.0
+    ]
+   ],
+   "group_one_event": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "time_to_engage_s": [
+    4.9159999999999995,
+    [
+     4.899658333333332,
+     4.933999999999999
+    ]
+   ]
+  },
+  "unrelated_return_swapped": {
+   "false_triggers": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "missed_triggers": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "id_swaps": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "wrong_merges": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "fragmented_returns": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "writes_total": [
+    28.0,
+    [
+     28.0,
+     28.0
+    ]
+   ],
+   "writes_dropped": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "writes_misattributed": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "events": [
+    1.0,
+    [
+     1.0,
+     1.0
+    ]
+   ],
+   "regreets": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "disengaged": [
+    2.0,
+    [
+     2.0,
+     2.0
+    ]
+   ],
+   "returned_logged": [
+    2.0,
+    [
+     2.0,
+     2.0
+    ]
+   ],
+   "group_one_event": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "time_to_engage_s": [
+    4.901666666666666,
+    [
+     4.884666666666666,
+     4.918675000000001
+    ]
+   ]
+  }
+ }
+}

@@ -34,8 +34,11 @@ DEFAULTS = {"fps": 15, "frame_w": 640, "frame_h": 480, "seeds": 100, "boot": 100
             "write_every_s": 1.0, "child_scale": 0.7, "pos_jitter_px": 3, "ratio_jitter": 0.03, "time_offset_s": 0.4}
 
 
+_OVERRIDES: dict = {}          # set by --override for a labelled SENSITIVITY run; part of the recorded config hash
+
+
 def cfg() -> dict:
-    return load_config("museum_trackeval", DEFAULTS)
+    return {**load_config("museum_trackeval", DEFAULTS), **_OVERRIDES}
 
 
 def effective_configs() -> dict:
@@ -279,6 +282,7 @@ def render_md(meta: dict, table: Dict[str, Dict[str, tuple]]) -> str:
     cols = ["false_triggers", "missed_triggers", "id_swaps", "wrong_merges", "fragmented_returns", "writes_total", "writes_dropped", "writes_misattributed", "events", "regreets", "group_one_event", "time_to_engage_s"]
     L = [f"# Tracker / trigger simulator results ({meta['seeds'][2]} seeds {meta['seeds'][0]}..{meta['seeds'][1]})", "",
          f"- config hash (sha256 of all effective museum configs): `{meta['config_hash']}`", f"- git: `{meta['git']['commit']}` dirty={meta['git']['dirty']}",
+         *([f"- SENSITIVITY RUN, not the first run: overrides {meta['overrides']}"] if meta.get("overrides") else []),
          "- Scripted people, synthetic face embeddings and my own movement model. Numbers are per run (one scene), mean [95% bootstrap CI over seeds].",
          "- Synthetic embeddings show the logic works, not that real faces separate (relatives especially). Nothing here measures real visitors.", "",
          "| scenario | " + " | ".join(cols) + " |", "|---|" + "---|" * len(cols)]
@@ -295,7 +299,12 @@ def main(argv=None) -> int:
     ap.add_argument("--prefix", default="museum_tracking")
     ap.add_argument("--log-dir", default=None)
     ap.add_argument("--print-hash", action="store_true")
+    ap.add_argument("--override", action="append", default=[], metavar="KEY=VALUE",
+                    help="override a museum_trackeval.yaml value for a labelled SENSITIVITY run (recorded in the hash and the report)")
     a = ap.parse_args(argv)
+    for kv in a.override:
+        k, v = kv.split("=", 1)
+        _OVERRIDES[k] = float(v)
     if a.print_hash:
         print(config_hash()); return 0
     c = cfg()
@@ -306,7 +315,7 @@ def main(argv=None) -> int:
     for n, arr in res.items():
         table[n] = {k: boot_ci(arr[k], None, c["boot"], rng) for k in METRICS if k not in ("tte_sum", "tte_n")}
         table[n]["time_to_engage_s"] = boot_ci(arr["tte_sum"], arr["tte_n"], c["boot"], rng)
-    meta = {"config_hash": config_hash(), "git": git_info(), "seeds": [seeds[0], seeds[-1], len(seeds)]}
+    meta = {"config_hash": config_hash(), "git": git_info(), "seeds": [seeds[0], seeds[-1], len(seeds)], "overrides": dict(_OVERRIDES)}
     md = render_md(meta, table)
     if a.out:
         os.makedirs(a.out, exist_ok=True)
