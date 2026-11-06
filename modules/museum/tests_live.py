@@ -12,6 +12,14 @@ from . import live as L
 from .appearance import AgeProbs, Detection, FakeAgeEstimator
 
 
+def fake_clock(step=0.1):
+    t = [0.0]
+    def clock():
+        t[0] += step
+        return t[0]
+    return clock
+
+
 def make(band="adult", llm=None, log_dir=None):
     probs = {"child": AgeProbs(0.9, 0.08, 0.02), "adult": AgeProbs(0.06, 0.92, 0.02), "unsure": AgeProbs(0.4, 0.4, 0.2)}[band]
     emb = np.random.RandomState(7).randn(512)
@@ -19,13 +27,13 @@ def make(band="adult", llm=None, log_dir=None):
     fake_llm = llm or (lambda s, u: json.dumps({"topics": [], "style": []}))
     replies = []
     def reply(system, text): replies.append(system); return "ok"
-    live = L.Live(None, fake_llm, FakeAgeEstimator({"visitor_1": probs}), det, log_dir=log_dir, reply_fn=reply)
+    live = L.Live(None, fake_llm, FakeAgeEstimator({"visitor_1": probs}), det, log_dir=log_dir, reply_fn=reply, clock=fake_clock())
     live.replies = replies
     return live
 
 
 def meet(live):
-    for _ in range(6):
+    for _ in range(80):                       # 8 fake seconds: stable track, group settled, dwell passed -> engagement event
         live.process_frame(None)
 
 
@@ -144,8 +152,8 @@ def test_one_frame_ghost_never_becomes_a_visitor_and_does_not_inflate_group_size
             out.append(Detection((400, 10, 440, 50), ghost_emb))        # appears in a single frame
         return out
     live = L.Live(None, lambda s, u: "{}", FakeAgeEstimator({"visitor_1": AgeProbs(0.06, 0.92, 0.02), "visitor_2": AgeProbs(0.5, 0.5, 0.0)}),
-                  det, reply_fn=lambda s, t: "ok")
-    for _ in range(8):
+                  det, reply_fn=lambda s, t: "ok", clock=fake_clock())
+    for _ in range(80):
         live.process_frame(None)
     assert live.profile.persons == ["visitor_1"] and list(live.met) == ["visitor_1"]
     assert "solo" in live.met["visitor_1"].row_id            # group_size 1, not 2
@@ -220,3 +228,70 @@ def test_state_reports_camera_health_and_placeholder_is_a_jpeg():
     j = L.placeholder_jpeg("Camera stopped delivering frames\nreconnecting...")
     assert j[:2] == b"\xff\xd8"
     live.end()
+
+
+def _live_with_box(box, log_dir=None, probs=AgeProbs(0.06, 0.92, 0.02), frames_after=None):
+    emb = np.random.RandomState(7).randn(512); emb /= np.linalg.norm(emb)
+    state = {"present": True}
+    det = lambda f: [Detection(box, emb)] if state["present"] else []
+    live = L.Live(None, lambda s, u: "{}", FakeAgeEstimator({"visitor_1": probs}), det, log_dir=log_dir,
+                  reply_fn=lambda s, t: "ok", clock=fake_clock())
+    live.state_flag = state
+    return live
+
+
+def test_a_visitor_who_is_too_far_is_not_greeted_and_is_asked_to_come_closer():
+    live = _live_with_box((100, 60, 140, 100))                      # 40 px tall in a 480 px frame = 0.083 < exit_ratio
+    for _ in range(120):
+        live.process_frame(None)
+    assert live.met == {} and live.profile.persons == ["visitor_1"]   # a stable node, but no engagement
+    r = live.chat("hello")
+    assert "closer" in r["reply"]
+    live.end()
+
+
+def test_engage_event_is_logged_anonymously_and_disengaged_return_is_logged_not_greeted(tmp_path):
+    live = _live_with_box((100, 60, 240, 220), log_dir=str(tmp_path))
+    for _ in range(80):
+        live.process_frame(None)
+    assert list(live.met) == ["visitor_1"] and live.engine.state("visitor_1") == "engaged"
+    n_msgs = len(live.messages)
+    live.state_flag["present"] = False
+    for _ in range(50):                                               # gone 5 fake seconds (> leave_s) before replying
+        live.process_frame(None)
+    live.state_flag["present"] = True
+    for _ in range(300):
+        live.process_frame(None)
+    assert live.engine.state("visitor_1") == "disengaged" and len(live.messages) == n_msgs      # never re-greeted
+    path = live.log.path
+    live.end()
+    rows = [json.loads(l) for l in open(path)]
+    kinds = [r["event"] for r in rows]
+    assert kinds.count("engage") == 1 and "disengaged" in kinds and "disengaged_returned" in kinds
+    e = next(r for r in rows if r["event"] == "engage")
+    assert e["persons"] == ["visitor_1"] and e["opening_id"] and e["distance_proxy"] and e["group"]["status"] == "known"
+    assert e["prior"]["band"] == "adult" and e["t"] > 0
+    raw = open(path).read().lower()
+    assert "hello" not in raw and "embedding" not in raw
+
+
+def test_first_chat_message_marks_the_exchange_started_so_leaving_later_is_not_a_disengagement():
+    live = _live_with_box((100, 60, 240, 220))
+    for _ in range(80):
+        live.process_frame(None)
+    live.chat("the full story please")
+    assert live.engine.state("visitor_1") == "exchange"
+    live.state_flag["present"] = False
+    for _ in range(100):
+        live.process_frame(None)
+    assert live.engine.state("visitor_1") == "exchange"
+    live.end()
+
+
+def test_end_wipes_group_state_too():
+    live = _live_with_box((100, 60, 240, 220))
+    for _ in range(80):
+        live.process_frame(None)
+    assert live.group.context("visitor_1").status == "known"
+    live.end()
+    assert live.group.context("visitor_1").reason == "no_track"

@@ -1,0 +1,11 @@
+# Engagement trigger: start the first interaction when a visitor is close enough. All values are PLACEHOLDERS.
+# Distance proxy = face-box height / frame height. It is a proxy, not a distance: it depends on the camera, its
+# position and the visitor's face size. Measure it with tools/calibrate_engagement.py before trusting 0.20 / 0.15.
+enter_ratio: 0.20          # at/above this the visitor counts as "close"
+exit_ratio: 0.15           # below this the dwell count resets (hysteresis: between exit and enter it holds)
+dwell_frames: 20           # frames at/above enter_ratio before the first member passes the dwell test
+min_track_conf: 0.6        # identity must be trustworthy
+cooldown_s: 30.0           # minimum time between two engagement events
+max_attempts_per_person: 1 # one greeting per person per visit
+group_settle_s: 4.0        # after the first member passes dwell, wait this long for the group context to stabilise
+leave_s: 3.0               # an engaged visitor absent this long before the exchange starts is "disengaged" for good

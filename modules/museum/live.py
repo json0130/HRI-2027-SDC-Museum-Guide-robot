@@ -26,6 +26,8 @@ from typing import Callable, Dict, List, Optional
 import numpy as np
 
 from . import profile_api
+from .engagement import EngagementEngine, opening_for_event
+from .group import GroupTracker
 from .appearance import AgeBandPipeline, AgeProbs, Detection, FakeAgeEstimator, FairFaceAgeEstimator
 from .decision_log import DecisionLog, snapshot
 from .initiation import OpeningParams, choose_opening
@@ -70,8 +72,9 @@ class Live:
     """All state for one live museum session. Thread-safe via one lock; camera thread calls process_frame."""
 
     def __init__(self, llm, extract_llm: Callable[[str, str], str], estimator, detect_fn, *, log_dir: Optional[str] = None,
-                 reply_fn: Optional[Callable] = None):
+                 reply_fn: Optional[Callable] = None, clock: Optional[Callable[[], float]] = None, frame_h: int = 480):
         self.llm, self.extract_llm, self.reply_fn = llm, extract_llm, reply_fn
+        self.clock, self.frame_h = clock or time.monotonic, frame_h
         self._estimator, self._detect, self._log_dir = estimator, detect_fn, log_dir
         self.lock = threading.RLock()          # state; held only briefly
         self.chat_lock = threading.Lock()      # one conversation turn at a time
@@ -91,7 +94,11 @@ class Live:
             with self.pipe_lock:
                 self.pipeline = AgeBandPipeline(self._estimator, self._detect)
             self.profile.add_cleanup(self.pipeline.clear)   # ending the visit wipes the face-embedding gallery too
-            self.log = DecisionLog(self._log_dir, "profile") if self._log_dir else None
+            self.log = DecisionLog(self._log_dir, "profile", clock=self.clock) if self._log_dir else None
+            self.group = GroupTracker()
+            self.engine = EngagementEngine(self.group.context, self.group.members)
+            self.profile.add_cleanup(self.group.clear)
+            self.last_res: List[dict] = []
             self.met: Dict[str, OpeningParams] = {}
             self.prior_log: Dict[str, dict] = {}
             self.faces: List[dict] = []
@@ -112,25 +119,46 @@ class Live:
         with self.lock:
             if self.ended:
                 return []
+            now = self.clock()
             stable = self.pipeline.cfg["stable_frames"]
             self.profile.sync_tracks(res, stable)        # nodes only for tracks stable for N consecutive frames
-            confirmed = [r for r in res if r["person_id"] in self.profile.persons]
-            for r in confirmed:
-                if r["person_id"] not in self.met:
-                    self._meet(r, len(confirmed))
+            self.last_res = res
+            ctxs = self.group.update(now, res)            # coarse group context (weak, opening-only)
+            for pid, ctx in ctxs.items():
+                if pid in self.profile.persons:
+                    self.profile.set_group_context(pid, ctx)
+            fh = frame.shape[0] if getattr(frame, "shape", None) is not None else self.frame_h
+            obs = [{"person_id": r["person_id"], "box": r["box"], "track_conf": r["track_conf"],
+                    "eligible": r["person_id"] in self.profile.persons} for r in res]
+            for ev in self.engine.update(now, fh, obs):   # step 4: the first interaction starts when someone is close enough
+                self._engage(ev)
+            if self.log:
+                for e in self.engine.drain_log():
+                    if e["kind"] != "engage":
+                        self.log.log_event(e["kind"], persons=[e["person"]], suspended_writes=self.profile.suspended_writes)
             self.faces = res
             return res
 
-    def _meet(self, r: dict, group_size: int) -> None:
-        pid = r["person_id"]
-        op = choose_opening(r["band"], r["confidence"], group_size)
-        self.met[pid] = op
-        self.profile.set_prior(pid, r["band"], r["confidence"])
-        self.prior_log[pid] = {"band": r["band"], "confidence": r["confidence"]}
-        self.opening_dim[pid] = "depth" if "short version" in op.first_question else None
-        self.policy.note_external_question(pid, self.turn)
-        self.messages.append({"who": "robot", "pid": pid, "text": f"{op.greeting('your museum guide')} {op.first_question}",
-                              "meta": f"opening row {op.row_id}"})
+    def _engage(self, ev) -> None:
+        bands = {r["person_id"]: r for r in self.last_res}
+        for pid in ev.person_ids:
+            r = bands.get(pid)
+            if r:
+                self.profile.set_prior(pid, r["band"], r["confidence"])
+                self.prior_log[pid] = {"band": r["band"], "confidence": r["confidence"]}
+        op = opening_for_event(ev, self.profile)         # prior + group context AS THEY ARE at this moment
+        first = ev.person_ids[0]
+        for pid in ev.person_ids:
+            self.met[pid] = op
+            self.opening_dim[pid] = "depth" if "short version" in op.first_question else None
+        self.policy.note_external_question(first, self.turn)
+        self.messages.append({"who": "robot", "pid": first, "text": f"{op.greeting('your museum guide')} {op.first_question}",
+                              "meta": f"engaged {len(ev.person_ids)} · opening row {op.row_id} · group {ev.group.status} · {ev.reason} · size proxy {ev.distance_proxy}"})
+        if self.log:
+            self.log.log_event("engage", persons=list(ev.person_ids), group=ev.group.to_dict(), distance_proxy=ev.distance_proxy,
+                               opening_id=op.row_id, prior=self.prior_log.get(first),
+                               track_conf=self.profile._track_conf.get(first, 1.0), suspended_writes=self.profile.suspended_writes,
+                               reason=ev.reason)
 
     def primary(self) -> Optional[str]:
         best, area = None, -1
@@ -154,9 +182,10 @@ class Live:
                     return {"error": "visit ended" if self.ended else "empty message"}
                 self.messages.append({"who": "visitor", "pid": pid or "?", "text": text})
                 if pid is None:
-                    self.messages.append({"who": "robot", "pid": "-", "text": "I can't see you yet. Please look at the camera."})
+                    self.messages.append({"who": "robot", "pid": "-", "text": "Please come a little closer so we can start." if self.faces else "I can't see you yet. Please look at the camera."})
                     return {"reply": self.messages[-1]["text"]}
                 self.turn += 1
+                self.engine.exchange_started([pid], self.clock())   # the visitor answered: no longer "leaving before the exchange"
                 t, st = self.turn, self.policy._st(pid)
                 pend, outcome = st.pending, "none"
                 # (1) outcome of the pending question / offer / adaptation

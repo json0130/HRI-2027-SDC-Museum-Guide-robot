@@ -54,5 +54,19 @@ class DecisionLog:
         self._fh.write(json.dumps(row, sort_keys=True) + "\n")
         self._fh.flush()
 
+    def log_event(self, kind: str, *, persons: list, group: Optional[dict] = None, distance_proxy: Optional[float] = None,
+                  opening_id: Optional[str] = None, prior: Optional[dict] = None, track_conf: Optional[float] = None,
+                  suspended_writes: int = 0, reason: str = "") -> None:
+        """Engagement-level events: kind is engage | disengaged | disengaged_returned. Same whitelist rules: visit-scoped ids,
+        closed-vocabulary fields only, no images, embeddings, names or text."""
+        g = None if group is None else {k: group.get(k) for k in ("group_id", "group_size", "has_child_band_member", "status")}
+        pr = None if prior is None else {"band": prior["band"], "confidence": round(prior["confidence"], 3)}
+        row = {"t": round(self._clock() - self._t0, 3), "visit_id": self.visit_id, "mode": self.mode, "event": kind,
+               "persons": list(persons), "group": g, "distance_proxy": None if distance_proxy is None else round(float(distance_proxy), 3),
+               "opening_id": opening_id, "prior": pr, "track_conf": None if track_conf is None else round(float(track_conf), 3),
+               "suspended_writes": int(suspended_writes), "reason": reason}
+        self._fh.write(json.dumps(row, sort_keys=True) + "\n")
+        self._fh.flush()
+
     def close(self) -> None:
         self._fh.close()
