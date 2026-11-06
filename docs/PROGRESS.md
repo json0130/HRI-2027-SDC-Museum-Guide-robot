@@ -1,5 +1,17 @@
 # Progress log
 
+## live demo: lag, resizable UI, background-face fix  *(branch `museum-visual-profile`)*
+
+**Problem 1, laggy feed.** Measured with a script that counts DISTINCT frames from `/video`: 4.2 fps idle, 3.6 fps during a chat turn with a 1.7 s freeze. Causes: the camera loop ran detection (MTCNN + embeddings + FairFace) inside the capture loop, so the picture was paced by the models; `chat()` held the state lock across both LLM calls (4-12 s), and `process_frame` needed that lock, so the camera froze mid-turn; the stream also resent duplicate frames.
+**Fix:** `start_camera` runs a capture thread (buffer 1, no lock, no models, draws the overlay, publishes a JPEG) and a detection thread (newest frame only); `chat()` holds the state lock only for its quick state steps, never across the LLM calls (`chat_lock` serialises turns); `/video` sends only new frames.
+**Verified:** 15.6 fps idle, 15.4 fps during a chat turn, longest gap 0.13 s (was 1.71 s). The camera itself delivers 15.3 fps raw (also with MJPG), so the stream is now at the hardware's limit. Test `test_slow_llm_does_not_block_frames_or_state`.
+**Problem 2, resizable components.** Every card (camera, conversation, profile, graph, policy steps) has a native bottom-right drag handle (its content grows with it), the two columns have a drag splitter, and sizes are remembered per browser in localStorage (best effort, try/catch). Checked in Chrome by screenshot; the drag gesture itself I did not perform.
+**Problem 3 (found while checking the UI), a second visitor from the background.** When the visitor looked down, the largest face in frame became the robot head on the shelf; the relative-size rule (>= 0.5 of the largest) kept it, and it got its own "child" visitor and greeting. Added an absolute floor, `--min-face-height` 0.18 of the frame height (lab scene measured: robot head <= 16%, visitor >= 19%), applied before the relative rule (`filter_faces`, unit-tested). Re-run: with nobody visible there are no visitors; when the visitor returned (116-129 px tall) exactly one.
+**Limits:** the 0.18 floor is tuned to this lab scene and camera position and is tight (16% vs 19%); a different room needs recalibration, and a real visitor standing farther back than about 86 px face height is ignored.
+**Not verified:** actually dragging the resize handles; more than one real person.
+
+---
+
 ## live test with the real webcam and AI server  *(branch `museum-visual-profile`)*
 
 **Setup:** webcam index 0 (640x480), lab AI server `10.42.0.118:7898` (now the default and in the README), live demo run with `--camera 0 --ai-server 10.42.0.118 --log-dir logs/museum`. Browser UI checked in Chrome.

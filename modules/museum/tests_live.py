@@ -150,3 +150,28 @@ def test_one_frame_ghost_never_becomes_a_visitor_and_does_not_inflate_group_size
     assert live.profile.persons == ["visitor_1"] and list(live.met) == ["visitor_1"]
     assert "solo" in live.met["visitor_1"].row_id            # group_size 1, not 2
     live.end()
+
+
+def test_slow_llm_does_not_block_frames_or_state():
+    import threading, time
+    gate = threading.Event()
+    live = make("adult"); meet(live)
+    def slow_extract(s, u): gate.wait(2); return json.dumps({"topics": [], "style": []})
+    live.extract_llm = slow_extract
+    t = threading.Thread(target=lambda: live.chat("hello there")); t.start()
+    time.sleep(0.2)                                         # the turn is now inside the (slow) extraction LLM call
+    t0 = time.time()
+    live.process_frame(None); live.state()
+    assert time.time() - t0 < 0.3                           # camera pass and /state do not wait for the LLM
+    gate.set(); t.join(5)
+    assert not t.is_alive() and live.messages[-1]["who"] == "robot"
+    live.end()
+
+
+def test_filter_faces_absolute_floor_and_relative_rule():
+    D = lambda h, w=None: Detection((0, 0, w or h, h), None)
+    keep = L.filter_faces([D(100), D(60)], 480, 0.5, 0.18)             # 60 px tall < 86 px floor: the small background face goes
+    assert [d.box[3] for d in keep] == [100]
+    assert L.filter_faces([D(60)], 480, 0.5, 0.18) == []              # visitor looked down: only the small face is left, still rejected
+    assert len(L.filter_faces([D(120), D(110)], 480, 0.5, 0.18)) == 2  # two real, similar-distance people both kept
+    assert len(L.filter_faces([D(200), D(90)], 480, 0.5, 0.18)) == 1   # far-back person fails the relative rule (documented ceiling)

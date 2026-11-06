@@ -30,7 +30,7 @@ from .appearance import AgeBandPipeline, AgeProbs, Detection, FakeAgeEstimator, 
 from .decision_log import DecisionLog, snapshot
 from .initiation import OpeningParams, choose_opening
 from .profile import DIMS
-from .profile_extraction import extract_and_apply_profile
+from .profile_extraction import build_system_prompt, extract_and_apply_profile
 from .profiling_policy import ProfilingPolicy
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -73,8 +73,13 @@ class Live:
                  reply_fn: Optional[Callable] = None):
         self.llm, self.extract_llm, self.reply_fn = llm, extract_llm, reply_fn
         self._estimator, self._detect, self._log_dir = estimator, detect_fn, log_dir
-        self.lock = threading.RLock()
+        self.lock = threading.RLock()          # state; held only briefly
+        self.chat_lock = threading.Lock()      # one conversation turn at a time
+        self.pipe_lock = threading.Lock()      # the tracker/smoothers are touched by one detection pass at a time
         self.jpeg: Optional[bytes] = None
+        self.jpeg_id = 0
+        self.frame = None                      # latest raw frame (capture thread -> detection thread)
+        self.frame_id = 0
         self.reset()
 
     def reset(self) -> None:
@@ -82,7 +87,8 @@ class Live:
             self.visit_id = uuid.uuid4().hex[:8]
             self.profile = profile_api.start_visit(self.visit_id)
             self.policy = ProfilingPolicy(self.profile)
-            self.pipeline = AgeBandPipeline(self._estimator, self._detect)
+            with self.pipe_lock:
+                self.pipeline = AgeBandPipeline(self._estimator, self._detect)
             self.log = DecisionLog(self._log_dir, "profile") if self._log_dir else None
             self.met: Dict[str, OpeningParams] = {}
             self.prior_log: Dict[str, dict] = {}
@@ -97,10 +103,13 @@ class Live:
     # -- camera side ----------------------------------------------------------
 
     def process_frame(self, frame) -> List[dict]:
+        with self.pipe_lock:
+            if self.ended:
+                return []
+            res = self.pipeline.process(frame)           # heavy (detection + embeddings + age): no state lock held
         with self.lock:
             if self.ended:
                 return []
-            res = self.pipeline.process(frame)
             min_frames = self.pipeline.cfg["min_frames"]
             confirmed = [r for r in res if r["n_frames"] >= min_frames]   # a one-frame ghost never becomes a visitor
             for r in confirmed:
@@ -136,70 +145,89 @@ class Live:
     # -- conversation ---------------------------------------------------------
 
     def chat(self, text: str) -> dict:
-        with self.lock:
-            text = (text or "").strip()
-            pid = self.primary()
-            if self.ended or not text:
-                return {"error": "visit ended" if self.ended else "empty message"}
-            self.messages.append({"who": "visitor", "pid": pid or "?", "text": text})
-            if pid is None:
-                self.messages.append({"who": "robot", "pid": "-", "text": "I can't see you yet. Please look at the camera."})
-                return {"reply": self.messages[-1]["text"]}
-            self.turn += 1
-            t, st = self.turn, self.policy._st(pid)
-            pend, outcome = st.pending, "none"
-            # (1) outcome of the pending question / offer / adaptation
-            if pend and pend["kind"] == "ask_choice":
-                s = interpret_choice(pend["dim"], text)
-                if s:
-                    self.policy.answer_choice(pid, pend["dim"], s, t); outcome = "answered"
-            elif pend and pend["kind"] == "offer":
-                w = _words(text)
-                if w & NO and not w & YES: outcome = "declined"
-                elif w & YES: outcome = "accepted"
-                if outcome != "none": self.policy.observe(pid, outcome, t)
-            elif pend and pend["kind"] == "adapt":
-                outcome = "declined" if (_words(text) & NO) else "accepted"
-                self.policy.observe(pid, outcome, t)
-            elif self.opening_dim.get(pid) and pend is None:
-                s = interpret_choice(self.opening_dim[pid], text)
-                if s:
-                    self.policy.answer_choice(pid, self.opening_dim[pid], s, t); outcome = "answered"
-                self.opening_dim[pid] = None
-            # (2) guarded extraction into the in-memory KG
-            self.last_extraction = extract_and_apply_profile(self.profile, pid, text, self.extract_llm, t)
-            # (3) next move
-            move = self.policy.next_move(pid, t)
-            # (4) reply with the CURRENT style levels
-            levels = self.policy.levels(pid)
-            op = self.met[pid]
-            simple = op.vocabulary == "simple" and self.profile.prior(pid) is not None   # opening-only; gone after evidence
-            system = style_instructions(levels, simple)
+        """One conversation turn. `chat_lock` serialises turns; the state lock is held only for the quick state
+        steps, never across the two LLM calls (4-12 s), so the camera, detection and /state keep running."""
+        with self.chat_lock:
+            with self.lock:
+                text = (text or "").strip()
+                pid = self.primary()
+                if self.ended or not text:
+                    return {"error": "visit ended" if self.ended else "empty message"}
+                self.messages.append({"who": "visitor", "pid": pid or "?", "text": text})
+                if pid is None:
+                    self.messages.append({"who": "robot", "pid": "-", "text": "I can't see you yet. Please look at the camera."})
+                    return {"reply": self.messages[-1]["text"]}
+                self.turn += 1
+                t, st = self.turn, self.policy._st(pid)
+                pend, outcome = st.pending, "none"
+                # (1) outcome of the pending question / offer / adaptation
+                if pend and pend["kind"] == "ask_choice":
+                    s_ = interpret_choice(pend["dim"], text)
+                    if s_:
+                        self.policy.answer_choice(pid, pend["dim"], s_, t); outcome = "answered"
+                elif pend and pend["kind"] == "offer":
+                    w = _words(text)
+                    if w & NO and not w & YES: outcome = "declined"
+                    elif w & YES: outcome = "accepted"
+                    if outcome != "none": self.policy.observe(pid, outcome, t)
+                elif pend and pend["kind"] == "adapt":
+                    outcome = "declined" if (_words(text) & NO) else "accepted"
+                    self.policy.observe(pid, outcome, t)
+                elif self.opening_dim.get(pid) and pend is None:
+                    s_ = interpret_choice(self.opening_dim[pid], text)
+                    if s_:
+                        self.policy.answer_choice(pid, self.opening_dim[pid], s_, t); outcome = "answered"
+                    self.opening_dim[pid] = None
+            # (2) guarded extraction: LLM call WITHOUT the state lock, then apply under it
+            try:
+                raw = self.extract_llm(build_system_prompt(), text)
+            except Exception as exc:  # noqa: BLE001 - an LLM outage must not break the visit
+                raw, err = None, exc
+            def _llm(system, user):
+                if raw is None:
+                    raise err
+                return raw
+            with self.lock:
+                if self.ended:
+                    return {"error": "visit ended"}
+                self.last_extraction = extract_and_apply_profile(self.profile, pid, text, _llm, t)
+                # (3) next move
+                move = self.policy.next_move(pid, t)
+                levels = self.policy.levels(pid)
+                op = self.met[pid]
+                simple = op.vocabulary == "simple" and self.profile.prior(pid) is not None   # opening-only; gone after evidence
+                system = style_instructions(levels, simple)
+                hist = list(self.history.setdefault(pid, []))
+                extraction = self.last_extraction
+            # (4) reply with the CURRENT style levels (LLM call without the lock)
             if self.reply_fn:
                 reply = self.reply_fn(system, text)
             else:
-                reply = self.llm.respond(system, text, history=self.history.setdefault(pid, []),
-                                         max_tokens=60 if levels["depth"] < 0 else (200 if levels["depth"] > 0 else 120))
+                reply = self.llm.respond(system, text, history=hist, max_tokens=60 if levels["depth"] < 0 else (200 if levels["depth"] > 0 else 120))
             if not reply or reply.startswith("[LLM"):
                 reply = "(the language model is not available right now)"
-            self.history.setdefault(pid, []).append((text, reply))
-            full = reply + (("\n" + move.text) if move.text else "")
-            self.messages.append({"who": "robot", "pid": pid, "text": full,
-                                  "meta": f"move={move.kind}" + (f" {move.dim}" if move.dim else "") + (f" level→{move.level}" if move.level is not None else "")})
-            if self.log:
-                self.log.log(pid, prior=self.prior_log.get(pid), profile=snapshot(self.profile, pid),
-                             action={"kind": move.kind, "dim": move.dim, "direction": move.direction, "level": move.level},
-                             gate=self.policy.gate(self.profile.style(pid, move.dim)["confidence"]) if move.dim else "none",
-                             outcome=outcome, reversal=any(r["reversal"] and r["turn"] == t for r in self.policy.step_log),
-                             track_conf=self.profile._track_conf.get(pid, 1.0), suspended_writes=self.profile.suspended_writes)
-            return {"reply": full, "move": move.kind, "outcome": outcome, "extraction": self.last_extraction}
+            with self.lock:
+                if self.ended:
+                    return {"error": "visit ended"}
+                self.history.setdefault(pid, []).append((text, reply))
+                full = reply + (("\n" + move.text) if move.text else "")
+                self.messages.append({"who": "robot", "pid": pid, "text": full,
+                                      "meta": f"move={move.kind}" + (f" {move.dim}" if move.dim else "") + (f" level→{move.level}" if move.level is not None else "")})
+                if self.log:
+                    self.log.log(pid, prior=self.prior_log.get(pid), profile=snapshot(self.profile, pid),
+                                 action={"kind": move.kind, "dim": move.dim, "direction": move.direction, "level": move.level},
+                                 gate=self.policy.gate(self.profile.style(pid, move.dim)["confidence"]) if move.dim else "none",
+                                 outcome=outcome, reversal=any(r["reversal"] and r["turn"] == t for r in self.policy.step_log),
+                                 track_conf=self.profile._track_conf.get(pid, 1.0), suspended_writes=self.profile.suspended_writes)
+                return {"reply": full, "move": move.kind, "outcome": outcome, "extraction": extraction}
 
     def end(self) -> dict:
         with self.lock:
             if self.ended:
                 return {"ended": True}
             summary = profile_api.end_visit(self.visit_id)
-            self.pipeline.clear()
+            with self.pipe_lock:
+                self.pipeline.clear()
             if self.log: self.log.close()
             self.messages, self.history, self.met, self.faces = [], {}, {}, []
             self.ended = True
@@ -257,39 +285,76 @@ def make_app(live: Live):
     @app.get("/video")
     def video():
         def gen():
+            last = -1
             while True:
-                j = live.jpeg
-                if j:
-                    yield b"--f\r\nContent-Type: image/jpeg\r\n\r\n" + j + b"\r\n"
-                time.sleep(0.1)
+                if live.jpeg_id != last and live.jpeg:
+                    last = live.jpeg_id
+                    yield b"--f\r\nContent-Type: image/jpeg\r\n\r\n" + live.jpeg + b"\r\n"
+                else:
+                    time.sleep(0.01)
         return Response(gen(), mimetype="multipart/x-mixed-replace; boundary=f")
 
     return app
 
 
-def camera_loop(live: Live, source, every: float = 0.15, stop: Optional[threading.Event] = None) -> None:
-    """Read frames, process ~6-7 per second, publish an annotated JPEG. `source` is a cv2 index or None (virtual)."""
+def start_camera(live: Live, source, stop: Optional[threading.Event] = None) -> List[threading.Thread]:
+    """Two threads so the picture never waits for the models:
+    capture: read frames as fast as the camera delivers (buffer of 1, so no stale backlog), draw the latest face
+             overlay (debug only) and publish a JPEG. It takes no lock and does no model work.
+    detect : run face detection + embeddings + age on the NEWEST frame, as fast as it can (older frames are skipped).
+    `source` is a cv2 index, or None for a virtual camera."""
     import cv2
-    cap = cv2.VideoCapture(source) if source is not None else None
-    if cap is not None and not cap.isOpened():
-        raise SystemExit(f"cannot open camera {source}")
-    last = 0.0
-    while not (stop and stop.is_set()):
-        if cap is not None:
-            ok, frame = cap.read()
-            if not ok:
-                time.sleep(0.05); continue
-        else:
-            frame = np.full((300, 400, 3), 40, np.uint8); time.sleep(0.05)
-        if time.time() - last >= every:
-            live.process_frame(frame); last = time.time()
-        img = frame.copy()
-        for f in live.faces:
-            x1, y1, x2, y2 = f["box"]
-            cv2.rectangle(img, (x1, y1), (x2, y2), (80, 200, 120), 2)
-            cv2.putText(img, f"{f['person_id']} {f['band']} tc={f['track_conf']:.1f}", (x1, max(14, y1 - 6)), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (80, 200, 120), 1)
-        ok, buf = cv2.imencode(".jpg", img)
-        if ok: live.jpeg = buf.tobytes()
+    stop = stop or threading.Event()
+    cap = None
+    if source is not None:
+        cap = cv2.VideoCapture(source)
+        if not cap.isOpened():
+            raise SystemExit(f"cannot open camera {source}")
+        cap.set(cv2.CAP_PROP_BUFFERSIZE, 1)
+
+    def capture():
+        while not stop.is_set():
+            if cap is not None:
+                ok, frame = cap.read()
+                if not ok:
+                    time.sleep(0.02); continue
+            else:
+                frame = np.full((300, 400, 3), 40, np.uint8); time.sleep(0.04)
+            live.frame, live.frame_id = frame, live.frame_id + 1
+            img = frame.copy()
+            for f in live.faces:                      # reference read; replaced atomically by the detect thread
+                x1, y1, x2, y2 = f["box"]
+                cv2.rectangle(img, (x1, y1), (x2, y2), (80, 200, 120), 2)
+                cv2.putText(img, f"{f['person_id']} {f['band']} tc={f['track_conf']:.1f}", (x1, max(14, y1 - 6)),
+                            cv2.FONT_HERSHEY_SIMPLEX, 0.5, (80, 200, 120), 1)
+            ok, buf = cv2.imencode(".jpg", img, [cv2.IMWRITE_JPEG_QUALITY, 80])
+            if ok:
+                live.jpeg, live.jpeg_id = buf.tobytes(), live.jpeg_id + 1
+
+    def detect():
+        seen = -1
+        while not stop.is_set():
+            if live.frame is None or live.frame_id == seen:
+                time.sleep(0.005); continue
+            seen, frame = live.frame_id, live.frame
+            live.process_frame(frame)
+
+    threads = [threading.Thread(target=capture, daemon=True), threading.Thread(target=detect, daemon=True)]
+    for t in threads:
+        t.start()
+    return threads
+
+
+def filter_faces(dets: List[Detection], frame_h: int, min_frac: float, min_height_frac: float) -> List[Detection]:
+    """Drop background faces (posters, robot heads). Two rules, both site-calibration knobs:
+    absolute: face height must be >= min_height_frac of the frame height (so a small background face is never
+              promoted just because the visitor looked down and left the frame);
+    relative: face area must be >= min_frac of the largest remaining face.
+    Ceiling: a real second person standing far back is ignored too."""
+    big_enough = [d for d in dets if (d.box[3] - d.box[1]) >= min_height_frac * frame_h]
+    area = lambda d: (d.box[2] - d.box[0]) * (d.box[3] - d.box[1])
+    big = max((area(d) for d in big_enough), default=0)
+    return [d for d in big_enough if area(d) >= min_frac * big]
 
 
 def build(args) -> tuple:
@@ -318,11 +383,7 @@ def build(args) -> tuple:
 
         def detect(f):
             ds = [Detection(tuple(int(v) for v in r[2]), r[3]) for r in fid.identify_all(f, max_faces=4, with_emb=True)]
-            area = lambda d: (d.box[2] - d.box[0]) * (d.box[3] - d.box[1])
-            big = max((area(d) for d in ds), default=0)
-            # ponytail: background faces (posters, robot heads) are much smaller than the visitor; drop faces under
-            # min_face_frac of the largest. Ceiling: a second real person standing much farther away is ignored too.
-            return [d for d in ds if area(d) >= args.min_face_frac * big]
+            return filter_faces(ds, f.shape[0], args.min_face_frac, args.min_face_height)
     return Live(llm, extract_llm, estimator, detect, log_dir=args.log_dir, reply_fn=reply_fn)
 
 
@@ -337,13 +398,15 @@ def main(argv=None) -> int:
     ap.add_argument("--detector", choices=["opencv", "mtcnn"], default="mtcnn",
                     help="mtcnn detected the seated visitor in 53/53 test frames, Haar in 26/53")
     ap.add_argument("--min-face-frac", type=float, default=0.5, help="ignore faces smaller than this fraction of the largest face's area")
+    ap.add_argument("--min-face-height", type=float, default=0.18,
+                    help="ignore faces shorter than this fraction of the frame height (lab scene: robot head <=16%%, visitor >=19%%)")
     ap.add_argument("--log-dir", default=None, help="write the anonymised JSONL decision log here")
     ap.add_argument("--port", type=int, default=8080)
     a = ap.parse_args(argv)
     if a.llm == "ai-server" and not a.ai_server:
         ap.error("--ai-server HOST[:PORT] is required (or set AI_HOST, or use --llm fake)")
     live = build(a)
-    threading.Thread(target=camera_loop, args=(live, None if a.no_camera else a.camera), daemon=True).start()
+    start_camera(live, None if a.no_camera else a.camera)
     print(f"open http://127.0.0.1:{a.port}")
     make_app(live).run(host="127.0.0.1", port=a.port, threaded=True)
     return 0
