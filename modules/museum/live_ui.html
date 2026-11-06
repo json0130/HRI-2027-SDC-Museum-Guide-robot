@@ -32,7 +32,7 @@ svg{flex:1;min-height:60px;width:100%}.hint{color:var(--mute);font-size:12px}
 <button class="ghost" id="new">New visit</button><button id="end">End visit (wipe)</button></header>
 <main id="main">
 <div class="col">
- <div class="card" id="c-cam"><h2>Camera (debug overlay)</h2><div class="body"><div class="vwrap"><img id="v" src="/video" alt="camera"></div><div class="hint" id="faces"></div></div></div>
+ <div class="card" id="c-cam"><h2>Camera (debug overlay)</h2><div class="body"><div class="vwrap"><img id="v" src="/video" alt="camera"></div><div class="hint" id="cam"></div><div class="hint" id="faces"></div></div></div>
  <div class="card" id="c-chat"><h2>Conversation</h2><div class="body"><div id="chat"></div>
   <form id="f"><input id="t" autocomplete="off" placeholder="Say something as the visitor..."><button>Send</button></form></div></div>
 </div>
@@ -50,6 +50,7 @@ let lastMsgs=-1;
 function bar(ev,conf){const w=Math.abs(ev)*50,c=ev>=0?'var(--pos)':'var(--neg)';return `<div class="bar"><b></b><i style="${ev>=0?'left:50%':'right:50%'};width:${w}%;background:${c};opacity:${.35+.65*conf}"></i></div>`}
 function draw(s){
  $('vid').textContent=s.visit_id?'visit '+s.visit_id:'';$('sus').textContent=s.ended?'visit ended: all person data wiped':('dropped writes: '+(s.suspended_writes||0));
+ const cam=s.camera||{};$('cam').textContent='camera: '+(cam.status||'?')+(cam.fps?` · ${cam.fps} fps`:'')+(cam.frame_age!=null&&cam.frame_age>2?` · no frame for ${cam.frame_age}s`:'')+(cam.reconnects?` · reconnects ${cam.reconnects}`:'')+(cam.last_error?` · ${cam.last_error}`:'');$('cam').style.color=cam.status==='ok'&&!(cam.frame_age>2)?'var(--mute)':'var(--neg)';window.__camok=cam.status==='ok'&&cam.fps>1;
  $('faces').textContent=(s.faces||[]).map(f=>`${f.person_id}: ${f.band} (${f.confidence.toFixed(2)}), track ${f.track_conf.toFixed(1)}, ${f.n_frames} frames`).join('  |  ');
  const ids=Object.keys(s.persons||{});
  $('prof').innerHTML=ids.length?ids.map(p=>{const P=s.persons[p],L=s.levels[p]||{},pend=s.pending[p];
@@ -75,6 +76,10 @@ const main=$('main'),lw=store.get('lw');if(lw)main.style.setProperty('--lw',lw);
 $('split').onpointerdown=e=>{e.preventDefault();$('split').classList.add('on');$('split').setPointerCapture(e.pointerId);
  $('split').onpointermove=ev=>{const r=main.getBoundingClientRect(),p=Math.min(80,Math.max(20,(ev.clientX-r.left)/r.width*100));main.style.setProperty('--lw',p+'%')};
  $('split').onpointerup=()=>{$('split').classList.remove('on');$('split').onpointermove=null;store.set('lw',getComputedStyle(main).getPropertyValue('--lw'))}};
+// watchdog: if the camera is delivering but the picture has not changed for ~8 s the stream stalled in the browser: reload it
+(()=>{const c=document.createElement('canvas');c.width=32;c.height=24;const x=c.getContext('2d');let last=null,same=0;
+ const hash=()=>{try{x.drawImage($('v'),0,0,32,24);const d=x.getImageData(0,0,32,24).data;let s=0;for(let k=0;k<d.length;k+=4)s=(s*31+d[k]+d[k+1]*3+d[k+2]*7)|0;return s}catch(e){return 'broken'}};
+ setInterval(()=>{const hh=hash();same=(hh===last||hh==='broken')?same+1:0;last=hh;if(same>=2&&window.__camok){same=0;$('v').src='/video?'+Date.now()}},4000)})();
 async function tick(){try{draw(await api('/state'))}catch(e){}setTimeout(tick,700)}tick();
 $('f').onsubmit=async e=>{e.preventDefault();const t=$('t').value;if(!t)return;$('t').value='';await api('/chat',{text:t})};
 $('end').onclick=()=>api('/end',{});$('new').onclick=()=>{lastMsgs=-1;api('/new',{})};

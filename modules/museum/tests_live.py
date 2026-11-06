@@ -175,3 +175,48 @@ def test_filter_faces_absolute_floor_and_relative_rule():
     assert L.filter_faces([D(60)], 480, 0.5, 0.18) == []              # visitor looked down: only the small face is left, still rejected
     assert len(L.filter_faces([D(120), D(110)], 480, 0.5, 0.18)) == 2  # two real, similar-distance people both kept
     assert len(L.filter_faces([D(200), D(90)], 480, 0.5, 0.18)) == 1   # far-back person fails the relative rule (documented ceiling)
+
+
+class _Cap:
+    """cv2.VideoCapture stand-in: `n_ok` good frames, then it stops delivering (read -> False)."""
+    def __init__(self, n_ok): self.n, self.released = n_ok, False
+    def read(self):
+        import time; time.sleep(0.005)
+        if self.n > 0:
+            self.n -= 1; return True, np.full((60, 80, 3), 90, np.uint8)
+        return False, None
+    def release(self): self.released = True
+
+
+def test_camera_dropout_shows_why_and_reconnects():
+    import threading, time
+    live = make("adult")
+    caps, calls = [_Cap(5), _Cap(5)], {"n": 0}
+    def opener():
+        calls["n"] += 1
+        if calls["n"] == 1:
+            raise RuntimeError("cannot open camera 0")             # busy at first
+        return caps.pop(0)
+    stop = threading.Event()
+    th = threading.Thread(target=L.capture_loop, args=(live, opener, stop), kwargs={"stall_s": 0.1, "sleep": lambda s: time.sleep(0.01)}, daemon=True)
+    th.start()
+    seen = set()
+    for _ in range(300):
+        seen.add(live.camera["status"])
+        if live.camera["reconnects"] >= 1 and live.camera["status"] == "ok" and not caps:
+            break
+        time.sleep(0.01)
+    stop.set(); th.join(2)
+    assert "reconnecting" in seen and live.camera["status"] == "ok"         # unavailable -> ok, and a stall -> reconnect -> ok
+    assert live.camera["reconnects"] >= 1 and calls["n"] == 3               # failed open, first cap, stalled, second cap
+    assert live.jpeg and live.jpeg_id > 5                                   # something was always published (frames or a placeholder)
+    assert live.frame is not None
+    live.end()
+
+
+def test_state_reports_camera_health_and_placeholder_is_a_jpeg():
+    live = make("adult")
+    assert live.state()["camera"]["status"] == "starting"
+    j = L.placeholder_jpeg("Camera stopped delivering frames\nreconnecting...")
+    assert j[:2] == b"\xff\xd8"
+    live.end()

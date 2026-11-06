@@ -1,5 +1,18 @@
 # Progress log
 
+## live demo: camera cut-outs / black panel  *(branch `museum-visual-profile`)*
+
+**Report:** the feed sometimes cuts off or shows black.
+**What I could and could not reproduce.** With the camera healthy the stream was solid: 150 s monitor, 2301 distinct frames, 15.3 fps, no gap over 1 s, no disconnect, no server error; and 6 rapid page reloads in Chrome all loaded and kept advancing (canvas-hash check). I could NOT reproduce the cut-off with a healthy camera.
+**What I did find (two real weaknesses, one observed):**
+- The capture thread never recovered if the camera stopped delivering: on a failed `read()` it just slept and retried forever on the same handle, so the panel froze or stayed black with no explanation. An unplug, a driver hiccup, or another program taking `/dev/video0` would look exactly like "the feed cut off". The camera being unavailable did actually happen once during testing (a fresh server could not open `/dev/video0` right after the previous one was killed), and it crashed the server at startup.
+- The page only retried the `<img>` on an error event; a stream that silently stops advancing raised none.
+**Fix:** `capture_loop` reopens the camera after 1.5 s without frames (exponential backoff to 3 s), publishes a placeholder picture saying why ("Camera stopped delivering frames / reconnecting", or the open error) instead of black, never exits after startup; start-up still fails fast but with a message to close other programs using the camera; a detection exception no longer kills the detection thread; `/state` has `camera: {status, fps, frame_age, reconnects, last_error}` shown under the video (red when unhealthy); the page has a watchdog that reloads the stream if the picture stops changing while the camera is healthy.
+**Verified:** unit tests with a fake camera (open fails, delivers, stalls, reopens: status goes reconnecting -> ok, reconnects counted, something always published); live run after the change: status ok, 15 fps, 20 s monitor with no stalls. 150 tests pass.
+**Not verified:** a real unplug/replug (I did not do one), and I do not know what caused the cut-offs you saw, so this fixes the unrecovered-stall path and makes the cause visible rather than proving it was the cause. If it recurs, the red status line under the video and `reconnects` in `/state` will say whether the camera or the browser stream dropped.
+
+---
+
 ## live demo: lag, resizable UI, background-face fix  *(branch `museum-visual-profile`)*
 
 **Problem 1, laggy feed.** Measured with a script that counts DISTINCT frames from `/video`: 4.2 fps idle, 3.6 fps during a chat turn with a 1.7 s freeze. Causes: the camera loop ran detection (MTCNN + embeddings + FairFace) inside the capture loop, so the picture was paced by the models; `chat()` held the state lock across both LLM calls (4-12 s), and `process_frame` needed that lock, so the camera froze mid-turn; the stream also resent duplicate frames.

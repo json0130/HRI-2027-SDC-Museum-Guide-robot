@@ -80,6 +80,7 @@ class Live:
         self.jpeg_id = 0
         self.frame = None                      # latest raw frame (capture thread -> detection thread)
         self.frame_id = 0
+        self.camera = {"status": "starting", "fps": 0.0, "reconnects": 0, "last_error": "", "last_frame_ts": 0.0}
         self.reset()
 
     def reset(self) -> None:
@@ -238,7 +239,7 @@ class Live:
     def state(self) -> dict:
         with self.lock:
             if self.ended:
-                return {"visit_id": self.visit_id, "ended": True, "messages": [], "faces": [], "persons": {}, "graph": {"nodes": [], "edges": []}}
+                return {"visit_id": self.visit_id, "ended": True, "camera": dict(self.camera), "messages": [], "faces": [], "persons": {}, "graph": {"nodes": [], "edges": []}}
             snap = profile_api.get_visit_snapshot(self.visit_id, include_prior=True)
             nodes, edges = [], []
             for n in self.profile.store._nodes.values():
@@ -249,7 +250,8 @@ class Live:
                 if e.edge_type == "visit_pref":
                     edges.append({"source": e.source_id, "target": e.target_id, "value": e.value, "confidence": e.confidence,
                                   "evidence": len(e.evidence), "sources": sorted({x.source for x in e.evidence})})
-            return {"visit_id": self.visit_id, "ended": False, "faces": [{k: v for k, v in f.items() if k != "box"} | {"box": list(f["box"])} for f in self.faces],
+            cam = dict(self.camera, frame_age=round(time.time() - self.camera["last_frame_ts"], 1) if self.camera["last_frame_ts"] else None)
+            return {"visit_id": self.visit_id, "ended": False, "camera": cam, "faces": [{k: v for k, v in f.items() if k != "box"} | {"box": list(f["box"])} for f in self.faces],
                     "persons": snap["persons"], "group_size": snap["group_size"],
                     "levels": {p: self.policy.levels(p) for p in self.profile.persons},
                     "pending": {p: self.policy._st(p).pending for p in self.profile.persons},
@@ -297,39 +299,88 @@ def make_app(live: Live):
     return app
 
 
+def placeholder_jpeg(text: str, size=(640, 480)) -> bytes:
+    import cv2
+    img = np.full((size[1], size[0], 3), 30, np.uint8)
+    for i, line in enumerate(text.split("\n")):
+        cv2.putText(img, line, (24, size[1] // 2 - 20 + 34 * i), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (80, 160, 255), 2)
+    return cv2.imencode(".jpg", img)[1].tobytes()
+
+
+def capture_loop(live: "Live", open_cap, stop: threading.Event, *, stall_s: float = 1.5, sleep=time.sleep) -> None:
+    """Read frames and publish JPEGs; if the camera stops delivering for `stall_s` seconds (unplugged, taken by another
+    app, driver hiccup) release it and reopen with backoff, showing WHY on the picture instead of a frozen/black panel.
+    `open_cap()` returns a cv2.VideoCapture-like object or raises."""
+    import cv2
+    cap, last_ok, backoff = None, time.time(), 0.5
+    fps_n, fps_t = 0, time.time()
+    while not stop.is_set():
+        if cap is None:
+            try:
+                cap = open_cap()
+                last_ok, backoff = time.time(), 0.5
+                live.camera.update(status="ok", last_error="")
+            except Exception as exc:  # noqa: BLE001
+                live.camera.update(status="reconnecting", last_error=str(exc)[:120])
+                live.jpeg, live.jpeg_id = placeholder_jpeg(f"Camera unavailable: reconnecting\n{live.camera['last_error'][:60]}"), live.jpeg_id + 1
+                sleep(backoff); backoff = min(backoff * 2, 3.0)
+                continue
+        ok, frame = cap.read()
+        now = time.time()
+        if not ok or frame is None:
+            if now - last_ok > stall_s:                  # stalled: drop the handle and reopen
+                try: cap.release()
+                except Exception: pass                   # noqa: BLE001
+                cap = None
+                live.camera.update(status="reconnecting", reconnects=live.camera["reconnects"] + 1, last_error="no frames from the camera")
+                live.jpeg, live.jpeg_id = placeholder_jpeg("Camera stopped delivering frames\nreconnecting..."), live.jpeg_id + 1
+            else:
+                sleep(0.02)
+            continue
+        last_ok = now
+        live.camera["last_frame_ts"] = now
+        fps_n += 1
+        if now - fps_t >= 2:
+            live.camera["fps"], fps_n, fps_t = round(fps_n / (now - fps_t), 1), 0, now
+        live.frame, live.frame_id = frame, live.frame_id + 1
+        img = frame.copy()
+        for f in live.faces:                             # reference read; replaced atomically by the detect thread
+            x1, y1, x2, y2 = f["box"]
+            cv2.rectangle(img, (x1, y1), (x2, y2), (80, 200, 120), 2)
+            cv2.putText(img, f"{f['person_id']} {f['band']} tc={f['track_conf']:.1f}", (x1, max(14, y1 - 6)),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.5, (80, 200, 120), 1)
+        ok, buf = cv2.imencode(".jpg", img, [cv2.IMWRITE_JPEG_QUALITY, 80])
+        if ok:
+            live.jpeg, live.jpeg_id = buf.tobytes(), live.jpeg_id + 1
+    if cap is not None:
+        cap.release()
+
+
 def start_camera(live: Live, source, stop: Optional[threading.Event] = None) -> List[threading.Thread]:
     """Two threads so the picture never waits for the models:
-    capture: read frames as fast as the camera delivers (buffer of 1, so no stale backlog), draw the latest face
-             overlay (debug only) and publish a JPEG. It takes no lock and does no model work.
-    detect : run face detection + embeddings + age on the NEWEST frame, as fast as it can (older frames are skipped).
+    capture: capture_loop above (buffer 1, no lock, no models, reconnects if the camera stalls).
+    detect : face detection + embeddings + age on the NEWEST frame, as fast as it can (older frames are skipped).
     `source` is a cv2 index, or None for a virtual camera."""
     import cv2
     stop = stop or threading.Event()
-    cap = None
-    if source is not None:
+
+    def open_cap():
         cap = cv2.VideoCapture(source)
         if not cap.isOpened():
-            raise SystemExit(f"cannot open camera {source}")
+            raise RuntimeError(f"cannot open camera {source}")
         cap.set(cv2.CAP_PROP_BUFFERSIZE, 1)
+        return cap
 
-    def capture():
-        while not stop.is_set():
-            if cap is not None:
-                ok, frame = cap.read()
-                if not ok:
-                    time.sleep(0.02); continue
-            else:
-                frame = np.full((300, 400, 3), 40, np.uint8); time.sleep(0.04)
-            live.frame, live.frame_id = frame, live.frame_id + 1
-            img = frame.copy()
-            for f in live.faces:                      # reference read; replaced atomically by the detect thread
-                x1, y1, x2, y2 = f["box"]
-                cv2.rectangle(img, (x1, y1), (x2, y2), (80, 200, 120), 2)
-                cv2.putText(img, f"{f['person_id']} {f['band']} tc={f['track_conf']:.1f}", (x1, max(14, y1 - 6)),
-                            cv2.FONT_HERSHEY_SIMPLEX, 0.5, (80, 200, 120), 1)
-            ok, buf = cv2.imencode(".jpg", img, [cv2.IMWRITE_JPEG_QUALITY, 80])
-            if ok:
-                live.jpeg, live.jpeg_id = buf.tobytes(), live.jpeg_id + 1
+    class _Virtual:
+        def read(self):
+            time.sleep(0.04); return True, np.full((300, 400, 3), 40, np.uint8)
+        def release(self): pass
+
+    if source is not None:                       # fail fast with a clear message if the camera is not there at start
+        try:
+            open_cap().release()
+        except RuntimeError as exc:
+            raise SystemExit(f"{exc}. Is another program (a browser tab, another demo) using it? Close it and retry.")
 
     def detect():
         seen = -1
@@ -337,9 +388,13 @@ def start_camera(live: Live, source, stop: Optional[threading.Event] = None) -> 
             if live.frame is None or live.frame_id == seen:
                 time.sleep(0.005); continue
             seen, frame = live.frame_id, live.frame
-            live.process_frame(frame)
+            try:
+                live.process_frame(frame)
+            except Exception as exc:  # noqa: BLE001 - one bad frame must not kill detection for the rest of the visit
+                live.camera["last_error"] = f"detection error: {exc}"[:120]
 
-    threads = [threading.Thread(target=capture, daemon=True), threading.Thread(target=detect, daemon=True)]
+    threads = [threading.Thread(target=capture_loop, args=(live, open_cap if source is not None else _Virtual, stop), daemon=True),
+               threading.Thread(target=detect, daemon=True)]
     for t in threads:
         t.start()
     return threads
