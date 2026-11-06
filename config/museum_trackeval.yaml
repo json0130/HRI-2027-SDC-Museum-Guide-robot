@@ -1,0 +1,14 @@
+# Tracker / trigger simulator parameters (steps 1-4 only). These encode MY model of how people move and how face
+# embeddings behave; the results say nothing about real visitors or real faces.
+fps: 15
+frame_w: 640
+frame_h: 480
+seeds: 100
+boot: 1000
+genuine_cos: 0.8        # cosine between one observation of a face and that person's base embedding
+relative_cos: 0.8       # cosine between the base embeddings of two relatives (look-alikes)
+write_every_s: 1.0      # one simulated evidence write per tracked visitor per second
+pos_jitter_px: 3        # per-frame box-centre jitter (detector noise)
+ratio_jitter: 0.03      # per-frame relative jitter of the box size
+time_offset_s: 0.4      # each person's whole script is shifted by a random offset in +-this many seconds
+child_scale: 0.7        # a child's face is this fraction of an adult's at the same distance
