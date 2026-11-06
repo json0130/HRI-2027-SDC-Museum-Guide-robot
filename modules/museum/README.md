@@ -1,6 +1,29 @@
 # modules/museum: low-regret personalisation for one-off visits
 
-Steps A-F of the museum-visual-profile work.
+## Scope and status (rescoped)
+
+The visit flow has six steps. Only 1-4 are in scope and settled enough to build on:
+
+| # | Step | Status |
+|---|---|---|
+| 1 | Check the visitor's face, keep one id for the whole visit | in scope, built (tracker, re-association, `track_conf`) |
+| 2 | The person is a visit-scoped node in the KG | in scope, built (node after N stable frames, `visit_id`, wiped by `end()`) |
+| 3 | Visual first impression: age band **plus coarse group context** | age band built; group context **planned, not built** |
+| 4 | Start the first interaction when the person is close enough | **planned, not built** (engagement trigger) |
+| 5 | Greeting wording and the first choice question | **RESEARCH FIRST. Provisional placeholder.** |
+| 6 | Collecting information and building the profile | **RESEARCH FIRST. Provisional placeholder.** |
+
+**Provisional placeholders pending literature review (frozen: bug fixes only, no new question types, templates, dimensions, thresholds or policy logic):**
+`initiation.py` + `config/museum_initiation.yaml` (greeting and first question wording, rows), `profile.py` / `profile_extraction.py` / `config/museum_profile.yaml`
+(dimensions `talk_level`/`depth`/`pace`, evidence weights), `profiling_policy.py` / `config/museum_policy.yaml` (gates, budget, steps, question wording), and the
+conversation half of `live.py` (keyword answer matching, style prompt). They are untested guesses: **nothing here shows that the greeting, the first question or the
+profiling policy works.** Open questions are in `docs/RESEARCH_QUESTIONS_museum.md`.
+
+`simulate.py` and `decision_log.py` were built before this rescope. The simulator's profile modes (`fixed` / `prior-only` / `profile`), its first run and the break-even
+numbers evaluate the step-5/6 placeholders against my own model of visitors; they are not evidence about real visitors or about whether personalisation helps. They are
+frozen and will not be extended. The decision log is kept (it is the one file allowed to outlive a visit) and will be reused for steps 1-4.
+
+Steps A-F of the museum-visual-profile work (original numbering):
 
 | File | What |
 |---|---|

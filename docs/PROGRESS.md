@@ -1,5 +1,16 @@
 # Progress log
 
+## rescope: steps 5-6 are provisional placeholders, F is frozen  *(branch `museum-visual-profile`)*
+
+**Decision (rescope brief):** only steps 1-4 of the six-step flow are in scope; 5 (greeting wording, first choice question) and 6 (collecting information, building the profile) are research first.
+**Done:** `modules/museum/README.md` now opens with a scope/status table and lists the provisional placeholders (initiation table, profile, extraction, policy, the conversation half of the live demo). They are frozen: bug fixes only, no new question types, templates, dimensions, thresholds or policy logic.
+**Not built, as instructed:** no new Step F profile modes or profile-accuracy simulator work.
+**Conflict to flag:** the earlier Step F WAS already built and run before this brief (`simulate.py`, three modes, first official run with config hash `1929eb86...`, results in `docs/results/`). I did not delete it. It is marked frozen and not extended; its numbers evaluate placeholders against my own visitor model and must not be read as evidence that the greeting, the first question or the policy works. Say if you want it removed from the branch instead.
+**Also unchanged but worth stating:** the live demo still greets as soon as a stable track exists (step 4's proximity trigger is not built yet) and its conversation half uses the frozen placeholders.
+**Not verified:** every placeholder. Nothing here says they work.
+
+---
+
 ## steps 1-2: visit-scoped identity and KG node  *(branch `museum-visual-profile`)*
 
 **Scope (from the rescope brief):** one id per visitor for the whole visit; the person is a visit-scoped KG node; nothing biometric survives the visit.
