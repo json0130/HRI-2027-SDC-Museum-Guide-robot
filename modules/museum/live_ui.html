@@ -60,6 +60,7 @@ function graph(G){const W=520,H=300,svg=$('g'),cols={style_dim:70,person:260,top
  const pos={};for(const t in by)by[t].forEach((n,i)=>pos[n.id]=[cols[t],(i+1)*H/(by[t].length+1)]);
  let h='';G.edges.forEach(e=>{const a=pos[e.source],b=pos[e.target];if(!a||!b)return;const v=e.value*e.confidence;h+=`<line x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}" stroke="${v>=0?'var(--pos)':'var(--neg)'}" stroke-width="${1+4*e.confidence}" opacity="${.3+.7*Math.min(1,Math.abs(v)+.2)}"><title>value ${e.value.toFixed(2)} conf ${e.confidence.toFixed(2)} ${e.evidence} ev (${e.sources.join(', ')})</title></line>`});
  G.nodes.forEach(n=>{const p=pos[n.id];h+=`<circle cx="${p[0]}" cy="${p[1]}" r="${n.type==='person'?16:10}" fill="var(--card)" stroke="var(--acc)" stroke-width="2"/><text x="${p[0]}" y="${p[1]+(n.type==='person'?30:24)}" text-anchor="middle" font-size="11" fill="var(--ink)">${n.label}</text>`});svg.innerHTML=h}
+$('v').onerror=()=>setTimeout(()=>{$('v').src='/video?'+Date.now()},1000);   // the stream can fail on first load; retry
 async function tick(){try{draw(await api('/state'))}catch(e){}setTimeout(tick,700)}tick();
 $('f').onsubmit=async e=>{e.preventDefault();const t=$('t').value;if(!t)return;$('t').value='';await api('/chat',{text:t})};
 $('end').onclick=()=>api('/end',{});$('new').onclick=()=>{lastMsgs=-1;api('/new',{})};

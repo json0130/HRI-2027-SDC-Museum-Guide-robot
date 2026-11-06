@@ -38,7 +38,7 @@ Act on `effective_value`, not `value`: low-confidence items are already pulled t
 ## Live demo (webcam + conversation + live KG view)
 ```bash
 # real webcam + lab AI server (needs torch/facenet-pytorch/opencv/flask + the cached FairFace model)
-python3 -m modules.museum.live --camera 0 --ai-server 172.24.30.251 --log-dir logs/museum
+python3 -m modules.museum.live --camera 0 --ai-server 10.42.0.118 --log-dir logs/museum
 # no hardware, no network: virtual visitor, rule-based fake LLM
 python3 -m modules.museum.live --no-camera --virtual-band adult --llm fake
 ```

@@ -101,20 +101,21 @@ class Live:
             if self.ended:
                 return []
             res = self.pipeline.process(frame)
-            for r in res:
+            min_frames = self.pipeline.cfg["min_frames"]
+            confirmed = [r for r in res if r["n_frames"] >= min_frames]   # a one-frame ghost never becomes a visitor
+            for r in confirmed:
                 if r["person_id"] not in self.profile.persons:
                     self.profile.add_person(r["person_id"])
             self.profile.apply_tracks(res)
-            min_frames = self.pipeline.cfg["min_frames"]
-            for r in res:
-                if r["person_id"] not in self.met and r["n_frames"] >= min_frames:
-                    self._meet(r)
+            for r in confirmed:
+                if r["person_id"] not in self.met:
+                    self._meet(r, len(confirmed))
             self.faces = res
             return res
 
-    def _meet(self, r: dict) -> None:
+    def _meet(self, r: dict, group_size: int) -> None:
         pid = r["person_id"]
-        op = choose_opening(r["band"], r["confidence"], max(len(self.profile.persons), 1))
+        op = choose_opening(r["band"], r["confidence"], group_size)
         self.met[pid] = op
         self.profile.set_prior(pid, r["band"], r["confidence"])
         self.prior_log[pid] = {"band": r["band"], "confidence": r["confidence"]}
@@ -312,9 +313,16 @@ def build(args) -> tuple:
         detect = lambda f: [Detection((100, 60, 240, 220), emb / np.linalg.norm(emb))]
     else:
         from modules.face_webcam.face_id import FaceIdentifier   # heavy import (torch); detection + embeddings only,
-        fid = FaceIdentifier(detector="opencv")                  # NO enroll / save / load: museum mode forbids them
+        fid = FaceIdentifier(detector=args.detector)             # NO enroll / save / load: museum mode forbids them
         estimator = FairFaceAgeEstimator() if args.age_backend == "fairface" else FakeAgeEstimator({}, 0)
-        detect = lambda f: [Detection(tuple(int(v) for v in r[2]), r[3]) for r in fid.identify_all(f, max_faces=4, with_emb=True)]
+
+        def detect(f):
+            ds = [Detection(tuple(int(v) for v in r[2]), r[3]) for r in fid.identify_all(f, max_faces=4, with_emb=True)]
+            area = lambda d: (d.box[2] - d.box[0]) * (d.box[3] - d.box[1])
+            big = max((area(d) for d in ds), default=0)
+            # ponytail: background faces (posters, robot heads) are much smaller than the visitor; drop faces under
+            # min_face_frac of the largest. Ceiling: a second real person standing much farther away is ignored too.
+            return [d for d in ds if area(d) >= args.min_face_frac * big]
     return Live(llm, extract_llm, estimator, detect, log_dir=args.log_dir, reply_fn=reply_fn)
 
 
@@ -323,9 +331,12 @@ def main(argv=None) -> int:
     ap.add_argument("--camera", type=int, default=0)
     ap.add_argument("--no-camera", action="store_true", help="virtual visitor, no hardware")
     ap.add_argument("--virtual-band", choices=["child", "adult", "unsure"], default="adult")
-    ap.add_argument("--ai-server", default=os.environ.get("AI_HOST", ""), help="HOST[:PORT] of the lab AI server")
+    ap.add_argument("--ai-server", default=os.environ.get("AI_HOST", "10.42.0.118"), help="HOST[:PORT] of the lab AI server")
     ap.add_argument("--llm", choices=["ai-server", "fake"], default="ai-server")
     ap.add_argument("--age-backend", choices=["fairface"], default="fairface")
+    ap.add_argument("--detector", choices=["opencv", "mtcnn"], default="mtcnn",
+                    help="mtcnn detected the seated visitor in 53/53 test frames, Haar in 26/53")
+    ap.add_argument("--min-face-frac", type=float, default=0.5, help="ignore faces smaller than this fraction of the largest face's area")
     ap.add_argument("--log-dir", default=None, help="write the anonymised JSONL decision log here")
     ap.add_argument("--port", type=int, default=8080)
     a = ap.parse_args(argv)

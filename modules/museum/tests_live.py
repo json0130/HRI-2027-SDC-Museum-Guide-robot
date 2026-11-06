@@ -130,3 +130,23 @@ def test_interpret_choice_and_style_prompt():
     assert L.interpret_choice("pace", "whatever") == 0
     p = L.style_instructions({"depth": -1, "talk_level": -1, "pace": 0}, True)
     assert "ONE short sentence" in p and "minimal" in p and "simple" in p and "mood" not in p.lower()
+
+
+def test_one_frame_ghost_never_becomes_a_visitor_and_does_not_inflate_group_size():
+    real = (100, 60, 240, 220)
+    state = {"n": 0}
+    emb = np.random.RandomState(7).randn(512); emb /= np.linalg.norm(emb)
+    ghost_emb = np.random.RandomState(8).randn(512); ghost_emb /= np.linalg.norm(ghost_emb)
+    def det(f):
+        state["n"] += 1
+        out = [Detection(real, emb)]
+        if state["n"] == 2:
+            out.append(Detection((400, 10, 440, 50), ghost_emb))        # appears in a single frame
+        return out
+    live = L.Live(None, lambda s, u: "{}", FakeAgeEstimator({"visitor_1": AgeProbs(0.06, 0.92, 0.02), "visitor_2": AgeProbs(0.5, 0.5, 0.0)}),
+                  det, reply_fn=lambda s, t: "ok")
+    for _ in range(8):
+        live.process_frame(None)
+    assert live.profile.persons == ["visitor_1"] and list(live.met) == ["visitor_1"]
+    assert "solo" in live.met["visitor_1"].row_id            # group_size 1, not 2
+    live.end()

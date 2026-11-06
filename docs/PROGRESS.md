@@ -1,5 +1,20 @@
 # Progress log
 
+## live test with the real webcam and AI server  *(branch `museum-visual-profile`)*
+
+**Setup:** webcam index 0 (640x480), lab AI server `10.42.0.118:7898` (now the default and in the README), live demo run with `--camera 0 --ai-server 10.42.0.118 --log-dir logs/museum`. Browser UI checked in Chrome.
+**Worked:** camera frames, detection, FairFace on live frames (adult, confidence ~0.7-0.9 while the single seated visitor was in view), opening row `adult_solo`, AI-server chat (4-12 s per turn: one extraction call + one reply call, run synchronously), real LLM extraction produced a like ("dinosaurs") and a dislike ("loud crowded rooms") with no style inference from either, the explicit answer "The full story please" raised depth and took the first adaptation step, the opening hint was dropped as soon as real evidence existed, the UI redrew profile bars, graph edges and policy steps as it happened, and the decision log for the session contains no visitor text (4 lines, checked by grep).
+**Didn't work -> fixed:**
+- *Ghost visitors.* The first run created 3 visitors for 1 person. Measured on 53 real frames: Haar found a face in only 26/53 frames (it flickered), MTCNN in 53/53, but MTCNN always also found a 2nd face (a humanoid robot head in the background, 0.24-0.39 of the visitor's face area). Fixes: `--detector` (default now mtcnn), `--min-face-frac` 0.5 (drops faces smaller than half the largest), and a person is only created after `min_frames` confirmed frames, so a one-frame ghost can never become a visitor or inflate `group_size`. After the fix: 1 visitor, stable. Ceiling: a real second person standing much farther back is ignored too.
+- *Black camera panel in Chrome.* The MJPEG `<img>` was in a broken state on first load (the server was fine: `curl` got real frames); reloading the image worked, so the page now retries on error. Root cause of the first failure not found.
+**Observed, not fixed (design issues the live run exposed):**
+- One explicit answer produced TWO adaptation steps (levels 1 then 2 by turn 3) with no new evidence for depth, because confidence stays at 0.8 >= 0.7 and each accepted step allows the next after the 2-turn cooldown. "One level at a time" holds, but the robot ramps to the cap on a single answer.
+- The LLM invents exhibit content ("excavation site", "galleries") despite the "do not invent facts" instruction, because there is no exhibit catalogue to ground it (the README's open decision).
+- Latency 4-12 s per turn is too slow for natural conversation; extraction could run after the reply.
+**Not verified:** more than one person in front of the camera, a child, FairFace accuracy on real faces beyond "plausible", the misread/swap behaviour with real tracking, long visits.
+
+---
+
 ## live demo: webcam + conversation + live KG view  *(branch `museum-visual-profile`)*
 
 **Goal:** something runnable to meet a person, watch the profile and KG build live, and talk to the lab LLM.
