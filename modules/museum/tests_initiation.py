@@ -35,7 +35,11 @@ def test_neutral_group_inherits_default_fields():
 def test_every_row_is_choice_question_and_never_mentions_age():
     cfg = load_config("museum_initiation", DEFAULTS)
     for key in [k for k in cfg if k not in ("settings", "default")]:
-        p = choose_opening(key.split("_")[0], 1.0, 2 if key.endswith("group") else 1, cfg=cfg)
+        if key == "group_child_present":                # the group-context wiring row (see tests_group.py)
+            from .group import GroupContext
+            p = choose_opening("adult", 1.0, 3, cfg=cfg, group=GroupContext("g", 3, True, "known", ""))
+        else:
+            p = choose_opening(key.split("_")[0], 1.0, 2 if key.endswith("group") else 1, cfg=cfg)
         assert p.row_id == key
         assert " or " in p.first_question and p.first_question.endswith("?"), key
         assert not AGE_WORDS.search(p.greeting_template + " " + p.first_question), key

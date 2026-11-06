@@ -8,7 +8,7 @@ The visit flow has six steps. Only 1-4 are in scope and settled enough to build 
 |---|---|---|
 | 1 | Check the visitor's face, keep one id for the whole visit | in scope, built (tracker, re-association, `track_conf`) |
 | 2 | The person is a visit-scoped node in the KG | in scope, built (node after N stable frames, `visit_id`, wiped by `end()`) |
-| 3 | Visual first impression: age band **plus coarse group context** | age band built; group context **planned, not built** |
+| 3 | Visual first impression: age band **plus coarse group context** | built (`group.py`): `group_id`, `group_size`, `has_child_band_member` only, never a relationship label; placeholders |
 | 4 | Start the first interaction when the person is close enough | **planned, not built** (engagement trigger) |
 | 5 | Greeting wording and the first choice question | **RESEARCH FIRST. Provisional placeholder.** |
 | 6 | Collecting information and building the profile | **RESEARCH FIRST. Provisional placeholder.** |
@@ -66,6 +66,9 @@ python3 -m modules.museum.live --camera 0 --ai-server 10.42.0.118 --log-dir logs
 python3 -m modules.museum.live --no-camera --virtual-band adult --llm fake
 ```
 Open http://127.0.0.1:8080. Face appears -> opening (greeting + one choice question) from the age-band prior -> each message: pending question/step outcome, guarded LLM extraction into the in-memory KG, policy decides the next move, reply uses the current style levels. The page redraws the profile, the graph and the policy steps every 0.7 s. "End visit (wipe)" deletes all person data. `--llm fake` only understands the simulator's exact phrases ("just give me the short version", "tell me the full story please", "let's keep things moving", "can we take this slowly", "I love X", "I can't stand X"); the opening depth question is also answered by keywords. Real webcam and real AI-server use are **not verified** (see PROGRESS.md).
+
+## Coarse group context (step 3)
+`group.py` / `config/museum_group.yaml`: output is only `group_id`, `group_size` and `has_child_band_member` (true / false / unknown). It comes from proximity (edge gap <= 1.5 x the larger face width) AND co-movement (arrived within 4 s, same heading or both still) held for 3 s of the last 10 s. **No relationship labels are inferred** (couple, family, parent/child, friends): that would be appearance-based guessing of social facts. Weak, opening-only, never spoken, never a KG fact, dropped once real evidence exists, hidden from `get_visit_snapshot` unless `include_group=True`. Any instability (membership change, merge of two groups, more than 6 people) reports **unknown**, and `choose_opening(..., group=ctx)` then uses the plain neutral opening. All thresholds are untuned placeholders; image distance is not real distance and side-by-side queues look like groups.
 
 ## Identity (tracker) and suspended writes
 `VisitTracker` keeps `visitor_N` ids by IoU plus, when the detector supplies `Detection(box, emb)`, face-embedding cosine (face outweighs position). A returning face takes back a lost id only if its best cosine is >= `reid_min_cos` (0.6) **and** beats the runner-up track by >= `reid_gap` (0.1); otherwise it is a new person (a wrongly new id loses a profile, a wrong merge corrupts one). Each track has a `track_conf`; an ambiguous match (small margin, or overlapping faces with no embeddings) drops it. `VisitProfile.apply_tracks(results)` passes it in; below `min_track_conf` (0.5) evidence writes are **dropped, not buffered**, and counted (`suspended_writes`, `suspended_by_person`); the policy asks nothing of that person.

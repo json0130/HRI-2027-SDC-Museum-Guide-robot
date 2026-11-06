@@ -31,6 +31,12 @@ child_group:
   approach_distance_m: 1.8
   gaze_height: low
 
+# placeholder row, only to prove the group-context wiring (wording untested, pending research)
+group_child_present:
+  greeting_template: "Hello, everyone, and welcome! I'm {robot_name}, and I can show you around."
+  speech_rate: 0.95
+  approach_distance_m: 1.8
+
 adult_solo:
   greeting_template: "Good to meet you. I'm {robot_name}, happy to show you around."
 adult_group:

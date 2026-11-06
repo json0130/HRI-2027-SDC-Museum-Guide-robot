@@ -57,6 +57,7 @@ class VisitProfile:
         self.suspended_writes = 0
         self.suspended_by_person: Dict[str, int] = {}
         self._cleanups: List = []
+        self._group: Dict[str, dict] = {}
         self.ended = False
         ephemeral.enter()     # from here until end(), disk persistence of visitor data refuses to run
 
@@ -75,6 +76,17 @@ class VisitProfile:
     @property
     def group_size(self) -> int:
         return len(self._persons)
+
+    def set_group_context(self, person_id: str, ctx) -> None:
+        """Weak, opening-only group context (modules.museum.group.GroupContext). Like the age prior it is held in memory,
+        never written to the KG, dropped once the person has real evidence, and wiped by end()."""
+        self._group[person_id] = ctx.to_dict() if hasattr(ctx, "to_dict") else dict(ctx)
+
+    def group_context(self, person_id: str) -> Optional[dict]:
+        g = self._group.get(person_id)
+        if g is None or self._n_real.get(person_id, 0) > 0:
+            return None
+        return {**g, "use": "opening_only"}
 
     def set_track_conf(self, person_id: str, conf: float) -> None:
         """Identity confidence of this person's face track (from the tracker). Below
@@ -218,7 +230,7 @@ class VisitProfile:
         for dim in DIMS:
             self.store.delete_node(_style_id(dim))
         self._persons, self._prior, self._n_real, self._topics = [], {}, {}, set()
-        self._track_conf = {}
+        self._track_conf, self._group = {}, {}
         for fn in self._cleanups:               # e.g. wipe the in-memory face-embedding gallery
             fn()
         self._cleanups = []

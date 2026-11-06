@@ -25,7 +25,7 @@ def end_visit(visit_id: str) -> dict:
     return _VISITS.pop(visit_id).end()
 
 
-def get_person_profile(visit_id: str, person_id: str, include_prior: bool = False) -> dict:
+def get_person_profile(visit_id: str, person_id: str, include_prior: bool = False, include_group: bool = False) -> dict:
     vp = _VISITS[visit_id]
     if person_id not in vp.persons:
         raise KeyError(person_id)
@@ -41,10 +41,14 @@ def get_person_profile(visit_id: str, person_id: str, include_prior: bool = Fals
         # Opening-move hint from the camera, NOT a preference and not evidence. Present only when
         # asked for, marked "use": "opening_only", and None once any real evidence exists.
         out["prior"] = vp.prior(person_id)
+    if include_group:
+        # Coarse group context (group_id / size / has_child_band_member), opening-only like the prior; hidden by default,
+        # None once any real evidence exists, and never a relationship label.
+        out["group"] = vp.group_context(person_id)
     return out
 
 
-def get_visit_snapshot(visit_id: str, include_prior: bool = False) -> dict:
+def get_visit_snapshot(visit_id: str, include_prior: bool = False, include_group: bool = False) -> dict:
     vp = _VISITS[visit_id]
     return {"visit_id": visit_id, "group_size": vp.group_size,
-            "persons": {p: get_person_profile(visit_id, p, include_prior) for p in vp.persons}}
+            "persons": {p: get_person_profile(visit_id, p, include_prior, include_group) for p in vp.persons}}

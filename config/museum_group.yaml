@@ -1,0 +1,13 @@
+# Coarse group context: who is probably here together, from proximity AND co-movement. Placeholders, untuned.
+# Output is only group_id / group_size / has_child_band_member. Never a relationship label.
+gap_widths: 1.5          # edge-to-edge gap <= this many LARGER-of-the-two face widths counts as close
+together_s: 3.0          # a pair must be close AND co-moving for this long within window_s
+window_s: 10.0
+arrival_s: 4.0           # co-movement: the two tracks first appeared within this many seconds
+heading_window_s: 2.0    # heading = displacement of the face centre over this window
+still_widths_per_s: 0.25 # slower than this (in face widths / s) counts as standing still
+heading_cos: 0.7         # both moving: heading vectors must agree (cos of angle >= this, about 45 degrees)
+stable_s: 1.5            # membership unchanged for this long before the context is "known"
+merge_hold_s: 10.0       # after a merge the context stays "unknown" this long
+max_group_size: 6        # a component above this is not a group we can describe: "unknown"
+stable_frames: 5         # only tracks stable for this many consecutive frames are members
