@@ -101,6 +101,9 @@ class PersonNode(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     display_name: Optional[str] = None
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    # Museum mode: the visit this node belongs to (None for ordinary, persistent people), so a
+    # visit's nodes can be found and deleted. Optional + default None: old kg_state.json loads unchanged.
+    visit_id: Optional[str] = None
     node_type: Literal["person"] = "person"
 
 

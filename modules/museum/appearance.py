@@ -32,6 +32,7 @@ DEFAULTS = {
     "track_iou": 0.3, "track_max_missed": 30,
     "reid_min_cos": 0.6, "reid_gap": 0.1, "reid_ttl": 300, "iou_weight": 0.3, "overlap_ambiguous": 0.2,
     "match_margin": 0.15, "conf_ambiguous": 0.2, "conf_recover": 0.2, "new_track_conf": 0.6,
+    "stable_frames": 5,
 }
 
 
@@ -221,7 +222,7 @@ class VisitTracker:
     def _new(self, det: Detection, conf: Optional[float] = None) -> str:
         self._n += 1
         tid = f"visitor_{self._n}"
-        self._tracks[tid] = {"box": det.box, "missed": 0,
+        self._tracks[tid] = {"box": det.box, "missed": 0, "streak": 1,
                              "emb": None if det.emb is None else _unit(det.emb),
                              "conf": self._c["new_track_conf"] if conf is None else conf}
         return tid
@@ -265,7 +266,7 @@ class VisitTracker:
                 used[ids[i]] = i
             else:
                 t = self._tracks[tid]
-                t.update(box=d.box, missed=0, conf=c["new_track_conf"])
+                t.update(box=d.box, missed=0, conf=c["new_track_conf"], streak=1)
                 ids[i], used[tid] = tid, i
         # confidence + embedding update for continuity matches
         for tid, i in list(used.items()):
@@ -280,12 +281,14 @@ class VisitTracker:
                 for j, o in enumerate(dets))
             t["conf"] = c["conf_ambiguous"] if ambiguous else min(1.0, t["conf"] + c["conf_recover"])
             t["box"], t["missed"] = d.box, 0
+            t["streak"] += 1                              # consecutive frames this track has been matched
             if d.emb is not None and not ambiguous:
                 t["emb"] = _unit(d.emb) if t["emb"] is None else _unit(0.9 * t["emb"] + 0.1 * _unit(d.emb))
         for tid in list(self._tracks):
             if tid not in used:
                 t = self._tracks[tid]
                 t["missed"] += 1
+                t["streak"] = 0
                 # a track with no embedding cannot be re-associated, so it dies when it goes stale
                 limit = c["track_max_missed"] if t["emb"] is None else max(c["reid_ttl"], c["track_max_missed"])
                 if t["missed"] > limit:
@@ -294,6 +297,9 @@ class VisitTracker:
 
     def assign(self, boxes: Sequence[Box]) -> List[str]:
         return self.assign_detections([Detection(tuple(b)) for b in boxes])
+
+    def streak(self, tid: str) -> int:
+        return self._tracks[tid]["streak"] if tid in self._tracks else 0
 
     def confidence(self, tid: str) -> float:
         return self._tracks[tid]["conf"] if tid in self._tracks else 0.0
@@ -333,12 +339,14 @@ class AgeBandPipeline:
             r = sm.current() if ambiguous else sm.update(self._est.estimate(frame, d.box, key=pid))
             out.append({"person_id": pid, "box": d.box, "band": r.band, "confidence": r.confidence,
                         "p_child": r.p_child, "p_adult": r.p_adult, "n_frames": r.n_frames,
-                        "track_conf": tc})
+                        "track_conf": tc, "streak": self.tracker.streak(pid)})
         known = set(self.tracker.known())
         for pid in [p for p in self._smoothers if p not in known]:
             del self._smoothers[pid]
         return out
 
     def clear(self) -> None:
+        """Drop every track, embedding and smoother (the in-memory face gallery). Called by VisitProfile.end()
+        once bound with ``profile.add_cleanup(pipeline.clear)``."""
         self.tracker.clear()
         self._smoothers.clear()

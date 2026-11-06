@@ -1,5 +1,22 @@
 # Progress log
 
+## steps 1-2: visit-scoped identity and KG node  *(branch `museum-visual-profile`)*
+
+**Scope (from the rescope brief):** one id per visitor for the whole visit; the person is a visit-scoped KG node; nothing biometric survives the visit.
+**Already built earlier (follow-up 5, not redone):** in-memory running embedding mean per track; match score = IoU (0.3) + embedding cosine (0.7); lost tracks kept `reid_ttl` = 300 frames; re-association needs cosine >= 0.6 AND a >= 0.1 margin over the runner-up (live or lost), else a new id; `track_conf` drops to 0.2 on an ambiguous match (small margin, or overlapping faces without embeddings) and recovers +0.2 per clean frame; ambiguous frames are not fed to the age smoother; below `track_conf` 0.5 profile writes are dropped (not buffered), counted, and the count is in the decision log; crossing and silent-swap tests; guard test for `FaceIdentifier.save/.load` (mutation-checked: removing the guards makes it fail), `git status` clean at 81ebcb1.
+**Built now:**
+- `PersonNode.visit_id` (optional, default None; old `kg_state.json` loads unchanged, tested).
+- Tracker `streak` = consecutive matched frames (0 after a miss, 1 on a new or re-associated track).
+- `VisitProfile.sync_tracks(results, stable_frames)` creates the `visitor_N` node only after `stable_frames` (default 5, `config/museum_appearance.yaml`) CONSECUTIVE frames, so passers-by and one-frame detections never become nodes; a broken streak does not count.
+- `VisitProfile.add_cleanup`: `end()` now also runs `pipeline.clear` (wipes the in-memory face-embedding gallery and smoothers), so nothing is left that could re-identify anyone. The live demo binds it and uses `sync_tracks` instead of its own ad-hoc rule.
+**Threshold check (what I found, unchanged):** embedding model = facenet-pytorch InceptionResnetV1 (VGGFace2). The only real embeddings I had were 8 views of ONE person: same-person cosine min 0.42 / mean 0.67 / max 0.87, 21% of pairs below 0.6, so 0.6 will reject some true returns (fails toward a new id). I have no different-person faces, so the false-merge side is NOT measured. Relatives' faces score high against each other, so wrong merges are most likely in families; the margin rule is the only defence and was tested only with synthetic look-alikes.
+**Silent swaps:** `test_exchange_places_swaps_ids_silently_without_embeddings` shows that when people exchange places while occluded and there are no embeddings, ids follow the spots and `track_conf` stays high; write suspension cannot catch that (it only reacts to `track_conf`). With embeddings the ids stay correct. Synthetic embeddings (random orthogonal vectors, mixtures for look-alikes) show the logic works, not that real faces separate.
+**Verified:** `tests_identity.py` (old node loads; node only after N consecutive frames and carries `visit_id`; broken streak and one-frame passer-by never become nodes; `end()` deletes nodes, edges and the gallery; writes dropped, counted and logged; end-to-end visit through the tracker in an EMPTY temp dir creates only the decision log, no `faces.npz`, `sessions.db`, `kg_state.json` or embedding file). 156 passed.
+**Not verified:** real cameras or real faces through the new streak rule; behaviour in crowds.
+**Note on the frozen simulator config:** adding `stable_frames` changed the effective-config hash; the first official run's hash (`1929eb86...`) belongs to commit e972257, not to this config.
+
+---
+
 ## live demo: camera cut-outs / black panel  *(branch `museum-visual-profile`)*
 
 **Report:** the feed sometimes cuts off or shows black.

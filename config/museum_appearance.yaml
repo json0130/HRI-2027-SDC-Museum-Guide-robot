@@ -19,3 +19,4 @@ match_margin: 0.15   # best-vs-runner-up score gap below this = ambiguous match
 conf_ambiguous: 0.2  # track_conf after an ambiguous match
 conf_recover: 0.2    # track_conf gained per clean frame
 new_track_conf: 0.6  # track_conf of a new / re-associated track
+stable_frames: 5     # a visitor node is created only after this many CONSECUTIVE matched frames

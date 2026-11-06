@@ -69,7 +69,7 @@ def test_output_has_no_gender_or_race_fields():
     est = FakeAgeEstimator({"visitor_1": CHILD})
     pipe = AgeBandPipeline(est, lambda f: [(0, 0, 10, 10)])
     keys = set(pipe.process(None)[0])
-    assert keys == {"person_id", "box", "band", "confidence", "p_child", "p_adult", "n_frames", "track_conf"}
+    assert keys == {"person_id", "box", "band", "confidence", "p_child", "p_adult", "n_frames", "track_conf", "streak"}
     assert set(AgeProbs.__dataclass_fields__) == {"p_child", "p_adult", "p_teen"}
 
 

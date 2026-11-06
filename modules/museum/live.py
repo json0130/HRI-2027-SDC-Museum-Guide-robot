@@ -90,6 +90,7 @@ class Live:
             self.policy = ProfilingPolicy(self.profile)
             with self.pipe_lock:
                 self.pipeline = AgeBandPipeline(self._estimator, self._detect)
+            self.profile.add_cleanup(self.pipeline.clear)   # ending the visit wipes the face-embedding gallery too
             self.log = DecisionLog(self._log_dir, "profile") if self._log_dir else None
             self.met: Dict[str, OpeningParams] = {}
             self.prior_log: Dict[str, dict] = {}
@@ -111,12 +112,9 @@ class Live:
         with self.lock:
             if self.ended:
                 return []
-            min_frames = self.pipeline.cfg["min_frames"]
-            confirmed = [r for r in res if r["n_frames"] >= min_frames]   # a one-frame ghost never becomes a visitor
-            for r in confirmed:
-                if r["person_id"] not in self.profile.persons:
-                    self.profile.add_person(r["person_id"])
-            self.profile.apply_tracks(res)
+            stable = self.pipeline.cfg["stable_frames"]
+            self.profile.sync_tracks(res, stable)        # nodes only for tracks stable for N consecutive frames
+            confirmed = [r for r in res if r["person_id"] in self.profile.persons]
             for r in confirmed:
                 if r["person_id"] not in self.met:
                     self._meet(r, len(confirmed))

@@ -56,6 +56,7 @@ class VisitProfile:
         self._track_conf: Dict[str, float] = {}
         self.suspended_writes = 0
         self.suspended_by_person: Dict[str, int] = {}
+        self._cleanups: List = []
         self.ended = False
         ephemeral.enter()     # from here until end(), disk persistence of visitor data refuses to run
 
@@ -63,7 +64,7 @@ class VisitProfile:
 
     def add_person(self, person_id: str) -> None:
         if person_id not in self._persons:
-            self.store.upsert_node(PersonNode(id=person_id))
+            self.store.upsert_node(PersonNode(id=person_id, visit_id=self.visit_id))
             self._persons.append(person_id)
             self._n_real[person_id] = 0
 
@@ -79,6 +80,21 @@ class VisitProfile:
         """Identity confidence of this person's face track (from the tracker). Below
         cfg['min_track_conf'] new evidence is DROPPED, not buffered (see ``is_suspended``)."""
         self._track_conf[person_id] = float(conf)
+
+    def add_cleanup(self, fn) -> None:
+        """Run `fn()` when the visit ends (e.g. ``pipeline.clear`` to wipe the in-memory face-embedding gallery)."""
+        self._cleanups.append(fn)
+
+    def sync_tracks(self, results, stable_frames: int = 5) -> List[str]:
+        """Feed AgeBandPipeline results in. Creates the visit-scoped person node only once a track has been matched
+        in `stable_frames` CONSECUTIVE frames, so passers-by and one-frame detections never become nodes. Also updates
+        track confidence. Returns the ids of nodes created by this call."""
+        new = []
+        for r in results:
+            if r["streak"] >= stable_frames and r["person_id"] not in self._persons:
+                self.add_person(r["person_id"]); new.append(r["person_id"])
+        self.apply_tracks(results)
+        return new
 
     def apply_tracks(self, results) -> None:
         """Feed AgeBandPipeline.process() results in: updates track confidence per person."""
@@ -203,6 +219,9 @@ class VisitProfile:
             self.store.delete_node(_style_id(dim))
         self._persons, self._prior, self._n_real, self._topics = [], {}, {}, set()
         self._track_conf = {}
+        for fn in self._cleanups:               # e.g. wipe the in-memory face-embedding gallery
+            fn()
+        self._cleanups = []
         self.ended = True
         ephemeral.leave()
         return {"visit_id": self.visit_id, "persons_deleted": n_p, "topics_deleted": n_t}
